@@ -324,9 +324,11 @@
         ? (optedIn === true ? 'Opted in' : 'Not sharing')
         : 'Not yet decided';
 
-      // Crash reports default ON (opt-out).
+      // Crash reports default OFF in the UK fork (opt-in).
       const crashCb = document.getElementById('settingsCrashReports');
-      if (crashCb) crashCb.checked = getSetting('crash_reports_enabled', true);
+      if (crashCb) crashCb.checked = getSetting('crash_reports_enabled', false);
+      const updatesCb = document.getElementById('settingsCheckUpdates');
+      if (updatesCb) updatesCb.checked = !!getSetting('check_for_updates', false);
       
       // Display total impact (photos analyzed) from hydrated local settings.
       const totalPhotos = getSetting('kestrel_impact_total_files', 0);
@@ -358,6 +360,31 @@
       }
 
       // ── Species & Region section ─────────────────────────────────────────
+      // Bird identification model (UK fork): North America (original) or the
+      // EVA-02 iNat21 model restricted to UK / Europe / World.
+      const birdModelSel = document.getElementById('birdModelRegion');
+      const birdRaritiesCb = document.getElementById('birdIncludeUkRarities');
+      if (birdModelSel) {
+        birdModelSel.value = getSetting('bird_model_region', 'na') || 'na';
+        if (birdRaritiesCb) birdRaritiesCb.checked = !!getSetting('bird_include_uk_rarities', false);
+        const refreshBirdModelStatus = async () => {
+          const statusEl = document.getElementById('birdModelStatus');
+          if (birdRaritiesCb) birdRaritiesCb.disabled = !['uk', 'europe'].includes(birdModelSel.value);
+          if (!statusEl || !window.pywebview?.api?.get_bird_model_status) return;
+          try {
+            const st = await window.pywebview.api.get_bird_model_status(birdModelSel.value);
+            if (!st || !st.success) return;
+            statusEl.textContent = st.message || '';
+            statusEl.style.color = st.available ? '' : '#ff9f6b';
+          } catch (_) { /* non-fatal */ }
+        };
+        if (!birdModelSel.dataset.wired) {
+          birdModelSel.dataset.wired = '1';
+          birdModelSel.addEventListener('change', refreshBirdModelStatus);
+        }
+        refreshBirdModelStatus();
+      }
+
       const showSciCb = document.getElementById('showScientificNames');
       if (showSciCb) showSciCb.checked = !!getSetting('show_scientific_names', false);
 
@@ -393,7 +420,9 @@
       const treeScanDepth = Math.max(1, Math.min(6, parseInt(document.getElementById('treeScanDepth').value, 10) || 3));
       const analyticsOptIn = document.getElementById('settingsAnalyticsOptIn').checked;
       const crashReportsCb = document.getElementById('settingsCrashReports');
-      const crashReportsEnabled = crashReportsCb ? crashReportsCb.checked : true;
+      const crashReportsEnabled = crashReportsCb ? crashReportsCb.checked : false;
+      const updatesCbEl = document.getElementById('settingsCheckUpdates');
+      const checkForUpdates = updatesCbEl ? !!updatesCbEl.checked : false;
       const profileEl = document.getElementById('ratingProfile');
       const ratingProfile = profileEl ? profileEl.value : 'balanced';
       const rawCacheCb2 = document.getElementById('rawPreviewCacheEnabled');
@@ -427,10 +456,18 @@
       const regionsChanged = prevRegions !== nextRegions;
       const showSciChanged = !!existing.show_scientific_names !== showScientificNames;
 
+      const birdModelSelEl = document.getElementById('birdModelRegion');
+      const birdModelRegion = birdModelSelEl ? birdModelSelEl.value : (existing.bird_model_region || 'na');
+      const birdRaritiesEl = document.getElementById('birdIncludeUkRarities');
+      const birdIncludeUkRarities = birdRaritiesEl ? !!birdRaritiesEl.checked : !!existing.bird_include_uk_rarities;
+
       const settings = {
         ...existing, editor, customEditorPath, treeScanDepth,
+        bird_model_region: birdModelRegion,
+        bird_include_uk_rarities: birdIncludeUkRarities,
         analytics_opted_in: analyticsOptIn, analytics_consent_shown: true,
         crash_reports_enabled: crashReportsEnabled,
+        check_for_updates: checkForUpdates,
         rating_profile: ratingProfile,
         rating_thresholds_custom: normalizeCustomThresholds(_customThresholds),
         raw_preview_cache_enabled: rawPreviewCacheEnabled,

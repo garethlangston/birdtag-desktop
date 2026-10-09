@@ -464,9 +464,12 @@ def _mark_session_start() -> None:
             today_utc = datetime.now(timezone.utc).strftime('%Y-%m-%d')
             last_ping = str(settings.get('last_open_ping_utc', '') or '').strip()
             legal_agreed = str(settings.get('legal_agreed_version', '') or '').strip()
+            # UK fork: the daily app-open ping is only sent after an explicit
+            # analytics opt-in (upstream sends it once terms are accepted).
             if (
                 _telemetry is not None
                 and legal_agreed
+                and settings.get('analytics_opted_in') is True
                 and last_ping != today_utc
             ):
                 mid = _telemetry.get_machine_id(settings)
@@ -1191,7 +1194,7 @@ def main():
                         machine_id=_telemetry.get_machine_id(_crash_settings),
                         version=_telemetry._read_version(),
                         exit_reason='crash',
-                        crash_reports_enabled=bool(_crash_settings.get('crash_reports_enabled', True)),
+                        crash_reports_enabled=bool(_crash_settings.get('crash_reports_enabled', False)),
                     )
                 except Exception:
                     pass
@@ -1537,7 +1540,7 @@ if __name__ == '__main__':
                     machine_id=_crash_mid,
                     version=_telemetry._read_version(),
                     exit_reason='crash',
-                    crash_reports_enabled=bool(_crash_settings.get('crash_reports_enabled', True)),
+                    crash_reports_enabled=bool(_crash_settings.get('crash_reports_enabled', False)),
                 )
                 # Give daemon thread a moment to fire off the HTTP request
                 import time as _t

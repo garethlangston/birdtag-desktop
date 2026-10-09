@@ -749,11 +749,12 @@ class QueueManager:
         self._persist_recovery_state()
 
     def _send_folder_analytics(self, item):
-        """Send per-folder analytics (if opted-in) and completion telemetry (non-optional)."""
+        """Send per-folder analytics and completion telemetry — UK fork: only if opted in."""
         try:
             if _telemetry is None:
                 return
             settings = load_persisted_settings()
+            opted_in = settings.get('analytics_opted_in') is True
             machine_id = _telemetry.get_machine_id(settings)
             version = _telemetry._read_version()
 
@@ -765,12 +766,13 @@ class QueueManager:
                 elapsed = max(0.0, (end - item.start_time) - item.paused_duration)
 
             avg_time_per_file_s = elapsed / files_this_session if files_this_session > 0 else 0.0
-            _telemetry.send_analysis_completion_telemetry(
-                files_analyzed=files_this_session,
-                machine_id=machine_id,
-                version=version,
-                avg_time_per_file_s=avg_time_per_file_s,
-            )
+            if opted_in:  # local impact/perf counters below are still updated
+                _telemetry.send_analysis_completion_telemetry(
+                    files_analyzed=files_this_session,
+                    machine_id=machine_id,
+                    version=version,
+                    avg_time_per_file_s=avg_time_per_file_s,
+                )
 
             settings['kestrel_impact_total_files'] = settings.get('kestrel_impact_total_files', 0) + files_this_session
             settings['kestrel_impact_total_seconds'] = round(

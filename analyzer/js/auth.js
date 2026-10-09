@@ -485,6 +485,11 @@
 
     // Check remote version from JSON endpoint
     async function checkRemoteVersion() {
+      // UK fork: no network call at startup unless the user enabled
+      // Settings > "Check for new versions at startup".
+      try {
+        if (typeof getSetting !== 'function' || getSetting('check_for_updates', false) !== true) return;
+      } catch (_) { return; }
       try {
         // Read current app version from VERSION.txt
         let currentVer = _appVersion;

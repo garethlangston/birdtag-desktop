@@ -828,6 +828,27 @@
 
       <h4 style="margin:12px 0 8px;padding-top:8px;border-top:1px solid #1d2230;color:#a0a8b8;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">Species &amp; Region</h4>
 
+      <div class="row">
+        <label for="birdModelRegion" style="flex:1">Bird identification model</label>
+        <select id="birdModelRegion" style="min-width:280px">
+          <option value="na">North America (Kestrel original)</option>
+          <option value="uk">UK (EVA-02 iNat21, British List)</option>
+          <option value="europe">Europe (EVA-02 iNat21, Palearctic)</option>
+          <option value="world">World (EVA-02 iNat21, all 1,486 birds)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="birdIncludeUkRarities" style="flex:1">Include UK rarities (BBRC)</label>
+        <label class="inline" style="gap:6px">
+          <input type="checkbox" id="birdIncludeUkRarities" />
+          <span class="muted">UK / Europe models only</span>
+        </label>
+      </div>
+      <div class="muted" id="birdModelStatus" style="font-size:12px;margin-top:-6px;margin-bottom:8px">
+        Applies to the next analysis run. UK / Europe / World need the separately downloaded
+        EVA-02 model (non-commercial licence) in the models_extra folder.
+      </div>
+
       <div class="row" style="align-items:flex-start">
         <label for="birdRegionsPicker" style="flex:1">Bird Regions</label>
         <div id="birdRegionsPicker" style="display:flex;flex-direction:column;gap:4px;min-width:280px;max-height:200px;overflow-y:auto;border:1px solid #1d2230;border-radius:6px;padding:6px 8px;background:#0e1117">
@@ -948,7 +969,17 @@
         </label>
       </div>
       <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Automatically send a report if Kestrel
-        crashes, so we can find and fix the problem. No filenames, paths, or images are ever shared.</div>
+        crashes, so we can find and fix the problem. No filenames, paths, or images are ever shared.
+        Off by default in this fork.</div>
+
+      <div class="row">
+        <label for="settingsCheckUpdates" style="flex:1">Check for new versions at startup</label>
+        <label class="inline" style="gap:6px">
+          <input type="checkbox" id="settingsCheckUpdates" />
+        </label>
+      </div>
+      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Fetches the upstream release list from
+        projectkestrel.org when Kestrel starts. Off by default in this fork (no network calls at startup).</div>
     </div>
     <div class="settings-footer">
       <button id="settingsCancel">Cancel</button>

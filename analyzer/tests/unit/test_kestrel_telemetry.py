@@ -40,8 +40,8 @@ def pinned_user(monkeypatch):
 class TestCrashReportOptOut:
     """send_crash_report() must respect the crash_reports_enabled flag.
 
-    Gating happens for the two automatic call sites; the flag defaults to
-    True so a failed settings read still sends.
+    Gating happens for the two automatic call sites. UK fork: the flag
+    defaults to False, so a failed settings read does NOT send.
     """
 
     @pytest.fixture
@@ -63,10 +63,10 @@ class TestCrashReportOptOut:
         assert len(captured_posts) == 1
         assert captured_posts[0][0] == '/api/crash'
 
-    def test_sends_by_default(self, captured_posts):
-        # No explicit flag -> defaults to True (failsafe-on).
+    def test_not_sent_by_default(self, captured_posts):
+        # UK fork: no explicit flag -> defaults to False (privacy-first opt-in).
         kestrel_telemetry.send_crash_report(exc=ValueError('boom'))
-        assert len(captured_posts) == 1
+        assert captured_posts == []
 
     def test_suppressed_when_disabled(self, captured_posts):
         kestrel_telemetry.send_crash_report(

@@ -214,10 +214,10 @@ class TestSanitizePayload:
 
 
 class TestCrashReportsSetting:
-    """Tests for ``crash_reports_enabled`` — opt-out flag, default ON.
+    """Tests for ``crash_reports_enabled`` — UK fork: opt-in flag, default OFF.
 
     Like other ``_set_bool`` keys, an absent key is left absent (the default
-    is applied at read time via ``.get(..., True)``); a present value is
+    is applied at read time via ``.get(..., False)``); a present value is
     coerced to a real bool.
     """
 
@@ -530,3 +530,29 @@ class TestMonotonicGuard:
         incoming = {"kestrel_impact_total_files": 50}
         result = _apply_monotonic_guard(incoming, None)
         assert result.get("kestrel_impact_total_files") == 50
+
+
+class TestUkForkSettings:
+    """UK fork: bird model selection + privacy-first defaults."""
+
+    def test_bird_model_region_allowlist(self):
+        for v in ("na", "uk", "europe", "world"):
+            assert _sanitize_settings_payload({"bird_model_region": v})["bird_model_region"] == v
+        assert _sanitize_settings_payload({"bird_model_region": "UK"})["bird_model_region"] == "uk"
+        assert _sanitize_settings_payload({"bird_model_region": "mars"})["bird_model_region"] == "na"
+
+    def test_rarities_flag_coerced(self):
+        assert _sanitize_settings_payload({"bird_include_uk_rarities": "yes"})["bird_include_uk_rarities"] is True
+        assert _sanitize_settings_payload({"bird_include_uk_rarities": 0})["bird_include_uk_rarities"] is False
+
+    def test_check_for_updates_round_trips(self):
+        assert _sanitize_settings_payload({"check_for_updates": True})["check_for_updates"] is True
+        assert "check_for_updates" not in _sanitize_settings_payload({})
+
+    def test_bird_model_setting_persists(self, tmp_path, monkeypatch):
+        import settings_utils
+        monkeypatch.setattr(settings_utils, "_get_user_data_dir", lambda: str(tmp_path))
+        settings_utils.save_persisted_settings({"bird_model_region": "uk", "bird_include_uk_rarities": True})
+        loaded = settings_utils.load_persisted_settings()
+        assert loaded["bird_model_region"] == "uk"
+        assert loaded["bird_include_uk_rarities"] is True

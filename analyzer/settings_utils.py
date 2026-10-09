@@ -63,6 +63,7 @@ _ALLOWED_RATING_PROFILES = {
 _ALLOWED_EXPOSURE_QUALITY = {'lenient', 'balanced', 'aggressive'}
 _ALLOWED_WILDLIFE_MODEL_MODES = {'fast', 'accurate'}
 _ALLOWED_QUEUE_DETECTOR_NAMES = {'mdv5a', 'mdv1000-cedar'}
+_ALLOWED_BIRD_MODEL_REGIONS = {'na', 'uk', 'europe', 'world'}
 # Biogeographic region codes for the species combobox. Sourced from the
 # ``bird_catalog`` module so the data layer owns the vocabulary and we only
 # import the tuple here for validation.
@@ -472,10 +473,13 @@ def _sanitize_settings_payload(data: dict, emit_log: bool = False) -> dict:
 
     _set_opt_bool('analytics_opted_in', default=None)
     _set_bool('analytics_consent_shown', default=False)
-    # Crash reports default ON; users can opt out via Settings. Gated only for
-    # the two automatic sends in visualizer.py — the user-confirmed recovery
+    # UK fork: crash reports default OFF (opt-in via Settings). Gated for the
+    # two automatic sends in visualizer.py — the user-confirmed recovery
     # report ignores this flag (the dialog is its own consent).
-    _set_bool('crash_reports_enabled', default=True)
+    _set_bool('crash_reports_enabled', default=False)
+    # UK fork: the startup "new version available" check (projectkestrel.org)
+    # is off unless the user enables it.
+    _set_bool('check_for_updates', default=False)
 
     if 'rating_profile' in data:
         out['rating_profile'] = _coerce_enum(data.get('rating_profile'), _ALLOWED_RATING_PROFILES, default='balanced')
@@ -567,6 +571,14 @@ def _sanitize_settings_payload(data: dict, emit_log: bool = False) -> dict:
         else:
             out['bird_regions'] = list(_DEFAULT_BIRD_REGIONS)
     _set_bool('show_scientific_names', default=False)
+    # UK fork: which bird species model the pipeline uses. 'na' = Kestrel's
+    # original North American model (upstream default); 'uk' / 'europe' /
+    # 'world' = EVA-02 iNat21 restricted to that region's species.
+    if 'bird_model_region' in data:
+        out['bird_model_region'] = _coerce_enum(
+            data.get('bird_model_region'), _ALLOWED_BIRD_MODEL_REGIONS, default='na',
+        )
+    _set_bool('bird_include_uk_rarities', default=False)
 
     _set_bool('includeSecondarySpecies', default=False)
     _set_bool('groupByFolder', default=True)

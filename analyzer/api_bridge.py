@@ -912,7 +912,10 @@ class Api:
         legacy_agreed = str(settings.get('legal_agreed_version', '') or '').strip() != ''
         install_sent = settings.get('installed_telemetry_sent', False)
 
-        remote = self._fetch_remote_legal_payload()
+        # UK fork: no network call at startup unless the user enabled
+        # "Check for new versions at startup"; the offline fallback below
+        # was designed for exactly this case.
+        remote = self._fetch_remote_legal_payload() if settings.get('check_for_updates') is True else {}
         effective_date = remote.get('effective_date', '')
         terms_url = remote.get('terms_url', '') or 'https://projectkestrel.org/terms-of-use'
         privacy_url = remote.get('privacy_url', '') or 'https://projectkestrel.org/privacy-policy'
@@ -972,7 +975,8 @@ class Api:
             settings['legal_agreed_date'] = date_str
         info(f'[legal] User agreed to terms (version {version}, effective_date={date_str!r})')
 
-        if not settings.get('installed_telemetry_sent', False):
+        # UK fork: the one-off installation ping needs an explicit analytics opt-in.
+        if not settings.get('installed_telemetry_sent', False) and settings.get('analytics_opted_in') is True:
             if _telemetry:
                 mid = _telemetry.get_machine_id(settings)
                 _telemetry.send_installation_telemetry(mid, version=version)
@@ -1483,6 +1487,37 @@ class Api:
             cached = None
         self._bird_catalog_cache = cached
         return cached
+
+    def get_bird_model_status(self, region='na'):
+        """Status line for Settings > Bird identification model (UK fork).
+
+        Takes only a region code (no paths from JS). Reports whether the EVA-02
+        ONNX file needed for UK / Europe / World is installed and where Kestrel
+        looks for it.
+        """
+        try:
+            try:
+                from kestrel_analyzer.ml import bird_species_inat21 as inat
+            except ImportError:
+                from analyzer.kestrel_analyzer.ml import bird_species_inat21 as inat
+            region = str(region or 'na').lower()
+            dirs = [str(d) for d in inat.model_search_dirs()]
+            if region not in inat.REGIONS:
+                return {'success': True, 'region': 'na', 'available': True, 'model_path': '',
+                        'search_dirs': dirs,
+                        'message': "Kestrel's original North American model (499 species)."}
+            rows = inat.region_rows(region, include_rarities=False)
+            found = inat.find_model(prefer_fp16=False)
+            if found is None:
+                return {'success': True, 'region': region, 'available': False, 'model_path': '',
+                        'search_dirs': dirs, 'message': inat.missing_model_message()}
+            return {'success': True, 'region': region, 'available': True, 'model_path': str(found),
+                    'search_dirs': dirs,
+                    'message': f'{region.upper()}: {len(rows)} species (+ rarities if ticked). '
+                               f'Model found in {found.parent}. Applies to the next analysis run.'}
+        except Exception as e:
+            error(f'[API] get_bird_model_status error: {e}')
+            return {'success': False, 'error': str(e)}
 
     def get_bird_catalog_meta(self):
         """Return UI metadata: region labels + default selection + catalog size.
@@ -2907,6 +2942,7 @@ class Api:
             _telemetry.send_crash_report(
                 exc=None,
                 tb_str='Recovered unclean shutdown report requested by user.',
+                crash_reports_enabled=True,  # user-confirmed in the recovery dialog
                 log_tail=log_tail,
                 session_analytics={
                     'recovery_report': True,
