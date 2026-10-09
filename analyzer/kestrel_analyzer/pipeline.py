@@ -68,6 +68,7 @@ from .ml import GPU_EP
 from .ml.speciesnet_sam_hq import SpeciesNetSAMHQWrapper
 from .ml.provider_coordinator import ResilienceConfig
 from .ml.bird_species import BirdSpeciesClassifier
+from .ml import bird_species_inat21 as _inat21
 from .ml.quality import QualityClassifier
 
 
@@ -87,6 +88,9 @@ class AnalysisPipeline:
         self.detector_name = str(detector_name)
         self.sn_sam: Optional[SpeciesNetSAMHQWrapper] = None
         self.species_clf: Optional[BirdSpeciesClassifier] = None
+        # (region, include_rarities, model path) the current species_clf was built for;
+        # a settings change rebuilds the classifier on the next load_models().
+        self._species_clf_key: Optional[tuple] = None
         self.quality_clf: Optional[QualityClassifier] = None
         self._log_path: Optional[str] = None
 
@@ -469,6 +473,61 @@ class AnalysisPipeline:
         except Exception:
             pass
 
+    def _resolve_species_model(self) -> tuple:
+        """(region, include_rarities, model_path) from the persisted settings.
+
+        region is 'na' (Kestrel's original North American model) or one of
+        'uk' / 'europe' / 'world' (EVA-02 iNat21). model_path is None for 'na'
+        or when the EVA-02 file is not installed.
+        """
+        settings = {}
+        if callable(load_persisted_settings):
+            try:
+                settings = load_persisted_settings() or {}
+            except Exception:
+                settings = {}
+        region = str(settings.get("bird_model_region", "na") or "na").lower()
+        if region not in _inat21.REGIONS:
+            return ("na", False, None)
+        rarities = bool(settings.get("bird_include_uk_rarities", False))
+        # fp16 halves VRAM (4 GB cards) and is parity-checked; fp32 is faster on CPU.
+        found = _inat21.find_model(prefer_fp16=bool(self.use_gpu and GPU_EP))
+        return (region, rarities, str(found) if found else None)
+
+    def _build_species_classifier(self, key: tuple, coord, status_cb=None):
+        region, rarities, model_path = key
+        if region in _inat21.REGIONS:
+            if model_path:
+                try:
+                    clf = _inat21.Inat21BirdSpeciesClassifier(
+                        model_path, coord, region=region, include_rarities=rarities,
+                    )
+                    self._species_clf_key = key
+                    return clf
+                except Exception as e:
+                    _error(f"[Pipeline] EVA-02 bird model failed to load ({e}); using North America model")
+                    if status_cb:
+                        status_cb(f"Bird model ({region.upper()}) failed to load: {e}. Using North America model.")
+            else:
+                msg = _inat21.missing_model_message()
+                _error(f"[Pipeline] {msg}")
+                if status_cb:
+                    status_cb(msg + " Using the North America model for this run.")
+        clf = BirdSpeciesClassifier(
+            str(SPECIESCLASSIFIER_PATH),
+            str(SPECIESCLASSIFIER_LABELS),
+            coord,
+            models_dir=str(MODELS_DIR),
+        )
+        self._species_clf_key = key
+        return clf
+
+    def _species_crop(self, box, img):
+        """Crop handed to the species classifier (padded square for EVA-02)."""
+        if getattr(self.species_clf, "wants_square_context", False):
+            return _inat21.square_context_crop(box, img)
+        return self.sn_sam.get_species_crop(box, img)
+
     def load_models(
         self,
         status_cb: Optional[Callable[[str], None]] = None,
@@ -486,6 +545,9 @@ class AnalysisPipeline:
             and getattr(self.sn_sam, "use_gpu", None) == self.use_gpu
             and str(getattr(self.sn_sam, "detector_name", DEFAULT_DETECTOR_NAME)) == self.detector_name
         )
+        species_key = self._resolve_species_model()
+        if self.species_clf is not None and species_key != self._species_clf_key:
+            self.species_clf = None
         if mask_ready_for_cap and self.species_clf and self.quality_clf:
             # Wrapper is being reused — repoint its status_cb at the active
             # folder so coord notifications (e.g., "Switched to CPU after GPU
@@ -527,12 +589,7 @@ class AnalysisPipeline:
         # species step and the run looks "stuck on error".
         coord = self.sn_sam.coord
         if not self.species_clf:
-            self.species_clf = BirdSpeciesClassifier(
-                str(SPECIESCLASSIFIER_PATH),
-                str(SPECIESCLASSIFIER_LABELS),
-                coord,
-                models_dir=str(MODELS_DIR),
-            )
+            self.species_clf = self._build_species_classifier(species_key, coord, status_cb)
         if not self.quality_clf:
             self.quality_clf = QualityClassifier(
                 str(QUALITYCLASSIFIER_PATH),
@@ -1291,7 +1348,7 @@ class AnalysisPipeline:
                                 original_patch = img[y0:y1, x0:x1].copy()
                                 img[y0:y1, x0:x1] = corrected_crop
                                 try:
-                                    species_crop = self.sn_sam.get_species_crop(pred_boxes[i], img)
+                                    species_crop = self._species_crop(pred_boxes[i], img)
                                     quality_crop, quality_mask = self.sn_sam.get_square_crop(masks[i], img, resize=True)
                                 finally:
                                     img[y0:y1, x0:x1] = original_patch
@@ -1305,7 +1362,7 @@ class AnalysisPipeline:
                                 total_stops = 0.0
                                 meter_scale = 1.0
                                 pipeline_mode = "legacy_auto_bright_v1"
-                                species_crop = self.sn_sam.get_species_crop(pred_boxes[i], img)
+                                species_crop = self._species_crop(pred_boxes[i], img)
                                 quality_crop, quality_mask = self.sn_sam.get_square_crop(masks[i], img, resize=True)
                             items.append(
                                 {

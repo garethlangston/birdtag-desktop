@@ -104,6 +104,28 @@ def _parse_aliases(s: str) -> tuple[str, ...]:
     return tuple(p for p in (t.strip() for t in s.split("|")) if p)
 
 
+def with_bou_aliases(records: list[BirdRecord]) -> list[BirdRecord]:
+    """Add British (BOU) English names as aliases, e.g. "Robin" -> European Robin.
+
+    The UK fork's iNat21 classifier reports IOC canonical names but writes BOU
+    names into keywords; aliasing them here lets the combobox search and
+    ``lookup`` resolve either form. No-op if the iNat21 name table is absent.
+    """
+    try:
+        from .bird_names import bou_aliases
+        extra = bou_aliases()
+    except Exception:
+        return records
+    if not extra:
+        return records
+    from dataclasses import replace
+    out = []
+    for r in records:
+        add = [a for a in extra.get(r.canonical_common_name, ()) if a not in r.aliases]
+        out.append(replace(r, aliases=r.aliases + tuple(add)) if add else r)
+    return out
+
+
 def load_catalog(path: Path | None = None) -> list[BirdRecord]:
     """Read the bundled CSV. Skips header-equivalent or empty rows defensively."""
     p = Path(path) if path is not None else CATALOG_PATH
@@ -309,7 +331,9 @@ class BirdCatalog:
     """In-memory catalog wrapper with region filtering and ranked search."""
 
     def __init__(self, records: list[BirdRecord] | None = None):
-        self._records: list[BirdRecord] = records if records is not None else load_catalog()
+        self._records: list[BirdRecord] = (
+            records if records is not None else with_bou_aliases(load_catalog())
+        )
         # Indices for O(1) exact-name lookup. Lowercased keys.
         self._by_common: dict[str, BirdRecord] = {}
         self._by_alpha: dict[str, BirdRecord] = {}
@@ -331,6 +355,10 @@ class BirdCatalog:
                 _fam_regions.setdefault(r.family_common, set()).update(r.regions)
                 if r.order:
                     _fam_order.setdefault(r.family_common, r.order)
+        # Aliases (e.g. BOU "Robin") resolve too, but never shadow a canonical name.
+        for r in self._records:
+            for alias in r.aliases:
+                self._by_common.setdefault(alias.lower(), r)
         self._families: list[FamilyEntry] = []
         for fc, sci in self._family_common_to_sci.items():
             self._families.append(FamilyEntry(
