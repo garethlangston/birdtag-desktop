@@ -194,3 +194,31 @@ class TestMergeIntoExisting:
 
 def test_default_threshold_matches_browse_filter():
     assert mw.DEFAULT_SPECIES_CONFIDENCE_THRESHOLD == 0.75
+
+
+@needs_exiv2
+class TestExiv2ArrayQuirks:
+    """pyexiv2 splits array items on ', ' when reading and writes
+    lr:hierarchicalSubject as a Seq; the writer must work around both."""
+
+    def test_comma_in_family_survives_rewrites(self, tmp_path):
+        (tmp_path / "P7.ORF").touch()
+        entry = {"filename": "P7.ORF", "rating": 3, "culled": "accept", "species": "European Robin",
+                 "species_confidence": 0.9, "family": "Chats, Old World Flycatchers"}
+        for _ in range(3):
+            write_xmp_metadata(str(tmp_path), [entry])
+        items = mw._read_keyword_arrays((tmp_path / "P7.xmp").read_text(encoding="utf-8"))
+        assert items["Xmp.dc.subject"] == [
+            "Kestrel|Rating|3 Star", "Kestrel|Species|European Robin",
+            "Kestrel|Family|Chats, Old World Flycatchers", "Robin", "Erithacus rubecula"]
+
+    def test_hierarchical_subject_is_a_bag_after_merge(self, tmp_path):
+        (tmp_path / "P8.ORF").touch()
+        entry = {"filename": "P8.ORF", "rating": 3, "culled": "accept", "species": "Grey Heron",
+                 "species_confidence": 0.9}
+        write_xmp_metadata(str(tmp_path), [entry])
+        write_xmp_metadata(str(tmp_path), [entry])  # second write goes through the exiv2 merge
+        text = (tmp_path / "P8.xmp").read_text(encoding="utf-8")
+        hier = text[text.index("<lr:hierarchicalSubject>"):text.index("</lr:hierarchicalSubject>")]
+        assert "<rdf:Bag>" in hier and "<rdf:Seq>" not in hier
+        assert "Birds|Grey Heron|Ardea cinerea" in hier

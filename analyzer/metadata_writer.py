@@ -736,6 +736,10 @@ def _merge_xmp_into_file(path: str, xd: dict) -> None:
     img = pyexiv2.Image(path)
     try:
         existing = img.read_xmp() or {}
+        # pyexiv2's read_xmp() splits array items on ", " (so "Kestrel|Family|
+        # Chats, Old World Flycatchers" comes back as two keywords). Read the
+        # keyword arrays from the raw packet instead.
+        existing.update(_read_keyword_arrays(img.read_raw_xmp() or ''))
         bird_flat = [v for v in xd.get('Xmp.dc.subject', []) if not v.startswith('Kestrel|')]
         kestrel_subject = [v for v in xd.get('Xmp.dc.subject', []) if v.startswith('Kestrel|')]
         merged = merge_keyword_lists(existing, kestrel_subject, bird_flat,
@@ -754,8 +758,45 @@ def _merge_xmp_into_file(path: str, xd: dict) -> None:
             if not re.search(r'(^|\W)(Species|Family|Quality|Rating): ', str(existing['Xmp.dc.description'])):
                 out.pop('Xmp.dc.description')
         img.modify_xmp(out)
+        # exiv2 serialises lr:hierarchicalSubject as rdf:Seq; Adobe's schema
+        # (and Lightroom) define it as a Bag.
+        raw = img.read_raw_xmp() or ''
+        fixed = _HIER_SEQ_RE.sub(lambda m: m.group(1) + 'Bag' + m.group(2) + 'Bag' + m.group(3), raw)
+        if fixed != raw:
+            img.modify_raw_xmp(fixed)
     finally:
         img.close()
+
+
+_HIER_SEQ_RE = re.compile(
+    r'(<lr:hierarchicalSubject>\s*<rdf:)Seq(>.*?</rdf:)Seq(>\s*</lr:hierarchicalSubject>)', re.S)
+_KEYWORD_ARRAY_TAGS = {
+    'Xmp.dc.subject': '{%s}subject' % _NS_DC,
+    'Xmp.lr.hierarchicalSubject': '{%s}hierarchicalSubject' % _NS_LR,
+    'Xmp.digiKam.TagsList': '{%s}TagsList' % _NS_DIGIKAM,
+}
+
+
+def _read_keyword_arrays(raw_xmp: str) -> dict:
+    """Keyword arrays from a raw XMP packet, one list item per rdf:li (commas kept)."""
+    import xml.etree.ElementTree as ET
+
+    out: dict = {}
+    if not raw_xmp or '<' not in raw_xmp:
+        return out
+    start = raw_xmp.find('<x:xmpmeta')
+    end = raw_xmp.rfind('</x:xmpmeta>')
+    body = raw_xmp[start:end + len('</x:xmpmeta>')] if start >= 0 and end > start else raw_xmp
+    try:
+        root = ET.fromstring(body)
+    except ET.ParseError:
+        return out
+    li = '{%s}li' % _NS_RDF
+    for key, tag in _KEYWORD_ARRAY_TAGS.items():
+        for el in root.iter(tag):
+            items = [(e.text or '').strip() for e in el.iter(li)]
+            out.setdefault(key, []).extend(i for i in items if i)
+    return out
 
 
 _XMP_TMP_PREFIX = '.kestrel_xmp_'
