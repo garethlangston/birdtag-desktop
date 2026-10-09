@@ -54,3 +54,7 @@ EXPCOMP_tests/
 _kestrel*
 .tmp*
 .wrangler/
+# UK fork: EVA-02 iNat21 weights are CC-BY-NC-4.0 and installed separately (never commit)
+analyzer/models/birds_inat21/*.onnx
+analyzer/models/birds_inat21/*.onnx.data
+models_extra/
