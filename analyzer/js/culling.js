@@ -411,6 +411,9 @@
         culled: getRawCullStatus(r),
         culled_origin: normalizeCullOrigin(r),
         species: r.species || '',
+        // Model score for the species; the writer tags results below the
+        // confidence threshold as Birds|_Check|<name> instead of Birds|<name>.
+        species_confidence: r.species_confidence != null && r.species_confidence !== '' ? Number(r.species_confidence) : null,
         family: r.family || '',
         quality: r.quality != null ? r.quality : null,
       }));
