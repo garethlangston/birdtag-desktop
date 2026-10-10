@@ -105,15 +105,56 @@ except ImportError:
         _telemetry = None  # type: ignore[assignment]
 
 
-def _get_user_data_dir() -> str:
-    # Use a unified application folder name for Project Kestrel
+try:
+    from branding import data_dir_name as _brand_data_dir_name, legacy_data_dir_names as _brand_legacy_dirs
+except ImportError:  # pragma: no cover - package-style import
+    from analyzer.branding import data_dir_name as _brand_data_dir_name, legacy_data_dir_names as _brand_legacy_dirs
+
+
+def _user_data_base() -> str:
     if sys.platform.startswith('win'):
-        base = os.environ.get('LOCALAPPDATA') or os.environ.get('APPDATA') or os.path.expanduser('~')
-        return os.path.join(base, 'ProjectKestrel')
+        return os.environ.get('LOCALAPPDATA') or os.environ.get('APPDATA') or os.path.expanduser('~')
     if sys.platform == 'darwin':
-        return os.path.join(os.path.expanduser('~'), 'Library', 'Application Support', 'ProjectKestrel')
-    base = os.environ.get('XDG_DATA_HOME') or os.path.join(os.path.expanduser('~'), '.local', 'share')
-    return os.path.join(base, 'project-kestrel')
+        return os.path.join(os.path.expanduser('~'), 'Library', 'Application Support')
+    return os.environ.get('XDG_DATA_HOME') or os.path.join(os.path.expanduser('~'), '.local', 'share')
+
+
+def _get_user_data_dir() -> str:
+    # Fork: folder name comes from branding.json (e.g. %LOCALAPPDATA%\\BirdtagDesktop),
+    # so the fork never shares settings with an installed upstream Project Kestrel.
+    return os.path.join(_user_data_base(), _brand_data_dir_name())
+
+
+def _get_legacy_user_data_dirs() -> list[str]:
+    """Upstream Project Kestrel data folders (read-only fallbacks / migration source)."""
+    base = _user_data_base()
+    return [os.path.join(base, n) for n in _brand_legacy_dirs()
+            if os.path.join(base, n) != _get_user_data_dir()]
+
+
+def migrate_legacy_user_data() -> str | None:
+    """One-time copy of settings.json from an upstream/older folder into the fork's folder.
+
+    Only runs when the fork folder has no settings yet. Large model folders
+    (models_extra) are NOT copied; Kestrel keeps searching the legacy models_extra.
+    Returns the legacy folder migrated from, or None.
+    """
+    import shutil
+
+    dest_dir = _get_user_data_dir()
+    dest = os.path.join(dest_dir, SETTINGS_FILENAME)
+    if os.path.exists(dest):
+        return None
+    for legacy in _get_legacy_user_data_dirs():
+        src = os.path.join(legacy, SETTINGS_FILENAME)
+        if os.path.isfile(src):
+            try:
+                os.makedirs(dest_dir, exist_ok=True)
+                shutil.copy2(src, dest)
+                return legacy
+            except OSError:
+                return None
+    return None
 
 
 def _get_settings_path() -> str:

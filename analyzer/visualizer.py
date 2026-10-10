@@ -25,6 +25,7 @@ try:
 except Exception:
     pass
 
+
 import argparse
 import io
 import os
@@ -44,6 +45,7 @@ from settings_utils import (
 )
 from queue_manager import _queue_manager
 from api_bridge import Api
+from branding import PRODUCT_NAME as _BRAND_NAME
 
 # Telemetry — failsafe import (never blocks startup)
 try:
@@ -862,7 +864,7 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 def _build_arg_parser():
-    ap = argparse.ArgumentParser(description='Serve Project Kestrel visualizer with local desktop bridge.')
+    ap = argparse.ArgumentParser(description=f'Serve {_BRAND_NAME} visualizer with local desktop bridge.')
     ap.add_argument('--port', type=int, default=8765, help='Port to listen on (default 8765)')
     ap.add_argument('--root', default='', help='Default root folder for RAW originals (client can override unless KESTREL_ALLOWED_ROOT set)')
     ap.add_argument(
@@ -1027,7 +1029,7 @@ def _run_api_probe(args) -> int:
     try:
         if target == 'visualizer':
             win = webview.create_window(
-                'Project Kestrel (probe)',
+                f'{_BRAND_NAME} (probe)',
                 url=f'http://{HOST}:{args.port}/',
                 js_api=api,
                 width=900,
@@ -1035,7 +1037,7 @@ def _run_api_probe(args) -> int:
             )
         else:
             win = webview.create_window(
-                'Project Kestrel (probe)',
+                f'{_BRAND_NAME} (probe)',
                 html=_PROBE_HTML,
                 js_api=api,
                 width=400,
@@ -1119,6 +1121,14 @@ def parse_known_args():
 
 
 def main():
+    # Fork: copy settings.json once from an upstream Project Kestrel folder (if any).
+    try:
+        from settings_utils import migrate_legacy_user_data
+        _migrated_from = migrate_legacy_user_data()
+        if _migrated_from:
+            info(f'[startup] Imported settings from {_migrated_from}')
+    except Exception:
+        pass
     args, remaining_args = parse_known_args()
     if args.api_probe:
         sys.exit(_run_api_probe(args))
@@ -1259,7 +1269,7 @@ def main():
         log('Starting windowed UI via pywebview...')
         api = Api() # start maximized
         api._server_port = args.port
-        win = webview.create_window('Project Kestrel', url, js_api=api, maximized=True)
+        win = webview.create_window(_BRAND_NAME, url, js_api=api, maximized=True)
         api._main_window = win
 
         # When the analysis queue is running, intercept the close event so the
@@ -1304,7 +1314,7 @@ def main():
                         MB_ICONQUESTION = 0x00000020
                         title = 'Analysis in progress'
                         if _queue_manager.is_paused:
-                            msg = 'Analysis is paused. Exit Project Kestrel? You can re-open later to resume.'
+                            msg = f'Analysis is paused. Exit {_BRAND_NAME}? You can re-open later to resume.'
                         else:
                             msg = 'Analysis is in progress. Cancel analysis and exit?'
                         resp = ctypes.windll.user32.MessageBoxW(0, msg, title, MB_YESNOCANCEL | MB_ICONQUESTION)
@@ -1324,7 +1334,7 @@ def main():
                         return False
                     else:
                         if _queue_manager.is_paused:
-                            msg = 'Analysis is paused. Exit Project Kestrel? You can re-open later to resume.'
+                            msg = f'Analysis is paused. Exit {_BRAND_NAME}? You can re-open later to resume.'
                         else:
                             msg = 'Analysis is in progress. Cancel analysis and exit?'
                         # macOS: native NSAlert (Tk is excluded from the App

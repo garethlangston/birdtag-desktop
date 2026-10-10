@@ -183,6 +183,8 @@ class TestDistChannelTag:
             def __exit__(self, *a):
                 return False
 
+        # Fork: sends are off unless branding enables upstream services.
+        monkeypatch.setattr(kestrel_telemetry, '_upstream_services_enabled', lambda: True)
         monkeypatch.setattr(kestrel_telemetry.urllib.request, 'Request', _FakeReq)
         monkeypatch.setattr(
             kestrel_telemetry.urllib.request, 'urlopen', lambda *a, **k: _FakeResp()
@@ -214,3 +216,12 @@ class TestDistChannelTag:
     def test_get_dist_channel_defaults_direct(self, monkeypatch):
         monkeypatch.setattr(kestrel_telemetry, '_dist_channel_mod', None)
         assert kestrel_telemetry._get_dist_channel() == 'direct'
+
+
+class TestForkBlocksUpstreamTelemetry:
+    def test_post_json_is_noop_by_default(self, monkeypatch):
+        calls = []
+        monkeypatch.setattr(kestrel_telemetry.urllib.request, 'urlopen',
+                            lambda *a, **k: calls.append(a))
+        kestrel_telemetry._post_json('/api/test', {'foo': 'bar'})
+        assert calls == []

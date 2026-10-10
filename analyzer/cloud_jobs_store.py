@@ -60,14 +60,12 @@ _MAX_JOBS_RETAINED = 200  # oldest non-terminal kept; terminal jobs prune on tou
 
 
 def _user_data_dir() -> str:
-    """Same directory ``settings_utils.py`` writes to. Kept in sync by convention."""
-    if sys.platform.startswith("win"):
-        base = os.environ.get("LOCALAPPDATA") or os.environ.get("APPDATA") or os.path.expanduser("~")
-        return os.path.join(base, "ProjectKestrel")
-    if sys.platform == "darwin":
-        return os.path.join(os.path.expanduser("~"), "Library", "Application Support", "ProjectKestrel")
-    base = os.environ.get("XDG_DATA_HOME") or os.path.join(os.path.expanduser("~"), ".local", "share")
-    return os.path.join(base, "project-kestrel")
+    """Same directory ``settings_utils.py`` writes to (fork: name from branding.json)."""
+    try:
+        from settings_utils import _get_user_data_dir
+    except ImportError:  # pragma: no cover
+        from analyzer.settings_utils import _get_user_data_dir
+    return _get_user_data_dir()
 
 
 def _store_path() -> str:

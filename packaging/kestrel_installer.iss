@@ -1,81 +1,72 @@
-; Kestrel Project Installer - Inno Setup Script
-; Packages Kestrel Analyzer and Visualizer
+; Inno Setup script for the fork (unsigned, per-user install).
+; Every product-specific value is passed in from analyzer/branding.json by CI
+; (see .github/workflows/fork-windows-build.yml), e.g.
+;   ISCC /DMyAppName="Birdtag Desktop" /DExeName=BirdtagDesktop /DAppGuid=... kestrel_installer.iss
+; Upstream Project Kestrel names, ids, URLs and artwork are not used.
 
-#define MyAppName "Project Kestrel"
-#define MyAppPublisher "Project Kestrel"
-#define MyAppURL "https://github.com/sirspongelord/ProjectKestrel"
-#define TutorialURL "https://projectkestrel.org/#tutorial"
-
+#ifndef MyAppName
+  #define MyAppName "Birdtag Desktop"
+#endif
+#ifndef ExeName
+  #define ExeName "BirdtagDesktop"
+#endif
+#ifndef AppGuid
+  #define AppGuid "00000000-0000-0000-0000-000000000000"
+#endif
+#ifndef MyAppPublisher
+  #define MyAppPublisher "Birdtag Desktop contributors"
+#endif
+#ifndef MyAppURL
+  #define MyAppURL "https://github.com/garethlangston/birdtag-desktop"
+#endif
 #ifndef AppVersion
-  #define AppVersion "alpha-YYYY.MM.DD.HH.MM"
+  #define AppVersion "0.0.0-dev"
 #endif
-
-#ifndef ReleaseName
-  #define ReleaseName "Project Kestrel aYYYY.MM.DD.HH.MM"
-#endif
-
-#ifndef ReleaseDir
-  #define ReleaseDir "..\\release"
-#endif
-
-; WebView2 runtime installation removed to reduce installer failures
 
 [Setup]
-AppId=org.ProjectKestrel
+AppId={{{#AppGuid}}
 AppName={#MyAppName}
 AppVersion={#AppVersion}
+AppVerName={#MyAppName} {#AppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
-AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir=..\dist\installer
-OutputBaseFilename={#ReleaseName}-{#AppVersion}-Setup
+OutputBaseFilename={#ExeName}-{#AppVersion}-Setup
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
-PrivilegesRequired=admin
+PrivilegesRequired=lowest
+PrivilegesRequiredOverridesAllowed=dialog
 ArchitecturesInstallIn64BitMode=x64compatible
 ArchitecturesAllowed=x64compatible
 DisableProgramGroupPage=yes
-WizardImageFile=..\assets\logo.png
-WizardSmallImageFile=..\assets\logo.png
+SetupIconFile=..\assets\logo.ico
+UninstallDisplayIcon={app}\{#ExeName}\{#ExeName}.exe
+WizardImageFile=..\assets\installer-side.png
+WizardSmallImageFile=..\assets\installer-small.png
+LicenseFile=..\LICENSE
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon_projectkestrel"; Description: "Create desktop shortcut for Project Kestrel"; GroupDescription: "Desktop shortcuts:"; Flags: checkedonce
+Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription: "Desktop shortcuts:"; Flags: checkedonce
 
 [Files]
-; Unified Project Kestrel bundle (one-dir from PyInstaller)
-Source: "..\analyzer\dist\ProjectKestrel\*"; DestDir: "{app}\ProjectKestrel"; Flags: recursesubdirs createallsubdirs ignoreversion
-
-; Documentation
+Source: "..\analyzer\dist\{#ExeName}\*"; DestDir: "{app}\{#ExeName}"; Flags: recursesubdirs createallsubdirs ignoreversion
 Source: "..\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\FORK-NOTES.md"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\PRIVACY-FORK.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-; Start Menu icon (single unified app)
-Name: "{group}\Project Kestrel"; Filename: "{app}\ProjectKestrel\ProjectKestrel.exe"; WorkingDir: "{app}\ProjectKestrel"; IconFilename: "{app}\ProjectKestrel\_internal\\logo.ico"
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#ExeName}\{#ExeName}.exe"; WorkingDir: "{app}\{#ExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-
-; Desktop icon
-Name: "{autodesktop}\Project Kestrel"; Filename: "{app}\ProjectKestrel\ProjectKestrel.exe"; WorkingDir: "{app}\ProjectKestrel"; Tasks: desktopicon_projectkestrel; IconFilename: "{app}\ProjectKestrel\_internal\\logo.ico"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#ExeName}\{#ExeName}.exe"; WorkingDir: "{app}\{#ExeName}"; Tasks: desktopicon
 
 [Run]
-; Open tutorial webpage after install
-Filename: "{#TutorialURL}"; Description: "View online tutorial"; Flags: shellexec postinstall skipifsilent nowait
-
-; Option to launch after install (unified)
-Filename: "{app}\ProjectKestrel\ProjectKestrel.exe"; Description: "Launch Project Kestrel"; Flags: nowait postinstall skipifsilent unchecked
-
-[Code]
-// WebView2 installer integration removed to avoid forcing downloads during setup.
-// No-op InitializeWizard kept for compatibility.
-procedure InitializeWizard;
-begin
-  // Intentionally empty — installer will not download WebView2.
-end;
+Filename: "{app}\{#ExeName}\{#ExeName}.exe"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent unchecked

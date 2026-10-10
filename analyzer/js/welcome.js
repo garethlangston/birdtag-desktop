@@ -277,6 +277,8 @@
             lastSeen = res && res.settings && res.settings.last_seen_whats_new_version;
           } catch (_) {}
         }
+        // Fork: the bundled note describes upstream releases/services; never auto-show it.
+        if (window.BRAND && !window.BRAND.upstream_services) return;
         if (WHATS_NEW.version !== lastSeen) showNote(WHATS_NEW);
       })();
     })();

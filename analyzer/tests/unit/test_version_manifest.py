@@ -44,6 +44,8 @@ def test_version_number_file_exists_and_parses():
 def test_version_number_matches_appxmanifest():
     """The bundled number and the Store package's Identity Version are the same
     release, so they must not drift apart during a version bump."""
+    if not APPXMANIFEST.exists():
+        pytest.skip("fork: Microsoft Store (MSIX) packaging removed")
     manifest = APPXMANIFEST.read_text(encoding="utf-8")
     identity = re.search(r"<Identity\b[^>]*?Version=\"([\d.]+)\"", manifest, re.S)
     assert identity, "no <Identity ... Version=...> in the appxmanifest"

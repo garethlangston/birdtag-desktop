@@ -125,6 +125,8 @@
     function showAnalyticsConsentDialog() {
       if (_analyticsConsentPending) return;
       if (getSetting('analytics_consent_shown', false)) return;
+      // Fork: telemetry goes to upstream's servers and is disabled here; don't ask.
+      if (window.BRAND && !window.BRAND.upstream_services) return;
       _analyticsConsentPending = true;
       document.getElementById('analyticsConsentDlg').showModal();
     }
@@ -207,6 +209,8 @@
     }
 
     function showDonatePrompt(totalFiles) {
+      // Fork: upstream's donation prompt is not shown (see js/brand.js).
+      if (window.BRAND && !window.BRAND.upstream_services) return;
       const countEl = document.getElementById('donateCountDisplay');
       // Round down to nearest threshold for "over N photos" phrasing
       const thresholds = [1000, 5000, 10000, 25000, 50000, 100000, 200000];

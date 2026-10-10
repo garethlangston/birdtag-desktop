@@ -1,5 +1,11 @@
 # AGENTS.md
 
+> **Fork note:** this repository is *Birdtag Desktop*, an unofficial fork of Project Kestrel.
+> The text below is upstream's guide and still describes the code layout. For the fork:
+> the product name lives in `analyzer/branding.json`, upstream brand assets are not used,
+> upstream hosted services (Perch, Cloud Compute, telemetry) are disabled, and fork changes
+> are documented in `FORK-NOTES.md`. Don't open PRs against upstream from this fork.
+
 This file orients AI coding agents (and human contributors) working in the **Project Kestrel**
 desktop app repo. It is tracked and public — keep it free of anything private (no internal
 infrastructure, no sibling-repo details, no secrets).

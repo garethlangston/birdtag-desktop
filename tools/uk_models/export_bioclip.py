@@ -247,7 +247,7 @@ def stage_verify(a):
                       f"top-1 identical={r['top1_identical']}, min cosine={r['min_cosine']:.5f}, "
                       f"max |prob diff|={r['max_abs_prob_diff']:.2e}", ""]
     lines += ["Install: copy this whole folder into <Kestrel user data>/models_extra/ (Windows:",
-              "%LOCALAPPDATA%\\ProjectKestrel\\models_extra\\" + cfg["name"] + "\\) together with the",
+              "%LOCALAPPDATA%\\BirdtagDesktop\\models_extra\\" + cfg["name"] + "\\) together with the",
               "embeddings/ folder produced by build_bioclip_embeddings.py."]
     (a.dir / "README.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print((a.dir / "README.txt").read_text())

@@ -15,7 +15,7 @@ Usage (Linux or Windows, any Python 3.10+ with: torch timm huggingface_hub onnx
 onnxruntime onnxconverter-common pillow numpy):
   python tools/uk_models/export_eva02.py --out <folder> --images <dir with .jpg> [--stage all]
 
-On Windows put the result in %LOCALAPPDATA%\ProjectKestrel\models_extra (see FORK-NOTES.md).
+On Windows put the result in %LOCALAPPDATA%\BirdtagDesktop\models_extra (see FORK-NOTES.md).
 """
 from __future__ import annotations
 
@@ -193,7 +193,7 @@ def stage_verify(out: Path) -> None:
             lines.append("")
     lines += [
         "Install: copy the .onnx file(s) into the Kestrel 'models_extra' folder",
-        "  (Windows: %LOCALAPPDATA%\\ProjectKestrel\\models_extra) and pick UK / Europe / World under",
+        "  (Windows: %LOCALAPPDATA%\\BirdtagDesktop\\models_extra) and pick UK / Europe / World under",
         "  Settings > Bird identification model. Kestrel prefers fp16 on GPU (DirectML) and fp32 on CPU.",
     ]
     (out / "README.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")

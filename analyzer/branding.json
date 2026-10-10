@@ -1,0 +1,19 @@
+{
+  "_comment": "Single source of truth for the product name. UI (js/brand.js), window title (branding.py), PyInstaller spec, Inno Setup installer and CI read this file. Rename the app by editing it (keep installer_app_guid stable so upgrades work).",
+  "product_name": "Birdtag Desktop",
+  "short_name": "Birdtag",
+  "exe_name": "BirdtagDesktop",
+  "data_dir_name": "BirdtagDesktop",
+  "data_dir_name_unix": "birdtag-desktop",
+  "legacy_data_dir_names": [
+    "ProjectKestrel",
+    "project-kestrel"
+  ],
+  "app_id": "io.github.garethlangston.birdtag-desktop",
+  "publisher": "Birdtag Desktop contributors (unofficial fork of Project Kestrel)",
+  "homepage": "https://github.com/garethlangston/birdtag-desktop",
+  "upstream_name": "Project Kestrel",
+  "upstream_url": "https://github.com/SanjaySoniLV/ProjectKestrel",
+  "upstream_services": false,
+  "installer_app_guid": "65D3A521-4D01-424B-97B4-87305307CD16"
+}

@@ -35,7 +35,7 @@ git (`.gitignore` blocks `*.onnx` under `birds_inat21/`).
      ```
      This downloads the timm model (~1.2 GB) once, exports fp32 (opset 17, legacy tracer),
      converts to fp16, checks both against timm, and writes `README.txt` with SHA256 values.
-2. Put the `.onnx` file(s) in **`%LOCALAPPDATA%\ProjectKestrel\models_extra\`**
+2. Put the `.onnx` file(s) in **`%LOCALAPPDATA%\BirdtagDesktop\models_extra\`**
    (the folder that holds `settings.json`, plus `models_extra`). Kestrel also looks in
    `analyzer\models\birds_inat21\` and in `%KESTREL_MODELS_EXTRA_DIR%` if that is set.
 3. Settings → Species & Region → Bird identification model → **UK**. The line under the
@@ -59,7 +59,7 @@ With **GPU** on, Kestrel uses fp16 if present (half the VRAM); on CPU it prefers
 ### Installing BioCLIP on Windows
 
 1. Copy the whole `bioclip-2` folder (`config.json`, `image_encoder_fp32.onnx`, `README.txt`,
-   `embeddings\`) into `%LOCALAPPDATA%\ProjectKestrel\models_extra\bioclip-2\`, next to the
+   `embeddings\`) into `%LOCALAPPDATA%\BirdtagDesktop\models_extra\bioclip-2\`, next to the
    EVA-02 file. Check the SHA256 in `README.txt`.
 2. Settings → Species & Region → Other wildlife model → **BioCLIP 2**. The line below the setting
    shows the species counts it found for your region.

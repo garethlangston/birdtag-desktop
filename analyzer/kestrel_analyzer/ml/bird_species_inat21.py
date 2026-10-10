@@ -43,7 +43,7 @@ class Inat21ModelMissing(FileNotFoundError):
 
 
 def user_models_extra_dir() -> Path:
-    """``<Kestrel user data dir>/models_extra`` (Windows: %LOCALAPPDATA%/ProjectKestrel/models_extra)."""
+    """``<user data dir>/models_extra`` (Windows: %LOCALAPPDATA%\\BirdtagDesktop\\models_extra; name from branding.json)."""
     try:
         try:
             from settings_utils import _get_user_data_dir  # type: ignore
@@ -52,13 +52,29 @@ def user_models_extra_dir() -> Path:
         return Path(_get_user_data_dir()) / "models_extra"
     except Exception:
         pass
+    try:
+        from branding import data_dir_name  # type: ignore
+    except ImportError:
+        from analyzer.branding import data_dir_name  # type: ignore
     if sys.platform.startswith("win"):
         base = os.environ.get("LOCALAPPDATA") or os.environ.get("APPDATA") or os.path.expanduser("~")
-        return Path(base) / "ProjectKestrel" / "models_extra"
-    if sys.platform == "darwin":
-        return Path.home() / "Library" / "Application Support" / "ProjectKestrel" / "models_extra"
-    base = os.environ.get("XDG_DATA_HOME") or os.path.join(os.path.expanduser("~"), ".local", "share")
-    return Path(base) / "project-kestrel" / "models_extra"
+    elif sys.platform == "darwin":
+        base = str(Path.home() / "Library" / "Application Support")
+    else:
+        base = os.environ.get("XDG_DATA_HOME") or os.path.join(os.path.expanduser("~"), ".local", "share")
+    return Path(base) / data_dir_name() / "models_extra"
+
+
+def legacy_models_extra_dirs() -> list[Path]:
+    """models_extra under upstream Project Kestrel's data folder (phase 1/2 install path)."""
+    try:
+        try:
+            from settings_utils import _get_legacy_user_data_dirs  # type: ignore
+        except ImportError:
+            from analyzer.settings_utils import _get_legacy_user_data_dirs  # type: ignore
+        return [Path(d) / "models_extra" for d in _get_legacy_user_data_dirs()]
+    except Exception:
+        return []
 
 
 def model_search_dirs() -> list[Path]:
@@ -66,7 +82,7 @@ def model_search_dirs() -> list[Path]:
     env = os.environ.get("KESTREL_MODELS_EXTRA_DIR", "").strip()
     if env:
         dirs.append(Path(env))
-    dirs += [user_models_extra_dir(), INAT21_DATA_DIR]
+    dirs += [user_models_extra_dir(), *legacy_models_extra_dirs(), INAT21_DATA_DIR]
     return dirs
 
 

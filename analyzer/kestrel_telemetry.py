@@ -175,9 +175,22 @@ def _warn(msg: str) -> None:
         print(msg, file=sys.stderr, flush=True)
 
 
+def _upstream_services_enabled() -> bool:
+    """Fork: telemetry/feedback go to upstream Project Kestrel's servers, so they are
+    off unless branding.json sets upstream_services (default false)."""
+    try:
+        try:
+            from branding import UPSTREAM_SERVICES
+        except ImportError:  # pragma: no cover
+            from analyzer.branding import UPSTREAM_SERVICES
+        return bool(UPSTREAM_SERVICES)
+    except Exception:
+        return False
+
+
 def _post_json(endpoint: str, payload: dict) -> None:
     """POST JSON to the Cloudflare Worker (fire-and-forget, failsafe)."""
-    if urllib is None:
+    if urllib is None or not _upstream_services_enabled():
         return
     url = f"{KESTREL_API_URL}{endpoint}"
     try:

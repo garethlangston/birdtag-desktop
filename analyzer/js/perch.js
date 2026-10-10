@@ -1681,6 +1681,8 @@
      *  Also handles the upload-already-running gate + dirty-CSV save prompt
      *  that the previous shareWithPerchFolder used to handle. */
     async function openPerchDialog(rootPath) {
+      // Fork: upstream's hosted Perch service is not offered (see js/brand.js).
+      if (window.BRAND && !window.BRAND.upstream_services) return;
       if (!window.pywebview?.api) {
         showToast('Share with Perch requires desktop mode', 4000);
         return;
