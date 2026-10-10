@@ -1,0 +1,13 @@
+slug | Commons file | licence | author | URL
+common_lizard | File:Common lizard (Zootoca vivipara) juvenile.jpg | CC BY-SA 4.0 | Charles J. Sharp | https://commons.wikimedia.org/wiki/File:Common_lizard_(Zootoca_vivipara)_juvenile.jpg
+slow_worm | File:Common slowworm (Anguis fragilis).jpg | CC BY-SA 4.0 | Petar Milošević | https://commons.wikimedia.org/wiki/File:Common_slowworm_(Anguis_fragilis).jpg
+grass_snake | File:AD2009Aug07 Natrix helvetica 01.jpg | Public domain | Bernie | https://commons.wikimedia.org/wiki/File:AD2009Aug07_Natrix_helvetica_01.jpg
+common_frog | File:Rana temporaria in nature park Trhoň in 2014 (2).jpg | CC BY 3.0 | Chmee2 | https://commons.wikimedia.org/wiki/File:Rana_temporaria_in_nature_park_Trho%C5%88_in_2014_(2).jpg
+common_toad | File:Bufo bufo couple during migration(2005).jpg | CC BY-SA 3.0 | Janekpfeifer at de.wikipedia | https://commons.wikimedia.org/wiki/File:Bufo_bufo_couple_during_migration(2005).jpg
+smooth_newt | File:Smooth newt (Lissotriton vulgaris) nymph.jpg | CC BY-SA 4.0 | Charles J. Sharp | https://commons.wikimedia.org/wiki/File:Smooth_newt_(Lissotriton_vulgaris)_nymph.jpg
+peacock_butterfly | File:Inachis io Lill-Jansskogen.JPG | CC BY-SA 3.0 | Korall | https://commons.wikimedia.org/wiki/File:Inachis_io_Lill-Jansskogen.JPG
+red_admiral | File:Admiral auf einer Mostbirne 1.JPG | CC BY-SA 3.0 at | Böhringer Friedrich | https://commons.wikimedia.org/wiki/File:Admiral_auf_einer_Mostbirne_1.JPG
+emperor_dragonfly | File:Anax imperator qtl2.jpg | CC BY 3.0 | Quartl | https://commons.wikimedia.org/wiki/File:Anax_imperator_qtl2.jpg
+banded_demoiselle | File:♂ Gebänderte Prachtlibelle Calopteryx splendens 5.JPG | CC BY-SA 3.0 at | Feel free to use my photos, but please mention me as the author and if you want  | https://commons.wikimedia.org/wiki/File:%E2%99%82_Geb%C3%A4nderte_Prachtlibelle_Calopteryx_splendens_5.JPG
+buff_tailed_bumblebee | File:Bombus terrestris queen - Tilia cordata - Keila.jpg | CC BY-SA 4.0 | Ivar Leidus | https://commons.wikimedia.org/wiki/File:Bombus_terrestris_queen_-_Tilia_cordata_-_Keila.jpg
+seven_spot_ladybird_macro | File:Coccinella septempunctata couple (aka).jpg | CC BY-SA 2.5 | André Karwath aka Aka | https://commons.wikimedia.org/wiki/File:Coccinella_septempunctata_couple_(aka).jpg
