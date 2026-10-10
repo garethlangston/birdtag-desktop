@@ -69,6 +69,7 @@ from .ml.speciesnet_sam_hq import SpeciesNetSAMHQWrapper
 from .ml.provider_coordinator import ResilienceConfig
 from .ml.bird_species import BirdSpeciesClassifier
 from .ml import bird_species_inat21 as _inat21
+from .ml import bioclip as _bioclip
 from .ml.quality import QualityClassifier
 
 
@@ -91,6 +92,10 @@ class AnalysisPipeline:
         # (region, include_rarities, model path) the current species_clf was built for;
         # a settings change rebuilds the classifier on the next load_models().
         self._species_clf_key: Optional[tuple] = None
+        # UK fork: BioCLIP for reptiles / amphibians / insects (session is lazy).
+        self.bioclip_clf = None
+        self._bioclip_key: Optional[tuple] = None
+        self._species_threshold = 0.75
         self.quality_clf: Optional[QualityClassifier] = None
         self._log_path: Optional[str] = None
 
@@ -486,13 +491,92 @@ class AnalysisPipeline:
                 settings = load_persisted_settings() or {}
             except Exception:
                 settings = {}
-        region = str(settings.get("bird_model_region", "na") or "na").lower()
+        region = str(settings.get("bird_model_region", "uk") or "uk").lower()
         if region not in _inat21.REGIONS:
             return ("na", False, None)
         rarities = bool(settings.get("bird_include_uk_rarities", False))
         # fp16 halves VRAM (4 GB cards) and is parity-checked; fp32 is faster on CPU.
         found = _inat21.find_model(prefer_fp16=bool(self.use_gpu and GPU_EP))
         return (region, rarities, str(found) if found else None)
+
+    @staticmethod
+    def _settings() -> dict:
+        if callable(load_persisted_settings):
+            try:
+                return load_persisted_settings() or {}
+            except Exception:
+                return {}
+        return {}
+
+    def _resolve_bioclip(self) -> tuple:
+        """(enabled, model_dir, region) from settings + installed files."""
+        settings = self._settings()
+        try:
+            self._species_threshold = float(settings.get("species_confidence_threshold", 0.75))
+        except (TypeError, ValueError):
+            self._species_threshold = 0.75
+        mode = str(settings.get("other_wildlife_model", "bioclip") or "bioclip").lower()
+        if mode != "bioclip":
+            return (False, None, None)
+        region = str(settings.get("bird_model_region", "uk") or "uk").lower()
+        region = region if region in _bioclip.REGIONS else "world"  # NA birds -> World lists
+        found = _bioclip.find_model_dir()
+        return (True, str(found) if found else None, region)
+
+    def _build_bioclip(self, key: tuple, coord, status_cb=None):
+        enabled, model_dir, region = key
+        self._bioclip_key = key
+        if not enabled:
+            return None
+        if not model_dir:
+            msg = _bioclip.missing_message()
+            _error(f"[Pipeline] {msg}")
+            if status_cb:
+                status_cb(msg)
+            return None
+        try:
+            return _bioclip.BioclipClassifier(model_dir, coord, region=region, prefer_fp16=bool(self.use_gpu))
+        except Exception as e:
+            _error(f"[Pipeline] BioCLIP failed to load ({e}); reptiles/amphibians/insects use SpeciesNet only")
+            if status_cb:
+                status_cb(f"BioCLIP failed to load: {e}. Using SpeciesNet only.")
+            return None
+
+    def _bioclip_for_detection(self, label, crop, fallback_species, fallback_score):
+        """Classify a herp/insect/generic detection crop with BioCLIP.
+
+        Returns (species, confidence, family, family_confidence, route).
+        """
+        group = getattr(label, "bioclip_group", None)
+        if self.bioclip_clf is None or not group:
+            return fallback_species, fallback_score, "N/A", 0.0, "speciesnet"
+        generic = group == "any"
+        res = self.bioclip_clf.classify(crop, groups=None if generic else [group], use_negatives=generic)
+        route = f"detection:{label.taxonomy.split(';')[-1] if getattr(label, 'taxonomy', '') else group}"
+        if not res or (generic and not res["beats_negatives"]):
+            _info(f"[BioCLIP] route={route} -> no species (negatives win)")
+            return fallback_species, fallback_score, "N/A", 0.0, route
+        sp, sc = str(res["top_species_labels"][0]), float(res["top_species_scores"][0])
+        _info(f"[BioCLIP] route={route} group={res['group']} species={sp} score={sc:.3f}")
+        return sp, sc, res["top_family_labels"][0], float(res["top_family_scores"][0]), route
+
+    def _bioclip_whole_frame(self, img, name=""):
+        """No detection at all (macro insects/frogs): whole-frame BioCLIP over every
+        group plus background prompts. Returns a result dict or None."""
+        if self.bioclip_clf is None or img is None or getattr(img, "size", 0) < 64:
+            return None
+        try:
+            res = self.bioclip_clf.classify(img, groups=None, use_negatives=True)
+        except Exception as e:
+            _error(f"[BioCLIP] whole-frame failed for {name}: {e}")
+            return None
+        if not res:
+            return None
+        sc = float(res["top_species_scores"][0])
+        ok = res["beats_negatives"] and sc >= self._species_threshold
+        _info(f"[BioCLIP] route=whole-frame file={name} best={res['top_species_labels'][0]} score={sc:.3f}"
+              f" negative={res['negative_score']:.3f} -> {'species' if ok else 'nothing'}")
+        return res if ok else None
 
     def _build_species_classifier(self, key: tuple, coord, status_cb=None):
         region, rarities, model_path = key
@@ -522,8 +606,10 @@ class AnalysisPipeline:
         self._species_clf_key = key
         return clf
 
-    def _species_crop(self, box, img):
-        """Crop handed to the species classifier (padded square for EVA-02)."""
+    def _species_crop(self, box, img, label=None):
+        """Crop handed to the species classifier (padded square for EVA-02 / BioCLIP)."""
+        if getattr(label, "bioclip_group", None) and self.bioclip_clf is not None:
+            return _inat21.square_context_crop(box, img)
         if getattr(self.species_clf, "wants_square_context", False):
             return _inat21.square_context_crop(box, img)
         return self.sn_sam.get_species_crop(box, img)
@@ -548,7 +634,12 @@ class AnalysisPipeline:
         species_key = self._resolve_species_model()
         if self.species_clf is not None and species_key != self._species_clf_key:
             self.species_clf = None
-        if mask_ready_for_cap and self.species_clf and self.quality_clf:
+        bioclip_key = self._resolve_bioclip()
+        if bioclip_key != self._bioclip_key:
+            self.bioclip_clf = None
+            self._bioclip_key = None
+        if mask_ready_for_cap and self.species_clf and self.quality_clf and self._bioclip_key is not None:
+            self.sn_sam.bioclip_routing = self.bioclip_clf is not None
             # Wrapper is being reused — repoint its status_cb at the active
             # folder so coord notifications (e.g., "Switched to CPU after GPU
             # error") land on this folder's queue item, not whichever folder
@@ -582,6 +673,8 @@ class AnalysisPipeline:
             # the new coord recreates.
             self.species_clf = None
             self.quality_clf = None
+            self.bioclip_clf = None
+            self._bioclip_key = None
         # Share the wrapper's coordinator with the species/quality classifiers
         # so demote/promote rebuilds every session in the run together. Without
         # this, a DML/CoreML failure recovers the wrapper but leaves these two
@@ -590,6 +683,9 @@ class AnalysisPipeline:
         coord = self.sn_sam.coord
         if not self.species_clf:
             self.species_clf = self._build_species_classifier(species_key, coord, status_cb)
+        if self._bioclip_key is None:
+            self.bioclip_clf = self._build_bioclip(bioclip_key, coord, status_cb)
+        self.sn_sam.bioclip_routing = self.bioclip_clf is not None
         if not self.quality_clf:
             self.quality_clf = QualityClassifier(
                 str(QUALITYCLASSIFIER_PATH),
@@ -1257,15 +1353,25 @@ class AnalysisPipeline:
                         # Store relative path for cross-platform compatibility
                         crop_path_rel = os.path.relpath(crop_path, folder)
                         h, w = img.shape[:2]
+                        # UK fork: nothing detected -> whole-frame BioCLIP (macro insects / frogs)
+                        stage_ctx["stage"] = "bioclip_whole_frame"
+                        wf = self._bioclip_whole_frame(img, raw_file)
+                        if wf is not None:
+                            entry.update({
+                                "species": str(wf["top_species_labels"][0]),
+                                "species_confidence": float(wf["top_species_scores"][0]),
+                                "family": wf["top_family_labels"][0],
+                                "family_confidence": float(wf["top_family_scores"][0]),
+                            })
                         fallback_crop = {
                             "crop_index": 0,
                             "crop_path": crop_path_rel,
                             "detection_index": -1,
                             "detection_confidence": 0.0,
-                            "species": "Unknown",
-                            "species_confidence": 0.0,
-                            "family": "Unknown",
-                            "family_confidence": 0.0,
+                            "species": entry.get("species", "Unknown"),
+                            "species_confidence": float(entry.get("species_confidence", 0.0) or 0.0),
+                            "family": entry.get("family", "Unknown"),
+                            "family_confidence": float(entry.get("family_confidence", 0.0) or 0.0),
                             "quality": -1.0,
                             "rating": 0,
                             "exposure_correction": 0.0,
@@ -1348,7 +1454,7 @@ class AnalysisPipeline:
                                 original_patch = img[y0:y1, x0:x1].copy()
                                 img[y0:y1, x0:x1] = corrected_crop
                                 try:
-                                    species_crop = self._species_crop(pred_boxes[i], img)
+                                    species_crop = self._species_crop(pred_boxes[i], img, pred_class[i])
                                     quality_crop, quality_mask = self.sn_sam.get_square_crop(masks[i], img, resize=True)
                                 finally:
                                     img[y0:y1, x0:x1] = original_patch
@@ -1362,7 +1468,7 @@ class AnalysisPipeline:
                                 total_stops = 0.0
                                 meter_scale = 1.0
                                 pipeline_mode = "legacy_auto_bright_v1"
-                                species_crop = self._species_crop(pred_boxes[i], img)
+                                species_crop = self._species_crop(pred_boxes[i], img, pred_class[i])
                                 quality_crop, quality_mask = self.sn_sam.get_square_crop(masks[i], img, resize=True)
                             items.append(
                                 {
@@ -1418,10 +1524,12 @@ class AnalysisPipeline:
                                     item["family"] = "Unknown"
                                     item["family_confidence"] = 0.0
                             else:
-                                item["species"] = pred_class[i]
-                                item["species_confidence"] = float(pred_score[i])
-                                item["family"] = "N/A"
-                                item["family_confidence"] = 0.0
+                                # UK fork: herps / insects / generic animals -> BioCLIP
+                                stage_ctx["stage"] = "bioclip"
+                                (item["species"], item["species_confidence"], item["family"],
+                                 item["family_confidence"], item["route"]) = self._bioclip_for_detection(
+                                    pred_class[i], item["species_crop"], str(pred_class[i]), float(pred_score[i]))
+                                item["species"] = str(item["species"])
                             item["exposure_correction"] = round(
                                 float(item.get("total_stops", item["stops"])),
                                 4,

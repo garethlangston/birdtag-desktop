@@ -1488,7 +1488,41 @@ class Api:
         self._bird_catalog_cache = cached
         return cached
 
-    def get_bird_model_status(self, region='na'):
+    def get_wildlife_model_status(self, mode='bioclip', region='uk'):
+        """Status line for Settings > Other wildlife model (UK fork). No paths from JS."""
+        try:
+            try:
+                from kestrel_analyzer.ml import bioclip as bc
+            except ImportError:
+                from analyzer.kestrel_analyzer.ml import bioclip as bc
+            if str(mode or '').lower() != 'bioclip':
+                return {'success': True, 'available': True,
+                        'message': 'SpeciesNet only: reptiles, amphibians and insects get SpeciesNet labels '
+                                   '(only with wildlife detection on).'}
+            region = str(region or 'uk').lower()
+            region = region if region in bc.REGIONS else 'world'
+            found = bc.find_model_dir()
+            if found is None:
+                return {'success': True, 'available': False, 'message': bc.missing_message()}
+            emb = found / 'embeddings'
+            counts = {}
+            for g in bc.GROUPS:
+                f = emb / f'{g}_{region}.csv'
+                if f.is_file():
+                    with open(f, encoding='utf-8') as fh:
+                        counts[g] = max(0, sum(1 for _ in fh) - 1)
+            if not counts:
+                return {'success': True, 'available': False,
+                        'message': f'{found.name} found in {found.parent}, but it has no {region.upper()} '
+                                   'species lists (embeddings/). See FORK-NOTES.md.'}
+            desc = ', '.join(f'{n} {g}' for g, n in counts.items())
+            return {'success': True, 'available': True,
+                    'message': f'{found.name} ({region.upper()}): {desc}. Applies to the next analysis run.'}
+        except Exception as e:
+            error(f'[API] get_wildlife_model_status error: {e}')
+            return {'success': False, 'error': str(e)}
+
+    def get_bird_model_status(self, region='uk'):
         """Status line for Settings > Bird identification model (UK fork).
 
         Takes only a region code (no paths from JS). Reports whether the EVA-02
@@ -1500,7 +1534,7 @@ class Api:
                 from kestrel_analyzer.ml import bird_species_inat21 as inat
             except ImportError:
                 from analyzer.kestrel_analyzer.ml import bird_species_inat21 as inat
-            region = str(region or 'na').lower()
+            region = str(region or 'uk').lower()
             dirs = [str(d) for d in inat.model_search_dirs()]
             if region not in inat.REGIONS:
                 return {'success': True, 'region': 'na', 'available': True, 'model_path': '',
@@ -1573,7 +1607,21 @@ class Api:
                 n = 20
             n = max(1, min(100, n))
             results = cat.search(q, sel, limit=n)
-            return {'success': True, 'results': [record_to_dict(r) for r in results]}
+            out = [record_to_dict(r) for r in results]
+            # UK fork: BioCLIP reptiles / amphibians / insects of the selected region are
+            # offered too, so a wrong herp/insect ID can be corrected by hand.
+            if len(out) < n:
+                try:
+                    try:
+                        from kestrel_analyzer.wildlife_names import search_wildlife
+                    except ImportError:
+                        from analyzer.kestrel_analyzer.wildlife_names import search_wildlife
+                    region = str((load_persisted_settings() or {}).get('bird_model_region', 'uk') or 'uk')
+                    region = region if region in ('uk', 'europe', 'world') else 'world'
+                    out += search_wildlife(q, region, limit=n - len(out))
+                except Exception as e:
+                    debug(f'[API] wildlife search skipped: {e}')
+            return {'success': True, 'results': out}
         except Exception as e:
             error(f'[API] search_birds error: {e}')
             return {'success': False, 'error': str(e), 'results': []}
@@ -1625,6 +1673,18 @@ class Api:
                     rec = cat.lookup(raw)
                     if rec is not None:
                         out[rec.canonical_common_name] = record_to_dict(rec)
+                        continue
+                    try:  # UK fork: BioCLIP species pills
+                        try:
+                            from kestrel_analyzer.wildlife_names import lookup_wildlife
+                        except ImportError:
+                            from analyzer.kestrel_analyzer.wildlife_names import lookup_wildlife
+                        region = str((load_persisted_settings() or {}).get('bird_model_region', 'uk') or 'uk')
+                        wrec = lookup_wildlife(raw, region if region in ('uk', 'europe', 'world') else 'world')
+                        if wrec is not None:
+                            out[wrec['canonical_common_name']] = wrec
+                    except Exception:
+                        pass
             return {'success': True, 'map': out}
         except Exception as e:
             error(f'[API] lookup_birds error: {e}')
@@ -6893,6 +6953,12 @@ class Api:
         root_real, err = self._validate_root_dir(root_path, context='write_xmp_metadata', require_exists=True)
         if err:
             return {'success': False, 'error': err}
+        # UK fork: keyword confidence threshold + manual-edit protection from Settings.
+        settings = load_persisted_settings() or {}
+        try:
+            threshold = min(0.99, max(0.30, float(settings.get('species_confidence_threshold', 0.75))))
+        except (TypeError, ValueError):
+            threshold = 0.75
         return _write_xmp_metadata(
             root_real,
             image_data,
@@ -6900,6 +6966,8 @@ class Api:
             use_auto_labels,
             fields=fields if isinstance(fields, dict) else None,
             embed_jpeg=bool(embed_jpeg),
+            species_threshold=threshold,
+            overwrite_manual_edits=bool(settings.get('overwrite_manual_species_edits', False)),
         )
 
     def _restore_file_with_sidecars(self, reject_dir: str, root_path: str, filename: str,

@@ -831,8 +831,8 @@
       <div class="row">
         <label for="birdModelRegion" style="flex:1">Bird identification model</label>
         <select id="birdModelRegion" style="min-width:280px">
-          <option value="na">North America (Kestrel original)</option>
           <option value="uk">UK (EVA-02 iNat21, British List)</option>
+          <option value="na">North America (Kestrel original)</option>
           <option value="europe">Europe (EVA-02 iNat21, Palearctic)</option>
           <option value="world">World (EVA-02 iNat21, all 1,486 birds)</option>
         </select>
@@ -847,6 +847,35 @@
       <div class="muted" id="birdModelStatus" style="font-size:12px;margin-top:-6px;margin-bottom:8px">
         Applies to the next analysis run. UK / Europe / World need the separately downloaded
         EVA-02 model (non-commercial licence) in the models_extra folder.
+      </div>
+
+      <div class="row">
+        <label for="otherWildlifeModel" style="flex:1">Other wildlife model (reptiles, amphibians, insects)</label>
+        <select id="otherWildlifeModel" style="min-width:280px">
+          <option value="bioclip">BioCLIP 2 (zero-shot, region lists)</option>
+          <option value="speciesnet">SpeciesNet only (Kestrel original)</option>
+        </select>
+      </div>
+      <div class="muted" id="wildlifeModelStatus" style="font-size:12px;margin-top:-6px;margin-bottom:8px">
+        Uses the same region as the bird model. Needs the BioCLIP 2 folder in models_extra.
+      </div>
+
+      <div class="row">
+        <label for="speciesConfidenceThreshold" style="flex:1">Species keyword confidence</label>
+        <input id="speciesConfidenceThreshold" type="number" min="0.30" max="0.99" step="0.01" value="0.75" style="width:80px"
+          title="Below this, keywords are written as Birds|_Check|Name (or Insects|_Check|… etc.)" />
+      </div>
+      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">
+        0.30–0.99, default 0.75. Results below it are tagged <code>&lt;Group&gt;|_Check|Name</code> for review;
+        photos with no detected subject only get a species above it.
+      </div>
+
+      <div class="row">
+        <label for="overwriteManualSpeciesEdits" style="flex:1">Overwrite my manual species edits</label>
+        <label class="inline" style="gap:6px">
+          <input type="checkbox" id="overwriteManualSpeciesEdits" />
+          <span class="muted">Off: keywords you changed in digiKam/Lightroom are kept</span>
+        </label>
       </div>
 
       <div class="row" style="align-items:flex-start">

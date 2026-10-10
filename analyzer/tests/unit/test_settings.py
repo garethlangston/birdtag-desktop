@@ -539,7 +539,7 @@ class TestUkForkSettings:
         for v in ("na", "uk", "europe", "world"):
             assert _sanitize_settings_payload({"bird_model_region": v})["bird_model_region"] == v
         assert _sanitize_settings_payload({"bird_model_region": "UK"})["bird_model_region"] == "uk"
-        assert _sanitize_settings_payload({"bird_model_region": "mars"})["bird_model_region"] == "na"
+        assert _sanitize_settings_payload({"bird_model_region": "mars"})["bird_model_region"] == "uk"
 
     def test_rarities_flag_coerced(self):
         assert _sanitize_settings_payload({"bird_include_uk_rarities": "yes"})["bird_include_uk_rarities"] is True
@@ -556,3 +556,28 @@ class TestUkForkSettings:
         loaded = settings_utils.load_persisted_settings()
         assert loaded["bird_model_region"] == "uk"
         assert loaded["bird_include_uk_rarities"] is True
+
+
+class TestUkForkPhase2Settings:
+    def test_threshold_clamped(self):
+        assert _sanitize_settings_payload({"species_confidence_threshold": 0.6})["species_confidence_threshold"] == 0.6
+        assert _sanitize_settings_payload({"species_confidence_threshold": 0.1})["species_confidence_threshold"] == 0.3
+        assert _sanitize_settings_payload({"species_confidence_threshold": 5})["species_confidence_threshold"] == 0.99
+        assert _sanitize_settings_payload({"species_confidence_threshold": "x"})["species_confidence_threshold"] == 0.75
+
+    def test_other_wildlife_model(self):
+        assert _sanitize_settings_payload({"other_wildlife_model": "speciesnet"})["other_wildlife_model"] == "speciesnet"
+        assert _sanitize_settings_payload({"other_wildlife_model": "bogus"})["other_wildlife_model"] == "bioclip"
+
+    def test_overwrite_manual_flag(self):
+        assert _sanitize_settings_payload({"overwrite_manual_species_edits": 1})["overwrite_manual_species_edits"] is True
+
+    def test_phase2_settings_persist(self, tmp_path, monkeypatch):
+        import settings_utils
+        monkeypatch.setattr(settings_utils, "_get_user_data_dir", lambda: str(tmp_path))
+        settings_utils.save_persisted_settings({"species_confidence_threshold": 0.55,
+                                                "other_wildlife_model": "speciesnet",
+                                                "overwrite_manual_species_edits": True})
+        s = settings_utils.load_persisted_settings()
+        assert (s["species_confidence_threshold"], s["other_wildlife_model"], s["overwrite_manual_species_edits"]) \
+            == (0.55, "speciesnet", True)

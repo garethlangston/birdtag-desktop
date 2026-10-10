@@ -405,18 +405,33 @@
         if (detailEl && detail) detailEl.textContent = detail;
       };
 
-      const payload = folderRows.map(r => ({
-        filename: r.filename,
-        rating: getRating(r),
-        culled: getRawCullStatus(r),
-        culled_origin: normalizeCullOrigin(r),
-        species: r.species || '',
-        // Model score for the species; the writer tags results below the
-        // confidence threshold as Birds|_Check|<name> instead of Birds|<name>.
-        species_confidence: r.species_confidence != null && r.species_confidence !== '' ? Number(r.species_confidence) : null,
-        family: r.family || '',
-        quality: r.quality != null ? r.quality : null,
-      }));
+      // UK fork: species the user set by hand (finalized scene tags) win over the
+      // model's and are written as confident (no model score -> never _Check).
+      const _manualSpeciesFor = (r) => {
+        try {
+          const sc = (typeof _scenedata !== 'undefined' && r.__rootPath != null)
+            ? _scenedata[r.__rootPath]?.scenes?.[String(r.scene_count)] : null;
+          const tags = sc?.user_tags;
+          if (!tags || !tags.finalized || !Array.isArray(tags.species) || !tags.species.length) return null;
+          return tags.species.includes(r.species) ? r.species : tags.species[0];
+        } catch (_) { return null; }
+      };
+      const payload = folderRows.map(r => {
+        const manual = _manualSpeciesFor(r);
+        return {
+          filename: r.filename,
+          rating: getRating(r),
+          culled: getRawCullStatus(r),
+          culled_origin: normalizeCullOrigin(r),
+          species: manual || r.species || '',
+          // Model score for the species; the writer tags results below the
+          // confidence threshold as <Group>|_Check|<name>. null = manual (confident).
+          species_confidence: manual ? null
+            : (r.species_confidence != null && r.species_confidence !== '' ? Number(r.species_confidence) : null),
+          family: r.family || '',
+          quality: r.quality != null ? r.quality : null,
+        };
+      });
 
       dlg.querySelector('#wmCancel').addEventListener('click', closeAndRemove);
 

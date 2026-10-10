@@ -41,6 +41,10 @@ _NS_DIGIKAM = 'http://www.digikam.org/ns/1.0/'
 # is preserved.
 BIRD_KEYWORD_ROOT = 'Birds'
 BIRD_CHECK_KEYWORD = '_Check'
+# Phase 2: the same layout for every species group Kestrel identifies.
+KEYWORD_ROOTS = ('Birds', 'Reptiles', 'Amphibians', 'Insects', 'Mammals')
+# Per-file record of what Kestrel last wrote under each root (manual-edit protection).
+_KEYWORD_STATE_FILE = 'kestrel_keyword_state.json'
 # Same default as the browse view's species-confidence filter (#speciesConf).
 DEFAULT_SPECIES_CONFIDENCE_THRESHOLD = 0.75
 
@@ -226,48 +230,87 @@ def _normalize_fields(fields) -> dict:
     return out
 
 
-def _resolve_bird_names(species: str):
-    """(English keyword name, Latin) for a bird species name, or None if not a known bird.
+def _resolve_species_names(species: str):
+    """(root, English keyword name, Latin) for a species name, or None if unknown.
 
-    Uses the UK fork's name table (BOU names for British List species, IOC
-    otherwise) with Kestrel's global catalogue as fallback. Non-bird labels
-    (wildlife classes such as "deer") return None so they never land under
-    ``Birds|``.
+    Birds use the UK fork's name table (BOU names for British List species, IOC
+    otherwise); reptiles / amphibians / insects come from the installed BioCLIP
+    lists and mammals from SpeciesNet's labels. Generic labels ("Unknown",
+    "Animal") return None so they never land under a keyword root.
     """
     try:
         try:
-            from kestrel_analyzer.bird_names import keyword_names  # type: ignore
+            from kestrel_analyzer.wildlife_names import keyword_root_names  # type: ignore
         except ImportError:
-            from analyzer.kestrel_analyzer.bird_names import keyword_names  # type: ignore
-        return keyword_names(species)
+            from analyzer.kestrel_analyzer.wildlife_names import keyword_root_names  # type: ignore
+        return keyword_root_names(species)
     except Exception:
         return None
 
 
-def bird_keywords(species: str, confidence=None,
-                  threshold: float = DEFAULT_SPECIES_CONFIDENCE_THRESHOLD) -> tuple[list, list]:
+def species_keywords(species: str, confidence=None,
+                     threshold: float = DEFAULT_SPECIES_CONFIDENCE_THRESHOLD) -> tuple[list, list]:
     """-> (flat keywords, hierarchical '|' keywords) for one species result.
 
-    ``confidence`` None means "not a model score" (e.g. a user-applied
-    species) and counts as confident.
+    ``Root|English`` + ``Root|English|Latin`` when confident, else only
+    ``Root|_Check|English``. ``confidence`` None means "not a model score"
+    (a species the user set by hand) and counts as confident.
     """
     if not _is_meaningful(species or ''):
         return [], []
-    names = _resolve_bird_names(species)
+    names = _resolve_species_names(species)
     if names is None:
         return [], []
-    english, latin = names
+    root, english, latin = names
     try:
         confident = confidence is None or float(confidence) >= float(threshold)
     except (TypeError, ValueError):
         confident = True
     if not confident:
-        return [], [f'{BIRD_KEYWORD_ROOT}|{BIRD_CHECK_KEYWORD}|{english}']
+        return [], [f'{root}|{BIRD_CHECK_KEYWORD}|{english}']
     flat = [english] + ([latin] if latin and latin != english else [])
-    hier = [f'{BIRD_KEYWORD_ROOT}|{english}']
+    hier = [f'{root}|{english}']
     if latin and latin != english:
-        hier.append(f'{BIRD_KEYWORD_ROOT}|{english}|{latin}')
+        hier.append(f'{root}|{english}|{latin}')
     return flat, hier
+
+
+# Backwards-compatible name used by Phase 1 code/tests.
+bird_keywords = species_keywords
+
+
+def _root_of(tag: str, sep: str = '|') -> str:
+    return tag.split(sep)[0]
+
+
+def current_root_tags(existing: dict) -> dict:
+    """{root: sorted hierarchical tags currently in the file under that root}."""
+    lr = existing.get('Xmp.lr.hierarchicalSubject') or []
+    dk = existing.get('Xmp.digiKam.TagsList') or []
+    lr = [lr] if isinstance(lr, str) else list(lr)
+    dk = [dk] if isinstance(dk, str) else list(dk)
+    out: dict = {}
+    for t in lr:
+        if _root_of(t) in KEYWORD_ROOTS:
+            out.setdefault(_root_of(t), set()).add(t)
+    if not lr:  # digiKam-only files: derive from TagsList
+        for t in dk:
+            if _root_of(t, '/') in KEYWORD_ROOTS:
+                out.setdefault(_root_of(t, '/'), set()).add(t.replace('/', '|'))
+    return {k: sorted(v) for k, v in out.items()}
+
+
+def protected_roots(existing: dict, previous: dict | None, overwrite_manual: bool = False) -> set:
+    """Roots whose tags the user changed since Kestrel last wrote them (birdtag rule).
+
+    ``previous`` is what Kestrel recorded for this file ({root: [tags]}); a root
+    with no record is never protected. ``overwrite_manual`` disables protection.
+    """
+    if overwrite_manual or not previous:
+        return set()
+    cur = current_root_tags(existing)
+    return {root for root, prev in previous.items()
+            if root in KEYWORD_ROOTS and set(cur.get(root, [])) != set(prev or [])}
 
 
 def _dedupe(values) -> list:
@@ -279,28 +322,38 @@ def _dedupe(values) -> list:
     return out
 
 
-def merge_keyword_lists(existing: dict, kestrel_subject: list, new_flat: list, new_hier: list) -> dict:
+def merge_keyword_lists(existing: dict, kestrel_subject: list, new_flat: list, new_hier: list,
+                        protected: set | frozenset = frozenset()) -> dict:
     """Merge Kestrel's keywords into a file's existing keyword arrays.
 
     ``existing`` maps ``Xmp.dc.subject`` / ``Xmp.lr.hierarchicalSubject`` /
     ``Xmp.digiKam.TagsList`` to their current lists. Kestrel-owned entries are
-    removed (``Kestrel|*`` subjects, anything under the ``Birds`` root, and flat
-    keywords naming those Birds paths) and replaced by the new ones. All other
-    keywords are kept in their original order. Returns the three final lists.
+    removed (``Kestrel|*`` subjects, anything under an owned root such as
+    ``Birds`` / ``Insects``, and flat keywords naming those paths) and replaced
+    by the new ones. Roots in ``protected`` (edited by the user) are left
+    exactly as they are, and no new keywords are added under them. All other
+    keywords keep their original order. Returns the three final lists.
     """
     def _as_list(v):
         if v is None or v == '':
             return []
         return [str(x) for x in v] if isinstance(v, (list, tuple)) else [str(v)]
 
+    owned = set(KEYWORD_ROOTS) - set(protected)
+    if any(_root_of(h) in protected for h in new_hier):
+        new_hier, new_flat = [], []
     dc = _as_list(existing.get('Xmp.dc.subject'))
     lr = _as_list(existing.get('Xmp.lr.hierarchicalSubject'))
     dk = _as_list(existing.get('Xmp.digiKam.TagsList'))
-    old_lr = [h for h in lr if h.split('|')[0] == BIRD_KEYWORD_ROOT]
-    old_dk = [h for h in dk if h.split('/')[0] == BIRD_KEYWORD_ROOT]
+    old_lr = [h for h in lr if _root_of(h) in owned]
+    old_dk = [h for h in dk if _root_of(h, '/') in owned]
     owned_flat = {part for h in old_lr for part in h.split('|')[1:]}
     owned_flat |= {part for h in old_dk for part in h.split('/')[1:]}
     owned_flat.discard(BIRD_CHECK_KEYWORD)
+    # never strip a flat keyword that still names a protected (user-edited) path
+    for h in lr + [t.replace('/', '|') for t in dk]:
+        if _root_of(h) in protected:
+            owned_flat -= set(h.split('|')[1:])
     keep_dc = [v for v in dc if not v.startswith('Kestrel|') and v not in owned_flat]
     new_dk = [h.replace('|', '/') for h in new_hier]
     return {
@@ -308,6 +361,13 @@ def merge_keyword_lists(existing: dict, kestrel_subject: list, new_flat: list, n
         'Xmp.lr.hierarchicalSubject': _dedupe([h for h in lr if h not in old_lr] + list(new_hier)),
         'Xmp.digiKam.TagsList': _dedupe([h for h in dk if h not in old_dk] + new_dk),
     }
+
+
+def _state_from_hier(hier: list) -> dict:
+    out: dict = {}
+    for h in hier or []:
+        out.setdefault(_root_of(h), []).append(h)
+    return {k: sorted(v) for k, v in out.items()}
 
 
 def _build_xmp_packet(
@@ -351,7 +411,7 @@ def _build_xmp_packet(
         f'      xmlns:digiKam="{_NS_DIGIKAM}"',
         f'      xmlns:kestrel="{_KESTREL_NS}"',
     ]
-    bird_flat, bird_hier = bird_keywords(species, species_confidence, species_threshold) if has_species else ([], [])
+    bird_flat, bird_hier = species_keywords(species, species_confidence, species_threshold) if has_species else ([], [])
     if write_rating:
         lines.append(f'      xmp:Rating="{rating}"')
     if write_label:
@@ -667,7 +727,7 @@ def _build_embed_xmp_dict(
         subject.append(f'Kestrel|Species|{species}')
     if has_family:
         subject.append(f'Kestrel|Family|{family}')
-    bird_flat, bird_hier = bird_keywords(species, species_confidence, species_threshold) if has_species else ([], [])
+    bird_flat, bird_hier = species_keywords(species, species_confidence, species_threshold) if has_species else ([], [])
     subject += bird_flat
     if subject:
         xd['Xmp.dc.subject'] = subject
@@ -703,7 +763,9 @@ def _embed_xmp_in_jpeg(
     fields: dict,
     species_confidence=None,
     species_threshold: float = DEFAULT_SPECIES_CONFIDENCE_THRESHOLD,
-) -> None:
+    previous: dict | None = None,
+    overwrite_manual: bool = False,
+) -> tuple[dict, set]:
     """Embed Kestrel XMP fields directly into a JPEG's APP1 XMP segment.
 
     Uses exiv2 (via pyexiv2), which rewrites *only* the metadata segment and
@@ -712,12 +774,13 @@ def _embed_xmp_in_jpeg(
     properties are set/updated. Raises on any failure so the caller can record
     it per-file without aborting the batch.
     """
-    _merge_xmp_into_file(
+    return _merge_xmp_into_file(
         image_path,
         _build_embed_xmp_dict(
             rating, label, cull_status, filename, species, family, quality_score, fields,
             species_confidence=species_confidence, species_threshold=species_threshold,
         ),
+        previous=previous, overwrite_manual=overwrite_manual,
     )
 
 
@@ -725,12 +788,17 @@ _KESTREL_OPTIONAL_PROPS = ('Xmp.kestrel.Species', 'Xmp.kestrel.Family', 'Xmp.kes
 _KEYWORD_PROPS = ('Xmp.dc.subject', 'Xmp.lr.hierarchicalSubject', 'Xmp.digiKam.TagsList')
 
 
-def _merge_xmp_into_file(path: str, xd: dict) -> None:
+def _merge_xmp_into_file(path: str, xd: dict, previous: dict | None = None,
+                         overwrite_manual: bool = False) -> tuple[dict, set]:
     """Apply Kestrel's XMP dict to a JPEG or .xmp sidecar without losing foreign data.
 
     Keyword arrays are merged (see :func:`merge_keyword_lists`); stale
     ``kestrel:*`` optional properties are removed; every other property in the
-    file is left untouched.
+    file is left untouched. Roots the user edited since Kestrel's last write
+    (``previous``) are not touched unless ``overwrite_manual``.
+
+    Returns ``(state, protected)``: what Kestrel now owns per root (for the next
+    comparison) and the set of roots that were left alone.
     """
     pyexiv2 = _load_pyexiv2()
     img = pyexiv2.Image(path)
@@ -742,8 +810,11 @@ def _merge_xmp_into_file(path: str, xd: dict) -> None:
         existing.update(_read_keyword_arrays(img.read_raw_xmp() or ''))
         bird_flat = [v for v in xd.get('Xmp.dc.subject', []) if not v.startswith('Kestrel|')]
         kestrel_subject = [v for v in xd.get('Xmp.dc.subject', []) if v.startswith('Kestrel|')]
-        merged = merge_keyword_lists(existing, kestrel_subject, bird_flat,
-                                     list(xd.get('Xmp.lr.hierarchicalSubject', [])))
+        protected = protected_roots(existing, previous, overwrite_manual)
+        new_hier = list(xd.get('Xmp.lr.hierarchicalSubject', []))
+        merged = merge_keyword_lists(existing, kestrel_subject, bird_flat, new_hier, protected)
+        state = {r: list(v) for r, v in (previous or {}).items() if r in protected}
+        state.update({r: v for r, v in _state_from_hier(new_hier).items() if r not in protected})
         out = {k: v for k, v in xd.items() if k not in _KEYWORD_PROPS}
         for key in _KEYWORD_PROPS:
             if merged[key]:
@@ -764,6 +835,7 @@ def _merge_xmp_into_file(path: str, xd: dict) -> None:
         fixed = _HIER_SEQ_RE.sub(lambda m: m.group(1) + 'Bag' + m.group(2) + 'Bag' + m.group(3), raw)
         if fixed != raw:
             img.modify_raw_xmp(fixed)
+        return state, protected
     finally:
         img.close()
 
@@ -803,7 +875,8 @@ _XMP_TMP_PREFIX = '.kestrel_xmp_'
 _XMP_TMP_SUFFIX = '.xmp.tmp'
 
 
-def _merge_sidecar_atomic(dest_path: str, xd: dict) -> None:
+def _merge_sidecar_atomic(dest_path: str, xd: dict, previous: dict | None = None,
+                          overwrite_manual: bool = False) -> tuple[dict, set]:
     """Merge Kestrel's fields into an existing sidecar, atomically.
 
     Copies the sidecar to a temp file in the same directory, merges with
@@ -815,9 +888,10 @@ def _merge_sidecar_atomic(dest_path: str, xd: dict) -> None:
     try:
         with open(dest_path, 'rb') as src, os.fdopen(tmp_fd, 'wb') as f:
             f.write(src.read())
-        _merge_xmp_into_file(tmp, xd)
+        result = _merge_xmp_into_file(tmp, xd, previous=previous, overwrite_manual=overwrite_manual)
         _apply_sidecar_mode(tmp, dest_path)
         retry_on_file_lock(lambda: os.replace(tmp, dest_path))
+        return result
     except BaseException:
         try:
             os.remove(tmp)
@@ -875,6 +949,39 @@ def _write_text_atomic(dest_path: str, content: str) -> None:
         raise
 
 
+def _load_keyword_state(root: str) -> dict:
+    """{file basename: {root: [hierarchical tags Kestrel last wrote]}}; {} on any error."""
+    try:
+        with open(os.path.join(root, '.kestrel', _KEYWORD_STATE_FILE), 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        if not isinstance(data, dict):
+            return {}
+        return {k: {r: [str(t) for t in v] for r, v in d.items() if isinstance(v, list)}
+                for k, d in data.items()
+                if isinstance(k, str) and os.path.basename(k) == k and isinstance(d, dict)}
+    except Exception:
+        return {}
+
+
+def _save_keyword_state(root: str, state: dict) -> None:
+    try:
+        kdir = os.path.join(root, '.kestrel')
+        os.makedirs(kdir, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(prefix='.kw_state_', suffix='.tmp', dir=kdir)
+        try:
+            with os.fdopen(fd, 'w', encoding='utf-8') as f:
+                json.dump(state, f, indent=1, sort_keys=True)
+            retry_on_file_lock(lambda: os.replace(tmp, os.path.join(kdir, _KEYWORD_STATE_FILE)))
+        except BaseException:
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
+            raise
+    except Exception as e:
+        warn(f'[metadata] could not save keyword state: {e}')
+
+
 def write_xmp_metadata(
     root_path: str,
     image_data,
@@ -883,6 +990,7 @@ def write_xmp_metadata(
     fields: dict | None = None,
     embed_jpeg: bool = False,
     species_threshold: float = DEFAULT_SPECIES_CONFIDENCE_THRESHOLD,
+    overwrite_manual_edits: bool = False,
 ):
     """Write XMP sidecar files for each image, embedding star rating, culling
     label, and analysis metadata (species, family, quality score).
@@ -899,10 +1007,13 @@ def write_xmp_metadata(
                          ``species_threshold`` only ``Birds|_Check|<English>``
                          is written; missing means user-applied (confident).
 
-    Bird species are also written as ``Birds|<English>|<Latin>`` keywords
-    (lr:hierarchicalSubject, digiKam:TagsList, flat dc:subject). Existing
-    sidecars are merged, not replaced: keywords and properties Kestrel does
-    not own are preserved.
+    Species are also written as ``<Root>|<English>|<Latin>`` keywords (Root =
+    Birds / Reptiles / Amphibians / Insects / Mammals; lr:hierarchicalSubject,
+    digiKam:TagsList, flat dc:subject). Existing sidecars are merged, not
+    replaced: keywords and properties Kestrel does not own are preserved. If
+    the tags under a root differ from what Kestrel last wrote to that file
+    (recorded in ``.kestrel/kestrel_keyword_state.json``), the user edited them
+    and that root is left alone unless ``overwrite_manual_edits``.
 
     XMP sidecar files are written as ``<basename>.xmp`` alongside the
     original in ``root_path``.
@@ -975,6 +1086,8 @@ def write_xmp_metadata(
         # Hashes of sidecars as Kestrel last wrote them; used to tell "ours and
         # unchanged" (safe to overwrite) from "ours but edited externally".
         fingerprints = _load_xmp_fingerprints(root_real)
+        kw_state = _load_keyword_state(root_real)
+        kept_manual = []
 
         for entry in (image_data or []):
             try:
@@ -1055,7 +1168,7 @@ def write_xmp_metadata(
                 # already been modified.
                 if embed_jpeg and _is_jpeg(filename) and os.path.isfile(resolved_image):
                     try:
-                        _embed_xmp_in_jpeg(
+                        embedded_result = _embed_xmp_in_jpeg(
                             resolved_image,
                             rating=rating,
                             label=label,
@@ -1067,7 +1180,13 @@ def write_xmp_metadata(
                             fields=field_flags,
                             species_confidence=species_confidence,
                             species_threshold=species_threshold,
+                            previous=kw_state.get(os.path.basename(resolved_image)),
+                            overwrite_manual=overwrite_manual_edits,
                         )
+                        jpg_state, jpg_protected = embedded_result
+                        kw_state[os.path.basename(resolved_image)] = jpg_state
+                        if jpg_protected:
+                            kept_manual.append(os.path.basename(resolved_image))
                         embedded += 1
                         info(f'[metadata] embed_jpeg: embedded XMP into {filename}')
                     except Exception as embed_err:
@@ -1079,12 +1198,15 @@ def write_xmp_metadata(
                     # Merge into the existing sidecar so the user's own keywords
                     # (digiKam / Lightroom / birdtag) and other metadata survive.
                     try:
-                        _merge_sidecar_atomic(xmp_path, _build_embed_xmp_dict(
+                        sc_state, sc_protected = _merge_sidecar_atomic(xmp_path, _build_embed_xmp_dict(
                             rating, label, cull_status, filename, species, family,
                             quality_score, field_flags,
                             species_confidence=species_confidence,
                             species_threshold=species_threshold,
-                        ))
+                        ), previous=kw_state.get(xmp_filename), overwrite_manual=overwrite_manual_edits)
+                        kw_state[xmp_filename] = sc_state
+                        if sc_protected:
+                            kept_manual.append(xmp_filename)
                         merged = True
                     except Exception as merge_err:
                         warn(f'[metadata] write_xmp: merge into {xmp_path} failed ({merge_err}); rewriting')
@@ -1102,6 +1224,9 @@ def write_xmp_metadata(
                         species_threshold=species_threshold,
                     )
                     _write_text_atomic(xmp_path, xmp_content)
+                    flat_hier = species_keywords(species, species_confidence, species_threshold) \
+                        if field_flags['species'] else ([], [])
+                    kw_state[xmp_filename] = _state_from_hier(flat_hier[1])
 
                 # Record the hash of exactly what we just wrote, so a later
                 # external edit is detected on the next write. Only persist a
@@ -1126,6 +1251,10 @@ def write_xmp_metadata(
 
         if written:
             _save_xmp_fingerprints(root_real, fingerprints)
+        if written or embedded:
+            _save_keyword_state(root_real, kw_state)
+        if kept_manual:
+            info(f'[metadata] kept user-edited species keywords in {len(kept_manual)} file(s)')
 
         info(
             f'[metadata] write_xmp_metadata: written={written}, '
@@ -1139,6 +1268,7 @@ def write_xmp_metadata(
             'errors': errors,
             'embedded': embedded,
             'embed_errors': embed_errors,
+            'kept_manual_edits': kept_manual,
         }
 
     except Exception as e:

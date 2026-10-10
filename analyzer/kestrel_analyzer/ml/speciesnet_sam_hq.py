@@ -25,6 +25,7 @@ from .provider_coordinator import (
     ResilienceConfig,
 )
 from .resilient_session import ResilientOnnxSession
+from .bioclip import TaxonLabel, group_for_taxonomy
 from .speciesnet_taxonomy import (
     bird_vs_wildlife_classifier_scores,
     is_ambiguous_generic_taxonomy,
@@ -33,6 +34,7 @@ from .speciesnet_taxonomy import (
     route_with_classifier_tiebreak,
     should_skip_confident_no_cv_classifier,
     split_taxonomy,
+    wildlife_display_name,
 )
 
 _DEFAULT_MAX_BIRD_CROPS = 5
@@ -1018,6 +1020,10 @@ class SpeciesNetSAMHQWrapper:
         resilience_cfg: Optional[ResilienceConfig] = None,
     ):
         self.max_bird_crops = _coerce_max_bird_crops(max_bird_crops)
+        # UK fork: when True, reptile / amphibian / insect detections (and generic
+        # 'animal' / 'unknown' ones) are kept even with wildlife disabled and tagged
+        # with their BioCLIP group via TaxonLabel. Set by the pipeline.
+        self.bioclip_routing = False
         self.use_gpu = bool(use_gpu)
         self.detector_name = _coerce_detector_name(detector_name)
         self.predictor: Optional[OnnxSamPredictor] = None
@@ -1130,6 +1136,22 @@ class SpeciesNetSAMHQWrapper:
             partial_predictions={},
         )
         return results[0] if results else {}
+
+    def _bioclip_route(self, route, pred_label, pred_raw):
+        """UK fork: send herps / insects / generic animals to BioCLIP (pipeline side).
+
+        Birds and mammals keep their upstream route. Blank / 'no cv result' boxes
+        keep upstream's false-positive handling; an image left with no subject is
+        classified whole-frame by the pipeline instead.
+        """
+        if not self.bioclip_routing or route == "bird":
+            return route, pred_label
+        group = group_for_taxonomy(pred_raw)
+        if group in ("reptiles", "amphibians", "insects"):
+            return "wildlife", TaxonLabel(wildlife_display_name(pred_raw), group, pred_raw)
+        if group == "any" and not is_ignored_prediction(pred_raw) and not is_no_cv_result(pred_raw):
+            return "wildlife", TaxonLabel("Animal", "any", pred_raw)
+        return route, pred_label
 
     def get_prediction(
         self,
@@ -1321,6 +1343,7 @@ class SpeciesNetSAMHQWrapper:
                 cls_info,
                 wildlife_enabled=wildlife_enabled,
             )
+            route, pred_label = self._bioclip_route(route, pred_label, pred_raw)
 
             if should_skip_confident_no_cv_classifier(cls_info, detector_threshold):
                 cutoff = 1.0 - float(detector_threshold)

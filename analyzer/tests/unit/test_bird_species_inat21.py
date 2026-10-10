@@ -224,8 +224,14 @@ class TestPipelineSelection:
         monkeypatch.setattr(pl, "load_persisted_settings", lambda: dict(settings))
         return pl.AnalysisPipeline(use_gpu=False)
 
-    def test_default_is_north_america(self, monkeypatch):
+    def test_default_is_uk(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(inat, "find_model", lambda prefer_fp16=False: None)
         p = self._pipeline(monkeypatch, {})
+        # UK by default; with no EVA-02 file the builder falls back to NA (tested below)
+        assert p._resolve_species_model() == ("uk", False, None)
+
+    def test_explicit_north_america(self, monkeypatch):
+        p = self._pipeline(monkeypatch, {"bird_model_region": "na"})
         assert p._resolve_species_model() == ("na", False, None)
 
     def test_uk_with_rarities(self, monkeypatch, tmp_path):

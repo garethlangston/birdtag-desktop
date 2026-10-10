@@ -365,7 +365,7 @@
       const birdModelSel = document.getElementById('birdModelRegion');
       const birdRaritiesCb = document.getElementById('birdIncludeUkRarities');
       if (birdModelSel) {
-        birdModelSel.value = getSetting('bird_model_region', 'na') || 'na';
+        birdModelSel.value = getSetting('bird_model_region', 'uk') || 'uk';
         if (birdRaritiesCb) birdRaritiesCb.checked = !!getSetting('bird_include_uk_rarities', false);
         const refreshBirdModelStatus = async () => {
           const statusEl = document.getElementById('birdModelStatus');
@@ -384,6 +384,32 @@
         }
         refreshBirdModelStatus();
       }
+
+      // Other wildlife model (BioCLIP 2 / SpeciesNet), keyword threshold, manual edits
+      const wildSel = document.getElementById('otherWildlifeModel');
+      if (wildSel) {
+        wildSel.value = getSetting('other_wildlife_model', 'bioclip') || 'bioclip';
+        const refreshWildStatus = async () => {
+          const st_el = document.getElementById('wildlifeModelStatus');
+          if (!st_el || !window.pywebview?.api?.get_wildlife_model_status) return;
+          try {
+            const st = await window.pywebview.api.get_wildlife_model_status(wildSel.value, birdModelSel ? birdModelSel.value : 'uk');
+            if (!st || !st.success) return;
+            st_el.textContent = st.message || '';
+            st_el.style.color = st.available ? '' : '#ff9f6b';
+          } catch (_) { /* non-fatal */ }
+        };
+        if (!wildSel.dataset.wired) {
+          wildSel.dataset.wired = '1';
+          wildSel.addEventListener('change', refreshWildStatus);
+          if (birdModelSel) birdModelSel.addEventListener('change', refreshWildStatus);
+        }
+        refreshWildStatus();
+      }
+      const thrEl = document.getElementById('speciesConfidenceThreshold');
+      if (thrEl) thrEl.value = Number(getSetting('species_confidence_threshold', 0.75)).toFixed(2);
+      const ovrCb = document.getElementById('overwriteManualSpeciesEdits');
+      if (ovrCb) ovrCb.checked = !!getSetting('overwrite_manual_species_edits', false);
 
       const showSciCb = document.getElementById('showScientificNames');
       if (showSciCb) showSciCb.checked = !!getSetting('show_scientific_names', false);
@@ -457,7 +483,15 @@
       const showSciChanged = !!existing.show_scientific_names !== showScientificNames;
 
       const birdModelSelEl = document.getElementById('birdModelRegion');
-      const birdModelRegion = birdModelSelEl ? birdModelSelEl.value : (existing.bird_model_region || 'na');
+      const birdModelRegion = birdModelSelEl ? birdModelSelEl.value : (existing.bird_model_region || 'uk');
+      const wildSelEl = document.getElementById('otherWildlifeModel');
+      const otherWildlifeModel = wildSelEl ? wildSelEl.value : (existing.other_wildlife_model || 'bioclip');
+      const thrInput = document.getElementById('speciesConfidenceThreshold');
+      let speciesThreshold = thrInput ? parseFloat(thrInput.value) : Number(existing.species_confidence_threshold ?? 0.75);
+      if (!Number.isFinite(speciesThreshold)) speciesThreshold = 0.75;
+      speciesThreshold = Math.min(0.99, Math.max(0.30, speciesThreshold));
+      const ovrEl = document.getElementById('overwriteManualSpeciesEdits');
+      const overwriteManual = ovrEl ? !!ovrEl.checked : !!existing.overwrite_manual_species_edits;
       const birdRaritiesEl = document.getElementById('birdIncludeUkRarities');
       const birdIncludeUkRarities = birdRaritiesEl ? !!birdRaritiesEl.checked : !!existing.bird_include_uk_rarities;
 
@@ -465,6 +499,9 @@
         ...existing, editor, customEditorPath, treeScanDepth,
         bird_model_region: birdModelRegion,
         bird_include_uk_rarities: birdIncludeUkRarities,
+        other_wildlife_model: otherWildlifeModel,
+        species_confidence_threshold: speciesThreshold,
+        overwrite_manual_species_edits: overwriteManual,
         analytics_opted_in: analyticsOptIn, analytics_consent_shown: true,
         crash_reports_enabled: crashReportsEnabled,
         check_for_updates: checkForUpdates,

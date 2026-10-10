@@ -9,6 +9,8 @@ Existing sidecars / JPEGs are merged: keywords Kestrel does not own survive.
 from pathlib import Path
 import sys
 
+import json
+
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -222,3 +224,66 @@ class TestExiv2ArrayQuirks:
         hier = text[text.index("<lr:hierarchicalSubject>"):text.index("</lr:hierarchicalSubject>")]
         assert "<rdf:Bag>" in hier and "<rdf:Seq>" not in hier
         assert "Birds|Grey Heron|Ardea cinerea" in hier
+
+
+@needs_exiv2
+class TestManualEditProtection:
+    """birdtag rule: a root the user changed since Kestrel's last write is left alone."""
+
+    def _write(self, root, species, conf=0.9, **kw):
+        # overwrite_external=True = the user confirmed Kestrel's "sidecar was changed
+        # outside Kestrel" dialog; manual-edit protection applies inside that write.
+        kw.setdefault("overwrite_external", True)
+        return write_xmp_metadata(str(root), [{"filename": "P9.ORF", "rating": 3, "culled": "accept",
+                                               "species": species, "species_confidence": conf}], **kw)
+
+    def test_edited_sidecar_still_goes_through_conflict_dialog(self, tmp_path):
+        (tmp_path / "P9.ORF").touch()
+        self._write(tmp_path, "European Robin")
+        self._edit(tmp_path / "P9.xmp", ["Birds|Dunnock"])
+        assert self._write(tmp_path, "Eurasian Wren", overwrite_external=False)["skipped_conflicts"] == ["P9.xmp"]
+
+    def _edit(self, path, hier):
+        import pyexiv2
+        img = pyexiv2.Image(str(path))
+        img.modify_xmp({"Xmp.lr.hierarchicalSubject": hier,
+                        "Xmp.digiKam.TagsList": [h.replace("|", "/") for h in hier]})
+        img.close()
+
+    def test_user_edit_is_kept(self, tmp_path):
+        (tmp_path / "P9.ORF").touch()
+        self._write(tmp_path, "European Robin")
+        state = json.loads((tmp_path / ".kestrel" / "kestrel_keyword_state.json").read_text())
+        assert state["P9.xmp"]["Birds"] == ["Birds|Robin", "Birds|Robin|Erithacus rubecula"]
+        # user corrects it to Dunnock in digiKam
+        self._edit(tmp_path / "P9.xmp", ["Birds|Dunnock", "Birds|Dunnock|Prunella modularis"])
+        res = self._write(tmp_path, "Eurasian Wren")
+        assert res["kept_manual_edits"] == ["P9.xmp"]
+        x = _read(tmp_path / "P9.xmp")
+        assert x["Xmp.lr.hierarchicalSubject"] == ["Birds|Dunnock", "Birds|Dunnock|Prunella modularis"]
+        assert "Wren" not in x.get("Xmp.dc.subject", [])
+        assert x["Xmp.kestrel.Species"] == "Eurasian Wren"  # Kestrel's own field still updates
+        # still protected on the next run (record keeps Kestrel's last write)
+        assert self._write(tmp_path, "Eurasian Wren")["kept_manual_edits"] == ["P9.xmp"]
+
+    def test_overwrite_option_forces(self, tmp_path):
+        (tmp_path / "P9.ORF").touch()
+        self._write(tmp_path, "European Robin")
+        self._edit(tmp_path / "P9.xmp", ["Birds|Dunnock"])
+        res = self._write(tmp_path, "Eurasian Wren", overwrite_manual_edits=True)
+        assert res["kept_manual_edits"] == []
+        x = _read(tmp_path / "P9.xmp")
+        assert x["Xmp.lr.hierarchicalSubject"] == ["Birds|Wren", "Birds|Wren|Troglodytes troglodytes"]
+
+    def test_unedited_root_is_updated_and_other_roots_unaffected(self, tmp_path):
+        (tmp_path / "P9.ORF").touch()
+        self._write(tmp_path, "European Robin")
+        self._write(tmp_path, "Eurasian Wren")  # no user edit -> replaced
+        x = _read(tmp_path / "P9.xmp")
+        assert x["Xmp.lr.hierarchicalSubject"] == ["Birds|Wren", "Birds|Wren|Troglodytes troglodytes"]
+
+    def test_manual_species_without_score_is_confident(self, tmp_path):
+        (tmp_path / "P9.ORF").touch()
+        self._write(tmp_path, "Grey Heron", conf=None)
+        text = (tmp_path / "P9.xmp").read_text(encoding="utf-8")
+        assert "Birds|Grey Heron|Ardea cinerea" in text and "_Check" not in text

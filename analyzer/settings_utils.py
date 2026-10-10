@@ -64,6 +64,7 @@ _ALLOWED_EXPOSURE_QUALITY = {'lenient', 'balanced', 'aggressive'}
 _ALLOWED_WILDLIFE_MODEL_MODES = {'fast', 'accurate'}
 _ALLOWED_QUEUE_DETECTOR_NAMES = {'mdv5a', 'mdv1000-cedar'}
 _ALLOWED_BIRD_MODEL_REGIONS = {'na', 'uk', 'europe', 'world'}
+_ALLOWED_OTHER_WILDLIFE_MODELS = {'speciesnet', 'bioclip'}
 # Biogeographic region codes for the species combobox. Sourced from the
 # ``bird_catalog`` module so the data layer owns the vocabulary and we only
 # import the tuple here for validation.
@@ -571,14 +572,28 @@ def _sanitize_settings_payload(data: dict, emit_log: bool = False) -> dict:
         else:
             out['bird_regions'] = list(_DEFAULT_BIRD_REGIONS)
     _set_bool('show_scientific_names', default=False)
-    # UK fork: which bird species model the pipeline uses. 'na' = Kestrel's
-    # original North American model (upstream default); 'uk' / 'europe' /
-    # 'world' = EVA-02 iNat21 restricted to that region's species.
+    # UK fork: which bird species model the pipeline uses. 'uk' (default, falls
+    # back to 'na' with a message if the EVA-02 file is missing) / 'europe' /
+    # 'world' = EVA-02 iNat21 restricted to that region; 'na' = Kestrel's
+    # original North American model.
     if 'bird_model_region' in data:
         out['bird_model_region'] = _coerce_enum(
-            data.get('bird_model_region'), _ALLOWED_BIRD_MODEL_REGIONS, default='na',
+            data.get('bird_model_region'), _ALLOWED_BIRD_MODEL_REGIONS, default='uk',
         )
     _set_bool('bird_include_uk_rarities', default=False)
+    # UK fork phase 2: one confidence threshold for birds and BioCLIP taxa. Below it
+    # keywords go to <Root>|_Check|<name>; the whole-frame BioCLIP route needs it to
+    # tag anything at all.
+    _set_float('species_confidence_threshold', default=0.75, min_value=0.30, max_value=0.99, digits=2)
+    # Reptiles / amphibians / insects: 'bioclip' (BioCLIP 2 zero-shot, if installed)
+    # or 'speciesnet' (upstream behaviour).
+    if 'other_wildlife_model' in data:
+        out['other_wildlife_model'] = _coerce_enum(
+            data.get('other_wildlife_model'), _ALLOWED_OTHER_WILDLIFE_MODELS, default='bioclip',
+        )
+    # Off: species keywords the user edited in digiKam/Lightroom since Kestrel last
+    # wrote them are left alone (birdtag behaviour).
+    _set_bool('overwrite_manual_species_edits', default=False)
 
     _set_bool('includeSecondarySpecies', default=False)
     _set_bool('groupByFolder', default=True)
