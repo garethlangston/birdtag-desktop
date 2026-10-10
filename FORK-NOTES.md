@@ -1,4 +1,4 @@
-# Kestrel UK fork — notes (branch `uk-models`, phases 1–2)
+# Birdtag Desktop: fork notes (branch `uk-models`, phases 1–3)
 
 A personal fork of [Project Kestrel](https://github.com/SanjaySoniLV/ProjectKestrel)
 v6.3.0.0 that identifies **UK, European and world birds**, not just North
@@ -16,6 +16,58 @@ so digiKam and Lightroom keyword trees stay consistent.
 | Keywords (XMP) | For each species result, confident = score ≥ 0.75 (Kestrel's default browse filter) or no model score supplied: `Xmp.lr.hierarchicalSubject` `Birds\|English` + `Birds\|English\|Latin`, `Xmp.digiKam.TagsList` `Birds/English/Latin` (+ parent), and flat `dc:subject` English + Latin. Below 0.75: only `Birds\|_Check\|English` (and `Birds/_Check/English`). Kestrel's rating, label, `kestrel:*` fields and `Kestrel\|…` subjects are unchanged. **Existing sidecars and embedded JPEG XMP are now merged, not replaced**: anything outside the `Birds` tree, plus other people's properties (e.g. `photoshop:City`), is kept. Like birdtag, Kestrel owns the `Birds\|…` tree and replaces it on each write. Sidecars made by other software still need the usual "overwrite?" confirmation. |
 | Privacy | Crash reports, the app-open, install and completion pings, the startup version check and the `legal.json` check are off by default. See `PRIVACY-FORK.md`. |
 | Tools | `tools/uk_models/export_eva02.py` (ONNX export + fp16 + parity check + README), `build_inat21_region_lists.py`, `compare_classifiers.py`. |
+
+## Installing on Windows
+
+**Birdtag Desktop** is this fork's working name; the name is set in `analyzer/branding.json`. It is
+an unofficial fork of Project Kestrel and is not affiliated with it.
+
+1. **Get the installer.** Either:
+   * open <https://github.com/garethlangston/birdtag-desktop/releases> and download
+     `BirdtagDesktop-<version>-Setup.exe` from the latest pre-release (e.g. `v6.3.0-uk.1`), or
+   * download it from a build run: GitHub → **Actions** → *Fork Windows build (unsigned installer)* →
+     a green run → **Artifacts** → `BirdtagDesktop-…-windows-installer` (a zip with the
+     `.exe`; artifacts are kept for 30 days).
+2. **SmartScreen:** the installer is **not code-signed**, so Windows shows *"Windows protected your
+   PC"*. Click **More info → Run anyway**. It installs per user (no admin prompt) into
+   `%LOCALAPPDATA%\Programs\Birdtag Desktop`. Choose *Install for all users* in the first dialog
+   if you prefer.
+3. **Models:** copy the extra model files into `%LOCALAPPDATA%\BirdtagDesktop\models_extra\`:
+   * `eva02_large_inat21_fp16.onnx` (GPU) and/or `eva02_large_inat21_fp32.onnx` (CPU), for birds
+   * the `bioclip-2\` folder (`config.json`, `image_encoder_fp32.onnx`, `embeddings\`), for
+     reptiles, amphibians and insects
+
+   Files you already put in `%LOCALAPPDATA%\ProjectKestrel\models_extra\` during phases 1–2
+   are still found; there is no need to move them.
+4. **Settings and data:** the fork keeps its own folder, `%LOCALAPPDATA%\BirdtagDesktop` (settings,
+   logs, models_extra), so it never shares settings with an installed official Project Kestrel.
+   On first start it copies `settings.json` once from `%LOCALAPPDATA%\ProjectKestrel` if that exists.
+   Per-folder results (`.kestrel\` next to your photos) keep the same format.
+
+The installer contains Kestrel's bundled models (SpeciesNet, MegaDetector, SAM-HQ, quality, the
+NA bird model). Without the extra files the app falls back to the North America bird model
+and SpeciesNet, and Settings shows where it looked.
+
+## Phase 3: publishing as "Birdtag Desktop"
+
+* Upstream's names, logos and Store identities are proprietary (upstream `assets/LICENSE`), so
+  the fork uses its own name from `analyzer/branding.json`. That file is read by Python
+  (`branding.py`: window title, data folder), the UI (`js/brand.js` rewrites visible
+  "Project Kestrel"/"Kestrel" text), the PyInstaller spec (exe name), the Inno Setup script and CI.
+  Renaming the app means editing that one file and re-running `tools/branding/make_placeholder_art.py`.
+* Placeholder artwork is generated (CC0). Store tiles, splash screen, MSIX manifest and branded
+  screenshots were removed.
+* Upstream hosted services are hidden and disabled (`upstream_services: false`): Perch,
+  Cloud Compute, account sign-in, donation and feedback prompts, What's New, and telemetry to
+  upstream's server.
+* CI: `.github/workflows/fork-windows-build.yml` builds the unsigned installer on every push to
+  `uk-models`, and on demand. Pushing a `v*` tag also publishes a GitHub pre-release with the
+  installer attached. Upstream workflows (Store, macOS, App Store, cloud e2e) can only be run
+  manually and are disabled in the fork's Actions settings.
+* Internal identifiers stay as upstream: Python package `kestrel_analyzer`, the `.kestrel` results
+  folder, the `kestrel:` XMP namespace and `Kestrel|…` keywords, the spec file name, and the
+  keyring service name. They're not shown as the product name, and changing them would break
+  compatibility with existing results and sidecars.
 
 ## Installing the bird model on Windows
 
@@ -166,4 +218,6 @@ About 110 s per image on 2 CPU cores with every model loaded (much faster on a G
 
 ## Not yet done
 
-Branding/assets and CI (phase 3).
+* Code signing (SmartScreen warns), and macOS builds for the fork.
+* BioCLIP fp16 and World BioCLIP lists (see Phase 2 limitations). DirectML hasn't been tested by
+  the author of these notes; the CI build is not run on a GPU.

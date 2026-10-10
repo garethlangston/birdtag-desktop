@@ -9,9 +9,14 @@ name: Fork Windows build (unsigned installer)
 on:
   push:
     branches: [ uk-models ]
+    tags: [ 'v*' ]
     paths-ignore:
       - '**.md'
   workflow_dispatch:
+
+# contents: write is only used by the tag-triggered pre-release step.
+permissions:
+  contents: write
 
 concurrency:
   group: fork-windows-${{ github.ref }}
@@ -79,6 +84,7 @@ jobs:
         run: |
           $b = Get-Content analyzer/branding.json -Raw | ConvertFrom-Json
           $ver = "6.3.0-uk.${{ github.run_number }}"
+          if ("${{ github.ref_type }}" -eq "tag") { $ver = "${{ github.ref_name }}".TrimStart('v') }
           "name=$($b.product_name)"      | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "exe=$($b.exe_name)"           | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           "guid=$($b.installer_app_guid)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
@@ -147,3 +153,20 @@ jobs:
           if-no-files-found: error
           compression-level: 0
           retention-days: 30
+
+      - name: Publish pre-release (tags only)
+        if: ${{ github.ref_type == 'tag' }}
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > notes.md <<'NOTES'
+          Unsigned Windows installer for Birdtag Desktop, an **unofficial fork of Project Kestrel**
+          (not affiliated with Project Kestrel). Windows SmartScreen will warn because the
+          installer is not code-signed: choose "More info" → "Run anyway".
+
+          The extra models (EVA-02 iNat21 birds, CC-BY-NC-4.0 non-commercial; BioCLIP 2) are
+          not included. See FORK-NOTES.md "Installing on Windows" for where to put them.
+          NOTES
+          gh release create "${{ github.ref_name }}" dist/installer/*.exe \
+            --prerelease --title "Birdtag Desktop ${{ github.ref_name }}" --notes-file notes.md
