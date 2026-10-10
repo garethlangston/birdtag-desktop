@@ -1,4 +1,6 @@
-﻿name: Build macOS Artifacts (Intel)
+# FORK: upstream workflow, manual-only in this fork (needs upstream secrets / Apple / Store accounts).
+# The fork's Windows build is fork-windows-build.yml.
+name: Build macOS Artifacts (Intel)
 
 on:
   workflow_dispatch:

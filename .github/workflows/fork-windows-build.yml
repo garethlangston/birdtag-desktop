@@ -1,0 +1,149 @@
+name: Fork Windows build (unsigned installer)
+
+# Builds the fork's Windows installer without any upstream secrets: no code signing,
+# no build attestation, no Microsoft Store packaging, no cloud/e2e auth steps.
+# Product name, exe name and installer id come from analyzer/branding.json.
+# The EVA-02 / BioCLIP model files are NOT part of the build (licence / size); users
+# copy them into the models_extra folder (see FORK-NOTES.md).
+
+on:
+  push:
+    branches: [ uk-models ]
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+concurrency:
+  group: fork-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout (without LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      # LFS models (~940 MB) are cached so repeat builds don't use LFS bandwidth.
+      - name: List LFS objects
+        shell: bash
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Pull LFS objects
+        shell: bash
+        run: |
+          git lfs pull
+          git lfs ls-files | head -20
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-windows.txt
+
+      - name: Install dependencies
+        shell: powershell
+        run: |
+          python -m venv .venv2
+          .\.venv2\Scripts\Activate.ps1
+          python -m pip install --upgrade pip
+          pip install -r requirements-windows.txt
+          pip install pyinstaller pytest
+
+      - name: Unit tests (warning only)
+        id: unit
+        continue-on-error: true
+        shell: powershell
+        run: |
+          .\.venv2\Scripts\Activate.ps1
+          python -m pytest analyzer/tests -m unit -q --tb=short
+
+      - name: Warn if unit tests failed
+        if: ${{ always() && steps.unit.outcome == 'failure' }}
+        shell: powershell
+        run: Write-Host "::warning::Unit tests failed on Windows; the installer was still built."
+
+      - name: Read branding
+        id: brand
+        shell: powershell
+        run: |
+          $b = Get-Content analyzer/branding.json -Raw | ConvertFrom-Json
+          $ver = "6.3.0-uk.${{ github.run_number }}"
+          "name=$($b.product_name)"      | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "exe=$($b.exe_name)"           | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "guid=$($b.installer_app_guid)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "publisher=$($b.publisher)"    | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "url=$($b.homepage)"           | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "version=$ver"                 | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          Write-Host "Building $($b.product_name) ($($b.exe_name).exe) version $ver"
+
+      - name: Build with PyInstaller
+        shell: powershell
+        env:
+          KESTREL_DIST_CHANNEL: direct
+        run: |
+          .\.venv2\Scripts\Activate.ps1
+          Copy-Item VERSION.txt analyzer\VERSION.txt -Force
+          cd analyzer
+          python -m PyInstaller ProjectKestrel.spec --noconfirm
+          if (-not (Test-Path "dist\${{ steps.brand.outputs.exe }}\${{ steps.brand.outputs.exe }}.exe")) {
+            throw "PyInstaller output missing"
+          }
+
+      - name: Smoke test frozen exe (--cli --help)
+        continue-on-error: true
+        shell: powershell
+        run: |
+          $p = Start-Process -FilePath "analyzer\dist\${{ steps.brand.outputs.exe }}\${{ steps.brand.outputs.exe }}.exe" `
+            -ArgumentList @('--cli', '--help') -NoNewWindow -PassThru -RedirectStandardOutput help.txt
+          $p.Handle | Out-Null
+          $p.WaitForExit()
+          Get-Content help.txt -ErrorAction SilentlyContinue | Select-Object -First 15
+          Write-Host "exit code $($p.ExitCode)"
+
+      - name: Install Inno Setup 6
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+          if (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe") { Write-Host "Inno Setup present"; exit 0 }
+          $url    = "https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe"
+          $sha256 = "9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732"
+          Invoke-WebRequest -Uri $url -OutFile is.exe -MaximumRedirection 5
+          $got = (Get-FileHash is.exe -Algorithm SHA256).Hash
+          if ($got -ne $sha256) { throw "checksum mismatch: got $got" }
+          Start-Process -FilePath .\is.exe -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/SP-" -Wait
+          if (-not (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe")) { throw "Inno Setup not found" }
+
+      - name: Build installer (unsigned)
+        shell: powershell
+        run: |
+          cd packaging
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" `
+            "/DMyAppName=${{ steps.brand.outputs.name }}" `
+            "/DExeName=${{ steps.brand.outputs.exe }}" `
+            "/DAppGuid=${{ steps.brand.outputs.guid }}" `
+            "/DMyAppPublisher=${{ steps.brand.outputs.publisher }}" `
+            "/DMyAppURL=${{ steps.brand.outputs.url }}" `
+            "/DAppVersion=${{ steps.brand.outputs.version }}" `
+            kestrel_installer.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed ($LASTEXITCODE)" }
+          Get-ChildItem ..\dist\installer | Format-Table Name, Length
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.brand.outputs.exe }}-${{ steps.brand.outputs.version }}-windows-installer
+          path: dist/installer/*.exe
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
