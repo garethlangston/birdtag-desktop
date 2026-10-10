@@ -39,7 +39,12 @@ All of these are HTTPS and are only contacted after a user action or opt-in.
 | `appleid.apple.com` | `mac_apple_signin.py` | macOS *Sign in with Apple*, when clicked (not used on Windows) |
 | `github.com` | `visualizer.html`, `_speciesnet_ensemble.py` | Links and licence comments only. No requests |
 
-Model downloads: the UK/Europe/World bird model (EVA-02) is **not** downloaded by
+**GBIF (`api.gbif.org`)** and **Wikimedia Commons** are contacted only by the
+developer build scripts in `tools/uk_models/`: `build_bioclip_lists.py` builds the species
+lists, and `fetch_test_photos.py` downloads the test photos. The Kestrel app never calls
+them. BioCLIP species lists and text embeddings are files you copy in, like the models.
+
+Model downloads: the UK/Europe/World bird model (EVA-02) and BioCLIP 2 are **not** downloaded by
 Kestrel. You export or copy it yourself (see `FORK-NOTES.md`), so there is no
 download endpoint for it in the code.
 
