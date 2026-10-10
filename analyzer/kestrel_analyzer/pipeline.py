@@ -551,7 +551,11 @@ class AnalysisPipeline:
         if self.bioclip_clf is None or not group:
             return fallback_species, fallback_score, "N/A", 0.0, "speciesnet"
         generic = group == "any"
-        res = self.bioclip_clf.classify(crop, groups=None if generic else [group], use_negatives=generic)
+        # SpeciesNet's reptile/amphibian split is unreliable (a juvenile newt comes back
+        # as "reptile"), so herp detections are scored over both herp lists together.
+        groups = None if generic else (["reptiles", "amphibians"] if group in ("reptiles", "amphibians")
+                                       else [group])
+        res = self.bioclip_clf.classify(crop, groups=groups, use_negatives=generic)
         route = f"detection:{label.taxonomy.split(';')[-1] if getattr(label, 'taxonomy', '') else group}"
         if not res or (generic and not res["beats_negatives"]):
             _info(f"[BioCLIP] route={route} -> no species (negatives win)")

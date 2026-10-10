@@ -1,0 +1,5 @@
+scientific_name,reason
+Natrix natrix,"Split 2017: British grass snakes are Natrix helvetica; GB records under N. natrix are mostly pre-split and make the two prompts compete"
+Bufo spinosus,"Spiny toad does not occur in Great Britain (Jersey only); shares the GBIF English name Common Toad with Bufo bufo"
+Lucilia bufonivora,"Toad fly (GBIF name 'Anuran Parasite'): its photos mostly show the host toad, so BioCLIP labels toads with it"
+Dinocampus coccinellae,"Ladybird parasitoid wasp: its photos mostly show the host ladybird, so BioCLIP labels ladybirds with it"

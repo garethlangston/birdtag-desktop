@@ -1,0 +1,108 @@
+gbif_key,scientific_name,english_name,kingdom,phylum,class,order,family,genus,species,occurrences,group
+2426805,Rana temporaria,common frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana temporaria,792481,amphibians
+5217160,Bufo bufo,Common Toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufo,Bufo bufo,749285,amphibians
+5218405,Lissotriton vulgaris,Smooth Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton vulgaris,303403,amphibians
+2431783,Ichthyosaura alpestris,Alpine Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Ichthyosaura,Ichthyosaura alpestris,283832,amphibians
+2431776,Salamandra salamandra,Fire salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Salamandra,Salamandra salamandra,240466,amphibians
+2431885,Triturus cristatus,(Great or Northern) Crested Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus cristatus,203142,amphibians
+5218410,Lissotriton helveticus,Palmate Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton helveticus,198488,amphibians
+2422507,Epidalea calamita,Natterjack,Animalia,Chordata,Amphibia,Anura,Bufonidae,Epidalea,Epidalea calamita,184834,amphibians
+2427573,Hyla arborea,Common Tree Frog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla arborea,167376,amphibians
+2423435,Bombina variegata,Yellowbelly toad,Animalia,Chordata,Amphibia,Anura,Bombinatoridae,Bombina,Bombina variegata,132980,amphibians
+2426654,Pelophylax lessonae,Pool Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax lessonae,122881,amphibians
+2426760,Rana dalmatina,Agile Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana dalmatina,120284,amphibians
+2426612,Alytes obstetricans,midwife frog,Animalia,Chordata,Amphibia,Anura,Alytidae,Alytes,Alytes obstetricans,114220,amphibians
+2426661,Pelophylax ridibundus,Marsh Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax ridibundus,87257,amphibians
+2426789,Rana arvalis,Moor Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana arvalis,85434,amphibians
+2427555,Hyla meridionalis,Stripeless Tree Frog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla meridionalis,72496,amphibians
+2426658,Pelophylax perezi,Iberian Water Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax perezi,64315,amphibians
+9421513,Bufo spinosus,Common Toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufo,Bufo spinosus,63041,amphibians
+2431886,Triturus marmoratus,marbled newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus marmoratus,40411,amphibians
+9529916,Bufotes viridis,Green Toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufotes,Bufotes viridis,36474,amphibians
+2424293,Pelodytes punctatus,Parsley Frog,Animalia,Chordata,Amphibia,Anura,Pelodytidae,Pelodytes,Pelodytes punctatus,33076,amphibians
+2431781,Salamandra atra,Alpine Salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Salamandra,Salamandra atra,28998,amphibians
+2427091,Lithobates catesbeianus,"Bullfrog, North American bullfrog",Animalia,Chordata,Amphibia,Anura,Ranidae,Lithobates,Lithobates catesbeianus,24825,amphibians
+2423443,Bombina bombina,European fire-bellied toad,Animalia,Chordata,Amphibia,Anura,Bombinatoridae,Bombina,Bombina bombina,22917,amphibians
+2430567,Pelobates fuscus,Common Eurasian spadefoot toad,Animalia,Chordata,Amphibia,Anura,Pelobatidae,Pelobates,Pelobates fuscus,22890,amphibians
+2430565,Pelobates cultripes,Western Spadefoot,Animalia,Chordata,Amphibia,Anura,Pelobatidae,Pelobates,Pelobates cultripes,22813,amphibians
+8252035,Rana dalmatina,Agile frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana dalmatina,16353,amphibians
+5218408,Lissotriton boscai,Bosca's newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton boscai,8939,amphibians
+2431875,Pleurodeles waltl,Iberian ribbed newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Pleurodeles,Pleurodeles waltl,8812,amphibians
+2426774,Rana iberica,Iberian Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana iberica,8489,amphibians
+2431824,Calotriton asper,Pyrenean Brook Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Calotriton,Calotriton asper,7936,amphibians
+2431887,Triturus carnifex,Italian Crested Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus carnifex,7875,amphibians
+2426616,Discoglossus galganoi,Iberian Painted Frog,Animalia,Chordata,Amphibia,Anura,Alytidae,Discoglossus,Discoglossus galganoi,6709,amphibians
+2426617,Discoglossus pictus,Painted frog,Animalia,Chordata,Amphibia,Anura,Alytidae,Discoglossus,Discoglossus pictus,6620,amphibians
+2427565,Hyla orientalis,Caucasian Treefrog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla orientalis,5929,amphibians
+2431453,Speleomantes strinatii,Strinati’s Cave Salamander,Animalia,Chordata,Amphibia,Caudata,Plethodontidae,Speleomantes,Speleomantes strinatii,5167,amphibians
+2426610,Alytes cisternasii,Iberian Midwife Toad,Animalia,Chordata,Amphibia,Anura,Alytidae,Alytes,Alytes cisternasii,4609,amphibians
+2431938,Chioglossa lusitanica,Gold-striped salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Chioglossa,Chioglossa lusitanica,4115,amphibians
+2427598,Hyla intermedia,Italian Tree Frog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla intermedia,3777,amphibians
+2427580,Hyla molleri,European Treefrog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla molleri,3702,amphibians
+2431780,Salamandra lanzai,Lanzas fire salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Salamandra,Salamandra lanzai,3602,amphibians
+2426788,Rana latastei,Italian Agile Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana latastei,3597,amphibians
+2431889,Triturus pygmaeus,Pygmy Marbled Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus pygmaeus,3311,amphibians
+5217334,Xenopus laevis,African clawed frog,Animalia,Chordata,Amphibia,Anura,Pipidae,Xenopus,Xenopus laevis,3166,amphibians
+2426815,Rana italica,Italian Stream Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana italica,2044,amphibians
+2426615,Discoglossus sardus,Sardinia painted frog,Animalia,Chordata,Amphibia,Anura,Alytidae,Discoglossus,Discoglossus sardus,1917,amphibians
+2424292,Pelodytes ibericus,Iberian Parsley Frog,Animalia,Chordata,Amphibia,Anura,Pelodytidae,Pelodytes,Pelodytes ibericus,1907,amphibians
+11691106,Rana parvipalmata,Galician Common Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana parvipalmata,1858,amphibians
+2427563,Hyla sarda,Tyrrhenian Tree Frog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla sarda,1754,amphibians
+5218409,Lissotriton montandoni,Carpathian Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton montandoni,1653,amphibians
+2431891,Triturus dobrogicus,Danube Crested Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus dobrogicus,1556,amphibians
+2431940,Euproctus montanus,Corsican Brook Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Euproctus,Euproctus montanus,1520,amphibians
+2431779,Salamandra corsica,Corsican Fire Salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Salamandra,Salamandra corsica,1444,amphibians
+10635361,Pelobates vespertinus,Pallas Spadefoot Toad,Animalia,Chordata,Amphibia,Anura,Pelobatidae,Pelobates,Pelobates vespertinus,1171,amphibians
+2431851,Salamandrina perspicillata,Northern spectacled salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Salamandrina,Salamandrina perspicillata,1125,amphibians
+2426620,Discoglossus jeanneae,,Animalia,Chordata,Amphibia,Anura,Alytidae,Discoglossus,Discoglossus jeanneae,1102,amphibians
+9787242,Bufotes variabilis,,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufotes,Bufotes variabilis,1030,amphibians
+2426798,Rana macrocnemis,Banded Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana macrocnemis,1021,amphibians
+2426621,Discoglossus montalentii,Corsican Painted Frog,Animalia,Chordata,Amphibia,Anura,Alytidae,Discoglossus,Discoglossus montalentii,992,amphibians
+2426795,Rana graeca,Balkan Stream Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana graeca,889,amphibians
+2426793,Rana pyrenaica,Pyrenean Stream Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana pyrenaica,868,amphibians
+2426650,Pelophylax kurtmuelleri,Balkan Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax kurtmuelleri,743,amphibians
+10803854,Alytes almogavarii,Catalonian Midwife Toad,Animalia,Chordata,Amphibia,Anura,Alytidae,Alytes,Alytes almogavarii,650,amphibians
+2426640,Pelophylax bedriagae,Bedriaga’s Water Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax bedriagae,620,amphibians
+2426613,Alytes dickhilleni,Betic Midwife Toad,Animalia,Chordata,Amphibia,Anura,Alytidae,Alytes,Alytes dickhilleni,528,amphibians
+2426665,Pelophylax bergeri,,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax bergeri,484,amphibians
+2426672,Pelophylax cretensis,Cretan Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax cretensis,377,amphibians
+9391920,Pelodytes atlanticus,Lusitanian Parsley Frog,Animalia,Chordata,Amphibia,Anura,Pelodytidae,Pelodytes,Pelodytes atlanticus,376,amphibians
+2431456,Speleomantes italicus,Italian Cave Salamander,Animalia,Chordata,Amphibia,Caudata,Plethodontidae,Speleomantes,Speleomantes italicus,374,amphibians
+10743188,Salamandra longirostris,,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Salamandra,Salamandra longirostris,349,amphibians
+8808626,Lissotriton graecus,Greek Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton graecus,298,amphibians
+10061226,Triturus cristatus x T. marmoratus,,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus cristatus x T. marmoratus,283,amphibians
+2431455,Speleomantes ambrosii,Ambrosi Salamander,Animalia,Chordata,Amphibia,Caudata,Plethodontidae,Speleomantes,Speleomantes ambrosii,279,amphibians
+5217159,Bufo verrucosissimus,Caucasian toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufo,Bufo verrucosissimus,279,amphibians
+2432042,Proteus anguinus,olm,Animalia,Chordata,Amphibia,Caudata,Proteidae,Proteus,Proteus anguinus,277,amphibians
+10716997,Lissotriton maltzani,Algarve Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton maltzani,270,amphibians
+5218406,Lissotriton italicus,Italian Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton italicus,254,amphibians
+2431813,Ommatotriton ophryticus,Banded newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Ommatotriton,Ommatotriton ophryticus,236,amphibians
+2431890,Triturus karelinii,Balkan Crested Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus karelinii,230,amphibians
+8532266,Triturus ivanbureschi,Balkan Crested Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus ivanbureschi,216,amphibians
+5218334,Salamandrella keyserlingii,Dybowski's Salamander,Animalia,Chordata,Amphibia,Caudata,Hynobiidae,Salamandrella,Salamandrella keyserlingii,213,amphibians
+10444550,Pelobates balcanicus,Balkan Spadefoot,Animalia,Chordata,Amphibia,Anura,Pelobatidae,Pelobates,Pelobates balcanicus,212,amphibians
+10701330,Lissotriton schmidtleri,Schmidtler's Smooth Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton schmidtleri,200,amphibians
+10526275,Lissotriton lantzi,Caucasian Smooth Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton lantzi,198,amphibians
+2431827,Calotriton arnoldi,Montseny Brook Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Calotriton,Calotriton arnoldi,189,amphibians
+9993678,Pelophylax cypriensis,Cyprus Water Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax cypriensis,175,amphibians
+5217374,Pelodytes caucasicus,Caucasus parsley frog,Animalia,Chordata,Amphibia,Anura,Pelodytidae,Pelodytes,Pelodytes caucasicus,141,amphibians
+2426648,Pelophylax epeiroticus,Epirus Pool Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax epeiroticus,134,amphibians
+2427599,Hyla savignyi,Lemon-Yellow Tree Frog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla savignyi,133,amphibians
+2426609,Alytes muletensis,Majorca Midwife Toad,Animalia,Chordata,Amphibia,Anura,Alytidae,Alytes,Alytes muletensis,130,amphibians
+10779794,Bufotes balearicus,,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufotes,Bufotes balearicus,109,amphibians
+2430566,Pelobates syriacus,Syrian spadefoot toad,Animalia,Chordata,Amphibia,Anura,Pelobatidae,Pelobates,Pelobates syriacus,107,amphibians
+2431672,Speleomantes genei,Gene's Cave Salamander,Animalia,Chordata,Amphibia,Caudata,Plethodontidae,Speleomantes,Speleomantes genei,101,amphibians
+10722555,Bufotes siculus,,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufotes,Bufotes siculus,97,amphibians
+2431829,Lyciasalamandra helverseni,Karpathos Lycian Salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lyciasalamandra,Lyciasalamandra helverseni,95,amphibians
+2431852,Salamandrina terdigitata,Southern spectacled salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Salamandrina,Salamandrina terdigitata,91,amphibians
+10677799,Bufotes cypriensis,Cyprian Green Toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufotes,Bufotes cypriensis,82,amphibians
+2431888,Triturus macedonicus,Macedonian Crested Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus macedonicus,66,amphibians
+2431451,Speleomantes supramontis,Supramonte Cave Salamander,Animalia,Chordata,Amphibia,Caudata,Plethodontidae,Speleomantes,Speleomantes supramontis,59,amphibians
+2431452,Speleomantes imperialis,Imperial Cave Salamander,Animalia,Chordata,Amphibia,Caudata,Plethodontidae,Speleomantes,Speleomantes imperialis,59,amphibians
+2431941,Euproctus platycephalus,Sardinian Brook Salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Euproctus,Euproctus platycephalus,56,amphibians
+10705538,Sclerophrys mauritanica,Berber Toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Sclerophrys,Sclerophrys mauritanica,47,amphibians
+2426638,Pelophylax shqipericus,Albanian Water Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax shqipericus,32,amphibians
+2431943,Mertensiella caucasica,Caucasian salamander,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Mertensiella,Mertensiella caucasica,32,amphibians
+9568260,Pelodytes hespericus,,Animalia,Chordata,Amphibia,Anura,Pelodytidae,Pelodytes,Pelodytes hespericus,30,amphibians
+2426670,Pelophylax cerigensis,Karpathos Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax cerigensis,29,amphibians
+2431457,Speleomantes flavus,Monte Albo Cave Salamander,Animalia,Chordata,Amphibia,Caudata,Plethodontidae,Speleomantes,Speleomantes flavus,28,amphibians

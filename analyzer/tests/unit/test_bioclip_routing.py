@@ -140,6 +140,18 @@ class TestBioclipClassifier:
         res = clf.classify(np.zeros((20, 30, 3), np.uint8), use_negatives=True)
         assert res["beats_negatives"] and res["top_species_labels"][0] == "Common Frog"
 
+    def test_group_chosen_by_total_probability(self, clf):
+        # The lizard is the single closest species, but the two insects are almost as close
+        # and together hold more probability -> the insect group (and its best species) wins.
+        clf.scale = 10.0
+        e = np.array([0.61, 0, 0.6, 0.2], np.float32)  # cos: lizard .694, both insects .683
+        e /= np.linalg.norm(e)
+        full = clf.classify_embedding(e, groups=["reptiles"])  # sanity: lizard alone
+        assert full["top_species_labels"][0] == "Common Lizard"
+        res = clf.classify_embedding(e)
+        assert res["group"] == "insects"
+        assert res["group_scores"]["insects"] > res["group_scores"]["reptiles"]
+
     def test_preprocess_uses_config(self, fake_bioclip):
         cfg = json.loads((fake_bioclip / "config.json").read_text())
         x = bioclip._preprocess(np.full((16, 32, 3), 255, np.uint8), cfg)
@@ -176,6 +188,13 @@ class TestPipelineBioclip:
         lab = bioclip.TaxonLabel("Lizard", "reptiles", "x;reptilia;squamata;;;;lizard")
         sp, sc, fam, _, route = p._bioclip_for_detection(lab, np.zeros((9, 9, 3), np.uint8), "Lizard", 0.4)
         assert sp == "Common Lizard" and sc > 0.9 and fam == "Lacertidae" and route.startswith("detection")
+        # SpeciesNet says "reptile" but it's an amphibian: herp detections use both herp lists
+        _FakeSession.next_embedding = np.array([0, 1, 0, 0], np.float32)
+        assert p._bioclip_for_detection(lab, np.zeros((9, 9, 3), np.uint8), "Lizard", 0.4)[0] == "Common Frog"
+        # but an insect detection never becomes a herp
+        ins = bioclip.TaxonLabel("Butterfly", "insects", "x;insecta;lepidoptera;;;;butterfly")
+        assert p._bioclip_for_detection(ins, np.zeros((9, 9, 3), np.uint8), "Butterfly", 0.4)[0] in (
+            "7-spot Ladybird", "Peacock")
         # plain string label (mammal) is left to SpeciesNet
         assert p._bioclip_for_detection("Red Fox", None, "Red Fox", 0.8)[0] == "Red Fox"
         # whole frame: background wins -> nothing

@@ -200,6 +200,15 @@ class BioclipClassifier:
         p /= p.sum()
         species_p = p[:n_species]
         neg_p = float(p[n_species:].max()) if len(p) > n_species else 0.0
+        # Pick the group by its total probability first, then the species inside it, so a
+        # photo whose mass is spread over many species of one group is not won by a single
+        # look-alike from another group. (Class-level prompts were tried and were unreliable.)
+        group_scores: dict[str, float] = {}
+        if len(groups) > 1:
+            for i, (g, _) in enumerate(meta):
+                group_scores[g] = group_scores.get(g, 0.0) + float(species_p[i])
+            best_group = max(group_scores, key=group_scores.get)
+            species_p = np.where(np.array([g == best_group for g, _ in meta]), species_p, 0.0)
         k = min(top_k, n_species)
         top = np.argsort(species_p)[-k:][::-1]
         # family (scientific) aggregation for the family pill
@@ -218,6 +227,7 @@ class BioclipClassifier:
             "scientific_name": best_r["scientific_name"],
             "english_name": best_r.get("english_name", ""),
             "negative_score": neg_p,
+            "group_scores": group_scores,
             "beats_negatives": float(species_p[top[0]]) > neg_p,
         }
 

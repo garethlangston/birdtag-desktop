@@ -1,0 +1,26 @@
+gbif_key,scientific_name,english_name,kingdom,phylum,class,order,family,genus,species,occurrences,group
+9702100,Zootoca vivipara,European Common Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Zootoca,Zootoca vivipara,61367,reptiles
+2468095,Anguis fragilis,Slow worm,Animalia,Chordata,Reptilia,Squamata,Anguidae,Anguis,Anguis fragilis,53416,reptiles
+5960862,Vipera berus,common adder,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera berus,33773,reptiles
+9350124,Natrix helvetica,Grass Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Natrix,Natrix helvetica,20701,reptiles
+6161347,Natrix natrix,European Grass Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Natrix,Natrix natrix,13749,reptiles
+6159223,Lacerta agilis,Sand lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta agilis,5073,reptiles
+2443002,Trachemys scripta,slider,Animalia,Chordata,Reptilia,Testudines,Emydidae,Trachemys,Trachemys scripta,2855,reptiles
+2469188,Podarcis muralis,Common wall lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis muralis,1970,reptiles
+9789983,Dermochelys coriacea,Leatherback,Animalia,Chordata,Reptilia,Testudines,Dermochelyidae,Dermochelys,Dermochelys coriacea,1062,reptiles
+5959617,Coronella austriaca,smooth snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Coronella,Coronella austriaca,496,reptiles
+8909809,Emys orbicularis,European pond turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Emys,Emys orbicularis,261,reptiles
+8894817,Caretta caretta,loggerhead sea turtle,Animalia,Chordata,Reptilia,Testudines,Cheloniidae,Caretta,Caretta caretta,178,reptiles
+2458538,Zamenis longissimus,Aesculapian Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Zamenis,Zamenis longissimus,116,reptiles
+2442165,Lepidochelys kempii,Kemp's Ridley turtle,Animalia,Chordata,Reptilia,Testudines,Cheloniidae,Lepidochelys,Lepidochelys kempii,62,reptiles
+9185677,Podarcis siculus,Italian Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis siculus,31,reptiles
+6159243,Lacerta bilineata,Western Green Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta bilineata,27,reptiles
+9228211,Graptemys pseudogeographica,False Map Turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Graptemys,Graptemys pseudogeographica,27,reptiles
+8898408,Pseudemys concinna,eastern river cooter,Animalia,Chordata,Reptilia,Testudines,Emydidae,Pseudemys,Pseudemys concinna,21,reptiles
+2442225,Chelonia mydas,green turtle,Animalia,Chordata,Reptilia,Testudines,Cheloniidae,Chelonia,Chelonia mydas,17,reptiles
+5220435,Pelodiscus sinensis,Chinese softshell,Animalia,Chordata,Reptilia,Testudines,Trionychidae,Pelodiscus,Pelodiscus sinensis,15,reptiles
+2441905,Chelydra serpentina,Common snapping turtle,Animalia,Chordata,Reptilia,Testudines,Chelydridae,Chelydra,Chelydra serpentina,13,reptiles
+2443374,Mauremys caspica,Caspian turtle,Animalia,Chordata,Reptilia,Testudines,Geoemydidae,Mauremys,Mauremys caspica,10,reptiles
+2455615,Pantherophis guttatus,Corn Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Pantherophis,Pantherophis guttatus,5,reptiles
+5221528,Hemidactylus turcicus,Turkish Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Hemidactylus,Hemidactylus turcicus,5,reptiles
+2441454,Testudo hermanni,Hermann's tortoise,Animalia,Chordata,Reptilia,Testudines,Testudinidae,Testudo,Testudo hermanni,5,reptiles

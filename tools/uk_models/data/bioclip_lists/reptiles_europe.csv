@@ -1,0 +1,200 @@
+gbif_key,scientific_name,english_name,kingdom,phylum,class,order,family,genus,species,occurrences,group
+2469188,Podarcis muralis,Common wall lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis muralis,410580,reptiles
+9702100,Zootoca vivipara,European Common Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Zootoca,Zootoca vivipara,270256,reptiles
+2468095,Anguis fragilis,Slow worm,Animalia,Chordata,Reptilia,Squamata,Anguidae,Anguis,Anguis fragilis,268010,reptiles
+6159223,Lacerta agilis,Sand lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta agilis,214507,reptiles
+6159243,Lacerta bilineata,Western Green Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta bilineata,146314,reptiles
+6161347,Natrix natrix,European Grass Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Natrix,Natrix natrix,142733,reptiles
+5960862,Vipera berus,common adder,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera berus,126933,reptiles
+9350124,Natrix helvetica,Grass Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Natrix,Natrix helvetica,117119,reptiles
+2445034,Tarentola mauritanica,Moorish Gecko,Animalia,Chordata,Reptilia,Squamata,Phyllodactylidae,Tarentola,Tarentola mauritanica,97712,reptiles
+2443002,Trachemys scripta,slider,Animalia,Chordata,Reptilia,Testudines,Emydidae,Trachemys,Trachemys scripta,76717,reptiles
+5959617,Coronella austriaca,smooth snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Coronella,Coronella austriaca,66701,reptiles
+2458916,Hierophis viridiflavus,Western Whip Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Hierophis,Hierophis viridiflavus,58113,reptiles
+8909809,Emys orbicularis,European pond turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Emys,Emys orbicularis,57202,reptiles
+2469763,Psammodromus algirus,Algerian psammodromus,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Psammodromus,Psammodromus algirus,49460,reptiles
+2468542,Timon lepidus,Ocellated Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Timon,Timon lepidus,48900,reptiles
+6161340,Natrix maura,Viperine Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Natrix,Natrix maura,45580,reptiles
+2458538,Zamenis longissimus,Aesculapian Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Zamenis,Zamenis longissimus,45521,reptiles
+8796529,Malpolon monspessulanus,Montpellier snake,Animalia,Chordata,Reptilia,Squamata,Psammophiidae,Malpolon,Malpolon monspessulanus,43897,reptiles
+2441454,Testudo hermanni,Hermann's tortoise,Animalia,Chordata,Reptilia,Testudines,Testudinidae,Testudo,Testudo hermanni,41177,reptiles
+2444339,Vipera aspis,asp viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera aspis,36970,reptiles
+9416124,Zamenis scalaris,Ladder Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Zamenis,Zamenis scalaris,26179,reptiles
+6159273,Lacerta viridis,European green lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta viridis,24878,reptiles
+9185677,Podarcis siculus,Italian Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis siculus,24665,reptiles
+7444957,Podarcis liolepis,Catalonian Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis liolepis,20993,reptiles
+2443341,Mauremys leprosa,Mediterranean pond turtle,Animalia,Chordata,Reptilia,Testudines,Geoemydidae,Mauremys,Mauremys leprosa,20469,reptiles
+8356845,Anguis colchica,Slow Worm,Animalia,Chordata,Reptilia,Squamata,Anguidae,Anguis,Anguis colchica,17314,reptiles
+6161327,Natrix tessellata,Dice Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Natrix,Natrix tessellata,14909,reptiles
+5221528,Hemidactylus turcicus,Turkish Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Hemidactylus,Hemidactylus turcicus,14801,reptiles
+5959645,Coronella girondica,southern smooth snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Coronella,Coronella girondica,13550,reptiles
+8323736,Psammodromus edwarsianus,East Iberian Psammodromus,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Psammodromus,Psammodromus edwarsianus,10470,reptiles
+5225191,Chalcides striatus,Iberian Three-toed Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Chalcides,Chalcides striatus,10322,reptiles
+2459023,Hemorrhois hippocrepis,Horseshoe Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Hemorrhois,Hemorrhois hippocrepis,9754,reptiles
+9019391,Podarcis hispanicus,Iberian wall lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis hispanicus,9642,reptiles
+6159196,Lacerta schreiberi,Iberian Emerald Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta schreiberi,9053,reptiles
+2469126,Podarcis tiliguerta,Tyrrhenian Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis tiliguerta,8214,reptiles
+8894817,Caretta caretta,loggerhead sea turtle,Animalia,Chordata,Reptilia,Testudines,Cheloniidae,Caretta,Caretta caretta,7249,reptiles
+2469143,Podarcis bocagei,Bocage's Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis bocagei,6689,reptiles
+2441461,Testudo graeca,common tortoise,Animalia,Chordata,Reptilia,Testudines,Testudinidae,Testudo,Testudo graeca,6595,reptiles
+2473222,Blanus cinereus,Mediterranean worm lizard,Animalia,Chordata,Reptilia,Squamata,Blanidae,Blanus,Blanus cinereus,5853,reptiles
+5226733,Acanthodactylus erythrurus,Fringe-fingered Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Acanthodactylus,Acanthodactylus erythrurus,5698,reptiles
+2469139,Podarcis vaucheri,Andalusian wall lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis vaucheri,5278,reptiles
+2468700,Teira dugesii,Madeira Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Teira,Teira dugesii,5084,reptiles
+9323087,Podarcis virescens,Geniez's Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis virescens,4863,reptiles
+8682680,Gallotia galloti,Gallot's lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Gallotia,Gallotia galloti,4808,reptiles
+2449051,Chamaeleo chamaeleon,Common Chameleon,Animalia,Chordata,Reptilia,Squamata,Chamaeleonidae,Chamaeleo,Chamaeleo chamaeleon,4739,reptiles
+7917188,Psammodromus hispanicus,Spanish psammodromus,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Psammodromus,Psammodromus hispanicus,4622,reptiles
+9807306,Vipera ursinii,Meadow Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera ursinii,4557,reptiles
+9789983,Dermochelys coriacea,Leatherback,Animalia,Chordata,Reptilia,Testudines,Dermochelyidae,Dermochelys,Dermochelys coriacea,4538,reptiles
+7567645,Anguis veronensis,Italian Slow Worm,Animalia,Chordata,Reptilia,Squamata,Anguidae,Anguis,Anguis veronensis,4379,reptiles
+5960896,Vipera latastei,Lataste's Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera latastei,4334,reptiles
+2469065,Podarcis tauricus,Crimean Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis tauricus,3975,reptiles
+2468350,Pseudopus apodus,European glass lizard,Animalia,Chordata,Reptilia,Squamata,Anguidae,Pseudopus,Pseudopus apodus,3928,reptiles
+8974077,Chalcides bedriagai,Spanish Cylindrical Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Chalcides,Chalcides bedriagai,3633,reptiles
+9313254,Natrix astreptophora,Iberian Grass Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Natrix,Natrix astreptophora,3227,reptiles
+2468525,Iberolacerta bonnali,Pyrenean Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta bonnali,3148,reptiles
+6159197,Lacerta trilineata,Balkan Emerald Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta trilineata,2905,reptiles
+2469363,Algyroides nigropunctatus,Blue-throated Keeled Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Algyroides,Algyroides nigropunctatus,2758,reptiles
+2468999,Podarcis melisellensis,Dalmatian Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis melisellensis,2744,reptiles
+2441502,Testudo marginata,Marginated tortoise,Animalia,Chordata,Reptilia,Testudines,Testudinidae,Testudo,Testudo marginata,2743,reptiles
+2444308,Vipera ammodytes,sand viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera ammodytes,2687,reptiles
+9258179,Podarcis guadarramae,Guadarrama Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis guadarramae,2637,reptiles
+2457224,Dolichophis caspius,Caspian Whip Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Dolichophis,Dolichophis caspius,2633,reptiles
+5960884,Vipera seoanei,Seoane’s Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera seoanei,2583,reptiles
+2468511,Iberolacerta monticola,Iberian Mountain Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta monticola,2480,reptiles
+2455958,Macroprotodon brevis,Iberian False Smooth Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Macroprotodon,Macroprotodon brevis,2455,reptiles
+2469075,Podarcis erhardii,Erhard's Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis erhardii,2274,reptiles
+2443384,Mauremys rivulata,Western Caspian turtle,Animalia,Chordata,Reptilia,Testudines,Geoemydidae,Mauremys,Mauremys rivulata,2213,reptiles
+2447858,Mediodactylus kotschyi,European Bent-toed Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Mediodactylus,Mediodactylus kotschyi,2200,reptiles
+8120403,Ablepharus kitaibelii,Juniper Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Ablepharus,Ablepharus kitaibelii,2120,reptiles
+11189228,Lacerta diplochondrodes,Rhodos Green Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta diplochondrodes,2116,reptiles
+7504253,Stellagama stellio,Roughtail Rock Agama,Animalia,Chordata,Reptilia,Squamata,Agamidae,Stellagama,Stellagama stellio,2068,reptiles
+2446608,Euleptes europaea,European Leaf-toed Gecko,Animalia,Chordata,Reptilia,Squamata,Sphaerodactylidae,Euleptes,Euleptes europaea,1963,reptiles
+9107061,Archaeolacerta bedriagae,Tyrrhenian Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Archaeolacerta,Archaeolacerta bedriagae,1761,reptiles
+2469028,Podarcis pityusensis,Ibiza Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis pityusensis,1725,reptiles
+2469141,Podarcis carbonelli,Carbonell's Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis carbonelli,1713,reptiles
+2469702,Ophisops elegans,Snake-eyed Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Ophisops,Ophisops elegans,1685,reptiles
+9574630,Timon nevadensis,Sierra Nevada Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Timon,Timon nevadensis,1550,reptiles
+9228211,Graptemys pseudogeographica,False Map Turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Graptemys,Graptemys pseudogeographica,1524,reptiles
+2468656,Gallotia atlantica,Atlantic Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Gallotia,Gallotia atlantica,1521,reptiles
+2469148,Podarcis filfolensis,Filfola Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis filfolensis,1430,reptiles
+7381506,Coluber viridiflavus,Dark green snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Coluber,Coluber viridiflavus,1426,reptiles
+8898408,Pseudemys concinna,eastern river cooter,Animalia,Chordata,Reptilia,Testudines,Emydidae,Pseudemys,Pseudemys concinna,1409,reptiles
+2468651,Gallotia stehlini,Gran Canaria Giant Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Gallotia,Gallotia stehlini,1374,reptiles
+9099408,Elaphe quatuorlineata,Four-lined snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Elaphe,Elaphe quatuorlineata,1317,reptiles
+2458928,Hierophis gemonensis,Balkan Racer,Animalia,Chordata,Reptilia,Squamata,Colubridae,Hierophis,Hierophis gemonensis,1228,reptiles
+5225137,Chalcides ocellatus,Ocellated Bronze Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Chalcides,Chalcides ocellatus,1124,reptiles
+5959662,Malpolon insignitus,Eastern Montpellier Snake,Animalia,Chordata,Reptilia,Squamata,Psammophiidae,Malpolon,Malpolon insignitus,1101,reptiles
+8568628,Vipera renardi,Steppe Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera renardi,1075,reptiles
+2468945,Eremias arguta,Racerunner,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Eremias,Eremias arguta,1024,reptiles
+2469022,Podarcis peloponnesiacus,Peloponnese Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis peloponnesiacus,1009,reptiles
+5789555,Dalmatolacerta oxycephala,Sharp-snouted Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Dalmatolacerta,Dalmatolacerta oxycephala,943,reptiles
+5789532,Podarcis cretensis,Cretan Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis cretensis,916,reptiles
+2468503,Iberolacerta cyreni,Cyren's Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta cyreni,912,reptiles
+9624852,Xerotyphlops vermicularis,Eurasian Blind Snake,Animalia,Chordata,Reptilia,Squamata,Typhlopidae,Xerotyphlops,Xerotyphlops vermicularis,907,reptiles
+2457466,Telescopus fallax,European Cat Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Telescopus,Telescopus fallax,851,reptiles
+8994891,Tarentola delalandii,Tenerife Gecko,Animalia,Chordata,Reptilia,Squamata,Phyllodactylidae,Tarentola,Tarentola delalandii,818,reptiles
+2469361,Algyroides fitzingeri,Fitzingers algyroides,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Algyroides,Algyroides fitzingeri,770,reptiles
+11180835,Podarcis ionicus,Corfu Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis ionicus,704,reptiles
+5223135,Platyceps najadum,Dahl's Whip Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Platyceps,Platyceps najadum,701,reptiles
+2469155,Podarcis lilfordi,Lilford's Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis lilfordi,634,reptiles
+2458400,Elaphe dione,Steppes Ratsnake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Elaphe,Elaphe dione,631,reptiles
+7837038,Iberolacerta aranica,Aran Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta aranica,615,reptiles
+2468845,Darevskia lindholmi,Crimean Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia lindholmi,604,reptiles
+2458386,Elaphe sauromates,East-Four-lined Ratsnake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Elaphe,Elaphe sauromates,598,reptiles
+2458374,Zamenis situla,European Ratsnake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Zamenis,Zamenis situla,597,reptiles
+2469367,Algyroides moreoticus,Greek Keeled Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Algyroides,Algyroides moreoticus,531,reptiles
+2445033,Tarentola angustimentalis,Canary Wall Gecko,Animalia,Chordata,Reptilia,Squamata,Phyllodactylidae,Tarentola,Tarentola angustimentalis,526,reptiles
+7416224,Psammodromus occidentalis,Western Iberian Sand Racer,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Psammodromus,Psammodromus occidentalis,523,reptiles
+2468520,Iberolacerta aurelioi,Aurelio’s Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta aurelioi,515,reptiles
+2442843,Pseudemys nelsoni,Florida red-bellied turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Pseudemys,Pseudemys nelsoni,503,reptiles
+5789552,Phoenicolacerta troodica,Cypriote Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Phoenicolacerta,Phoenicolacerta troodica,466,reptiles
+5225173,Chalcides chalcides,Italian Three-toed Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Chalcides,Chalcides chalcides,464,reptiles
+2468663,Gallotia caesaris,Boettger's Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Gallotia,Gallotia caesaris,448,reptiles
+7376912,Paralaudakia caucasia,Caucasian Agama,Animalia,Chordata,Reptilia,Squamata,Agamidae,Paralaudakia,Paralaudakia caucasia,423,reptiles
+7881183,Macroprotodon cucullatus,False Smooth Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Macroprotodon,Macroprotodon cucullatus,419,reptiles
+2444716,Macrovipera lebetinus,Levantine Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Macrovipera,Macrovipera lebetinus,413,reptiles
+5789567,Hellenolacerta graeca,Greek Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Hellenolacerta,Hellenolacerta graeca,406,reptiles
+5226767,Acanthodactylus schreiberi,Schreiber's Fringe-fingered Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Acanthodactylus,Acanthodactylus schreiberi,398,reptiles
+2457232,Dolichophis jugularis,Large Whip Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Dolichophis,Dolichophis jugularis,379,reptiles
+9305963,Blanus vandellii,Vandelli's Worm Lizard,Animalia,Chordata,Reptilia,Squamata,Blanidae,Blanus,Blanus vandellii,370,reptiles
+2468799,Darevskia praticola,Meadow Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia praticola,367,reptiles
+2468506,Iberolacerta horvathi,Horvath's Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta horvathi,365,reptiles
+2443079,Graptemys ouachitensis,Ouachita map turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Graptemys,Graptemys ouachitensis,358,reptiles
+8145436,Podarcis waglerianus,Sicilian Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis waglerianus,354,reptiles
+9595248,Eryx jaculus,European Sandboa,Animalia,Chordata,Reptilia,Squamata,Boidae,Eryx,Eryx jaculus,352,reptiles
+11165726,Mediodactylus danilewskii,Bulgarian Bent-toed Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Mediodactylus,Mediodactylus danilewskii,316,reptiles
+2442225,Chelonia mydas,green turtle,Animalia,Chordata,Reptilia,Testudines,Cheloniidae,Chelonia,Chelonia mydas,314,reptiles
+2443244,Mauremys sinensis,Chinese stripe-necked turtle,Animalia,Chordata,Reptilia,Testudines,Geoemydidae,Mauremys,Mauremys sinensis,307,reptiles
+2468889,Eremias velox,Central Asian Racerunner,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Eremias,Eremias velox,288,reptiles
+2441905,Chelydra serpentina,Common snapping turtle,Animalia,Chordata,Reptilia,Testudines,Chelydridae,Chelydra,Chelydra serpentina,271,reptiles
+6159238,Lacerta strigata,Caspian Green Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta strigata,263,reptiles
+8279309,Anguis graeca,Greek Slow Worm,Animalia,Chordata,Reptilia,Squamata,Anguidae,Anguis,Anguis graeca,261,reptiles
+5960875,Vipera nikolskii,Adder,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera nikolskii,243,reptiles
+2445052,Tarentola boettgeri,Boettger's Wall Gecko,Animalia,Chordata,Reptilia,Squamata,Phyllodactylidae,Tarentola,Tarentola boettgeri,229,reptiles
+9152383,Phrynocephalus mystaceus,Secret toadhead agama,Animalia,Chordata,Reptilia,Squamata,Agamidae,Phrynocephalus,Phrynocephalus mystaceus,228,reptiles
+9083992,Darevskia brauneri,Brauner's Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia brauneri,227,reptiles
+2455971,Macroprotodon mauritanicus,False Smooth Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Macroprotodon,Macroprotodon mauritanicus,222,reptiles
+11153404,Mediodactylus orientalis,Eastern Mediterranean Thin-toed Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Mediodactylus,Mediodactylus orientalis,218,reptiles
+2442165,Lepidochelys kempii,Kemp's Ridley turtle,Animalia,Chordata,Reptilia,Testudines,Cheloniidae,Lepidochelys,Lepidochelys kempii,212,reptiles
+2469356,Algyroides marchi,Spanish Keeled Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Algyroides,Algyroides marchi,210,reptiles
+8889878,Elaphe taeniura,Beauty Rat Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Elaphe,Elaphe taeniura,204,reptiles
+4820419,Montivipera xanthina,Coastal Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Montivipera,Montivipera xanthina,177,reptiles
+5225148,Chalcides viridanus,Canaryan Cylindrical Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Chalcides,Chalcides viridanus,176,reptiles
+2455751,Eirenis modestus,Asia Minor Dwarf Racer,Animalia,Chordata,Reptilia,Squamata,Colubridae,Eirenis,Eirenis modestus,175,reptiles
+9565497,Anatololacerta pelasgiana,Pelasgian Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Anatololacerta,Anatololacerta pelasgiana,175,reptiles
+2448980,Chamaeleo africanus,African Chameleon,Animalia,Chordata,Reptilia,Squamata,Chamaeleonidae,Chamaeleo,Chamaeleo africanus,171,reptiles
+8959353,Phrynocephalus guttatus,Spotted Toadhead Agama,Animalia,Chordata,Reptilia,Squamata,Agamidae,Phrynocephalus,Phrynocephalus guttatus,168,reptiles
+2469118,Podarcis milensis,Milos Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Podarcis,Podarcis milensis,165,reptiles
+2468088,Anguis cephallonica,Peloponnese Slow Worm,Animalia,Chordata,Reptilia,Squamata,Anguidae,Anguis,Anguis cephallonica,149,reptiles
+2445039,Tarentola gomerensis,Gomero Wall Gecko,Animalia,Chordata,Reptilia,Squamata,Phyllodactylidae,Tarentola,Tarentola gomerensis,142,reptiles
+2443374,Mauremys caspica,Caspian turtle,Animalia,Chordata,Reptilia,Testudines,Geoemydidae,Mauremys,Mauremys caspica,139,reptiles
+5225153,Chalcides sexlineatus,Gran Canaria Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Chalcides,Chalcides sexlineatus,138,reptiles
+2443133,Chrysemys picta,painted turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Chrysemys,Chrysemys picta,135,reptiles
+5789566,Dinarolacerta mosorensis,Mosor Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Dinarolacerta,Dinarolacerta mosorensis,131,reptiles
+8011236,Ablepharus budaki,Budak's snake-eyed skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Ablepharus,Ablepharus budaki,128,reptiles
+5789726,Namibiana rostrata,Bocage's Blind Snake,Animalia,Chordata,Reptilia,Squamata,Leptotyphlopidae,Namibiana,Namibiana rostrata,127,reptiles
+2468522,Iberolacerta galani,Galan's Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta galani,124,reptiles
+2443597,Mauremys reevesii,Reeves turtle,Animalia,Chordata,Reptilia,Testudines,Geoemydidae,Mauremys,Mauremys reevesii,123,reptiles
+2458382,Zamenis lineatus,Striped Aesculapian Rat Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Zamenis,Zamenis lineatus,122,reptiles
+5789536,Anatololacerta anatolica,Anatolian Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Anatololacerta,Anatololacerta anatolica,115,reptiles
+2462191,Ophiomorus punctatissimus,Greek Snake Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Ophiomorus,Ophiomorus punctatissimus,107,reptiles
+2453265,Eirenis collaris,Collared Dwarf Racer,Animalia,Chordata,Reptilia,Squamata,Colubridae,Eirenis,Eirenis collaris,95,reptiles
+2455615,Pantherophis guttatus,Corn Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Pantherophis,Pantherophis guttatus,91,reptiles
+8247946,Chalcides coeruleopunctatus,La Gomera Skink,Animalia,Chordata,Reptilia,Squamata,Scincidae,Chalcides,Chalcides coeruleopunctatus,90,reptiles
+5220435,Pelodiscus sinensis,Chinese softshell,Animalia,Chordata,Reptilia,Testudines,Trionychidae,Pelodiscus,Pelodiscus sinensis,90,reptiles
+2468840,Darevskia caucasica,Caucasian Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia caucasica,88,reptiles
+2458438,Elaphe schrenckii,Amur Ratsnake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Elaphe,Elaphe schrenckii,86,reptiles
+11199676,Mediodactylus oertzeni,Dodecanese Thin-toed Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Mediodactylus,Mediodactylus oertzeni,79,reptiles
+2442828,Pseudemys peninsularis,Peninsula Cooter,Animalia,Chordata,Reptilia,Testudines,Emydidae,Pseudemys,Pseudemys peninsularis,77,reptiles
+5960856,Vipera kaznakovi,Caucasus Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera kaznakovi,76,reptiles
+10910391,Heremites vittatus,Bridled Mabuya,Animalia,Chordata,Reptilia,Squamata,Scincidae,Heremites,Heremites vittatus,71,reptiles
+2468694,Scelarcis perspicillata,Menorca Wall Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Scelarcis,Scelarcis perspicillata,65,reptiles
+2468822,Darevskia saxicola,Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia saxicola,65,reptiles
+9601519,Pseudemys rubriventris,American red-bellied turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Pseudemys,Pseudemys rubriventris,61,reptiles
+2447953,Tenuidactylus caspius,Caspian Bent-Toed Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Tenuidactylus,Tenuidactylus caspius,59,reptiles
+2443040,Trachemys venusta,MesoAmerican slider,Animalia,Chordata,Reptilia,Testudines,Emydidae,Trachemys,Trachemys venusta,58,reptiles
+2468831,Darevskia daghestanica,Dagestan Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia daghestanica,57,reptiles
+2459015,Hemorrhois nummifer,Asian Racer,Animalia,Chordata,Reptilia,Squamata,Colubridae,Hemorrhois,Hemorrhois nummifer,56,reptiles
+2465319,Eryx miliaris,Desert Sand Boa,Animalia,Chordata,Reptilia,Squamata,Boidae,Eryx,Eryx miliaris,53,reptiles
+2457240,Dolichophis schmidti,Red-bellied Racer,Animalia,Chordata,Reptilia,Squamata,Colubridae,Dolichophis,Dolichophis schmidti,51,reptiles
+5960888,Vipera dinniki,Dinnik's Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera dinniki,51,reptiles
+10287547,Elaphe urartica,Urartian Rat Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Elaphe,Elaphe urartica,47,reptiles
+6159264,Lacerta media,Medium Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta media,44,reptiles
+2468780,Darevskia derjugini,Artwin Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia derjugini,43,reptiles
+11068456,Heremites auratus,Golden Grass Mabuya,Animalia,Chordata,Reptilia,Squamata,Scincidae,Heremites,Heremites auratus,40,reptiles
+2468793,Darevskia alpina,Alpine Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia alpina,37,reptiles
+5220531,Emys trinacris,Sicilian pond turtle,Animalia,Chordata,Reptilia,Testudines,Emydidae,Emys,Emys trinacris,37,reptiles
+5960861,Vipera lotievi,Lotiev's Viper,Animalia,Chordata,Reptilia,Squamata,Viperidae,Vipera,Vipera lotievi,35,reptiles
+11146847,Lacerta citrovittata,Tinos Green Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Lacerta,Lacerta citrovittata,34,reptiles
+2468847,Darevskia armeniaca,Armenian Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia armeniaca,32,reptiles
+2468518,Iberolacerta martinezricai,Martinez-Rica's Rock Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Iberolacerta,Iberolacerta martinezricai,31,reptiles
+9357542,Indotyphlops braminus,"Braminy Bling Snake, Flower Pot Snake",Animalia,Chordata,Reptilia,Squamata,Typhlopidae,Indotyphlops,Indotyphlops braminus,27,reptiles
+9131359,Darevskia rudis,Georgian lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Darevskia,Darevskia rudis,26,reptiles
+2459658,Iguana iguana,Green iguana,Animalia,Chordata,Reptilia,Squamata,Iguanidae,Iguana,Iguana iguana,25,reptiles
+2447425,Phelsuma borbonica,Reunion Day Gecko,Animalia,Chordata,Reptilia,Squamata,Gekkonidae,Phelsuma,Phelsuma borbonica,24,reptiles
+2457223,Hierophis cypriensis,Cyprus Whip Snake,Animalia,Chordata,Reptilia,Squamata,Colubridae,Hierophis,Hierophis cypriensis,22,reptiles
+2443026,Trachemys emolli,Nicaraguan slider,Animalia,Chordata,Reptilia,Testudines,Emydidae,Trachemys,Trachemys emolli,22,reptiles
+8841716,Eretmochelys imbricata,hawksbill turtle,Animalia,Chordata,Reptilia,Testudines,Cheloniidae,Eretmochelys,Eretmochelys imbricata,22,reptiles
+2468688,Gallotia intermedia,Canarian Spotted Lizard,Animalia,Chordata,Reptilia,Squamata,Lacertidae,Gallotia,Gallotia intermedia,20,reptiles

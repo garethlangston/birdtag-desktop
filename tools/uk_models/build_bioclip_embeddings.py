@@ -34,6 +34,8 @@ from pathlib import Path
 import numpy as np
 
 OVERRIDES = Path(__file__).with_name("data") / "uk_wildlife_names.csv"
+# Species dropped from the UK lists (taxonomic splits / not British), with reasons.
+UK_EXCLUDE = Path(__file__).with_name("data") / "uk_exclude.csv"
 NEGATIVES = [
     "a photo of a plant.", "a photo of a flower.", "a photo of leaves.", "a photo of grass.",
     "a photo of a tree.", "a landscape photo.", "a photo of the sky.", "a photo of water.",
@@ -95,6 +97,7 @@ def main() -> int:
     ap.add_argument("--model-dir", required=True, type=Path, help="folder with config.json (export_bioclip.py)")
     ap.add_argument("--only", nargs="*", default=None, help="regions to build (default: all lists found)")
     ap.add_argument("--batch", type=int, default=64)
+    ap.add_argument("--groups", nargs="*", default=None, help="groups to build (default: all)")
     a = ap.parse_args()
 
     import open_clip
@@ -109,6 +112,10 @@ def main() -> int:
     out = a.model_dir / "embeddings"
     out.mkdir(parents=True, exist_ok=True)
     overrides = load_overrides()
+    uk_exclude = set()
+    if UK_EXCLUDE.exists():
+        with open(UK_EXCLUDE, encoding="utf-8") as f:
+            uk_exclude = {r["scientific_name"] for r in csv.DictReader(f)}
 
     neg = encode(model, tok, NEGATIVES, a.batch, "negatives")
     np.save(out / "negatives.npy", neg.astype(np.float16))
@@ -117,10 +124,12 @@ def main() -> int:
 
     for path in sorted(a.lists.glob("*_*.csv")):
         group, region = path.stem.split("_", 1)
-        if a.only and region not in a.only:
+        if (a.only and region not in a.only) or (a.groups and group not in a.groups):
             continue
         with open(path, encoding="utf-8") as f:
             rows = list(csv.DictReader(f))
+        if region == "uk":
+            rows = [r for r in rows if r["scientific_name"] not in uk_exclude]
         prompts, meta, seen = [], [], {}
         for r in rows:
             eng = overrides.get(r["scientific_name"]) or tidy_english(r["english_name"])

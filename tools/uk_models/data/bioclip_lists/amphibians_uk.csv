@@ -1,0 +1,17 @@
+gbif_key,scientific_name,english_name,kingdom,phylum,class,order,family,genus,species,occurrences,group
+2426805,Rana temporaria,common frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Rana,Rana temporaria,122268,amphibians
+2431885,Triturus cristatus,(Great or Northern) Crested Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Triturus,Triturus cristatus,89846,amphibians
+5217160,Bufo bufo,Common Toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufo,Bufo bufo,87452,amphibians
+5218405,Lissotriton vulgaris,Smooth Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton vulgaris,58941,amphibians
+5218410,Lissotriton helveticus,Palmate Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Lissotriton,Lissotriton helveticus,24056,amphibians
+2422507,Epidalea calamita,Natterjack,Animalia,Chordata,Amphibia,Anura,Bufonidae,Epidalea,Epidalea calamita,6124,amphibians
+2426661,Pelophylax ridibundus,Marsh Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax ridibundus,2640,amphibians
+2431783,Ichthyosaura alpestris,Alpine Newt,Animalia,Chordata,Amphibia,Caudata,Salamandridae,Ichthyosaura,Ichthyosaura alpestris,499,amphibians
+2426654,Pelophylax lessonae,Pool Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax lessonae,301,amphibians
+2426612,Alytes obstetricans,midwife frog,Animalia,Chordata,Amphibia,Anura,Alytidae,Alytes,Alytes obstetricans,259,amphibians
+2427091,Lithobates catesbeianus,"Bullfrog, North American bullfrog",Animalia,Chordata,Amphibia,Anura,Ranidae,Lithobates,Lithobates catesbeianus,30,amphibians
+2426609,Alytes muletensis,Majorca Midwife Toad,Animalia,Chordata,Amphibia,Anura,Alytidae,Alytes,Alytes muletensis,26,amphibians
+2426658,Pelophylax perezi,Iberian Water Frog,Animalia,Chordata,Amphibia,Anura,Ranidae,Pelophylax,Pelophylax perezi,21,amphibians
+2427573,Hyla arborea,Common Tree Frog,Animalia,Chordata,Amphibia,Anura,Hylidae,Hyla,Hyla arborea,12,amphibians
+5217334,Xenopus laevis,African clawed frog,Animalia,Chordata,Amphibia,Anura,Pipidae,Xenopus,Xenopus laevis,7,amphibians
+9421513,Bufo spinosus,Common Toad,Animalia,Chordata,Amphibia,Anura,Bufonidae,Bufo,Bufo spinosus,7,amphibians
