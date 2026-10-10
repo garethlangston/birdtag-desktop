@@ -149,6 +149,10 @@ About 110 s per image on 2 CPU cores with every model loaded (much faster on a G
   so parity could not be checked. fp32 is 1.2 GB; on a 4 GB card with EVA-02 fp16 (0.6 GB) and
   SpeciesNet it should fit, and Kestrel falls back to CPU if it does not.
 * **World BioCLIP lists not built here** (GBIF throughput on this machine); the commands are above.
+  UK and Europe embeddings are built and listed with SHA256 in `bioclip-2/README.txt`.
+* Bigger regions mean more look-alikes. In Europe mode, the UK toad photo comes out as Caucasian
+  Toad 0.49 (below threshold, so untagged); the peacock is still correct at 1.00. Use UK
+  mode for British photos. The UK exclusion list only applies to the UK lists.
 * BioCLIP zero-shot is less accurate than a trained classifier, especially for small or
   similar insects (many hoverflies, micro-moths, beetles) and newts. Look at `_Check` tags.
   Parasites whose photos show their hosts can win (the toad fly, the ladybird wasp); add any
