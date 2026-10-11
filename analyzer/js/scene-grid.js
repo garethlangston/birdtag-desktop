@@ -37,7 +37,7 @@
         { icon: '📝', label: 'Write Photo Metadata',
           run: () => writeMetadataForFolder(folderPath) },
         { divider: true },
-        { icon: '🗑', label: 'Clear Kestrel Analysis Data', danger: true,
+        { icon: '🗑', label: ('Clear ' + BRAND_SHORT + ' Analysis Data'), danger: true,
           run: () => {
             const folderName = (folderPath || '').split(/[\\/]/).filter(Boolean).pop() || folderPath;
             clearKestrelDataForFolder(folderPath, folderName, refreshCallback);
@@ -658,8 +658,8 @@
           repairBtn.type = 'button';
           repairBtn.className = 'action-btn folder-repair-btn hidden';
           repairBtn.dataset.repairRoot = fd.folderPath;
-          repairBtn.innerHTML = '<i>⚠</i> Repair Kestrel Data';
-          repairBtn.title = 'Kestrel data and photos no longer match';
+          repairBtn.innerHTML = ('<i>⚠</i> Repair ' + BRAND_SHORT + ' Data');
+          repairBtn.title = (BRAND_SHORT + ' data and photos no longer match');
           repairBtn.addEventListener('click', (ev) => {
             ev.stopPropagation();
             if (typeof openRepairDialog === 'function') openRepairDialog(fd.folderPath);

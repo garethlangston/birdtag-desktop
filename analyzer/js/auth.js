@@ -586,7 +586,7 @@
       const windowsNoteEl = document.getElementById('versionUpdateWindowsNote');
       if (windowsNoteEl) {
         if (platform === 'windows') {
-          windowsNoteEl.innerHTML = 'Windows users: Check for updates in the Microsoft Store within 1-3 days. If you used the traditional installer to install Kestrel, visit <a href="https://projectkestrel.org/download" target="_blank" style="color:#7ca3d9;text-decoration:underline;">projectkestrel.org/download</a> to manually update.';
+          windowsNoteEl.innerHTML = ('Windows users: Check for updates in the Microsoft Store within 1-3 days. If you used the traditional installer to install ' + BRAND_SHORT + ', visit <a href="https://projectkestrel.org/download" target="_blank" style="color:#7ca3d9;text-decoration:underline;">projectkestrel.org/download</a> to manually update.');
           windowsNoteEl.style.display = 'block';
         } else {
           windowsNoteEl.style.display = 'none';

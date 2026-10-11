@@ -46,7 +46,7 @@
 
     function _buildUncertainBadge(sampledImgs) {
       const tip =
-        'Estimate is based on average hardware. Kestrel will refine this once ' +
+        ('Estimate is based on average hardware. ' + BRAND_SHORT + ' will refine this once ') +
         `you've analyzed ~${_EST_MIN_SAMPLED_IMAGES_FOR_LOCAL} images on this ` +
         `machine (currently: ${sampledImgs}).`;
       const el = document.createElement('span');
@@ -470,7 +470,7 @@
       row.className = cls;
       row.dataset.path = node.path;
       row.title = outdated
-        ? `Analyzed on Kestrel v${node.kestrel_version} (current: v${_appVersion}) — re-analyze to update.\n${node.path}`
+        ? `Analyzed on ${BRAND_SHORT} v${node.kestrel_version} (current: v${_appVersion}) — re-analyze to update.\n${node.path}`
         : node.path;
 
       // ── Rails (Phase 1.5B mirror) ────────────────────────────────────────────
@@ -563,7 +563,7 @@
           e.preventDefault();
           e.stopPropagation();
           showContextMenu(e.clientX, e.clientY, [{
-            label: '🗑 Clear Kestrel Analysis Data',
+            label: ('🗑 Clear ' + BRAND_SHORT + ' Analysis Data'),
             danger: true,
             action: () => {
               clearKestrelDataForFolder(node.path, node.name, () => {
@@ -857,7 +857,7 @@
           willReanalyze = true;
           outdatedReanalyzeCount++;
           imagesThisFolder = total;
-          warningMsg = `Analyzed on Kestrel v${node.kestrel_version} (current: v${_appVersion}). Will erase .kestrel data and re-analyze all ${total.toLocaleString()} images.`;
+          warningMsg = `Analyzed on ${BRAND_SHORT} v${node.kestrel_version} (current: v${_appVersion}). Will erase .kestrel data and re-analyze all ${total.toLocaleString()} images.`;
           warningKind = 'warn';
         } else if (isFullyAnalyzed) {
           if (analyzeDlgReanalyzeUnlocked) {

@@ -273,9 +273,9 @@
       if (privacyLink) privacyLink.href = privacyUrl;
 
       if (status?.reason === 'terms_updated') {
-        msgEl.textContent = 'The Privacy Policy and/or Terms of Use have been updated. Please review and accept to continue using Project Kestrel.';
+        msgEl.textContent = ('The Privacy Policy and/or Terms of Use have been updated. Please review and accept to continue using ' + BRAND_NAME + '.');
       } else {
-        msgEl.textContent = 'By using Project Kestrel you agree to our Terms of Use and Privacy Policy.';
+        msgEl.textContent = ('By using ' + BRAND_NAME + ' you agree to our Terms of Use and Privacy Policy.');
       }
       banner.classList.remove('hidden');
     }
@@ -308,7 +308,7 @@
             // The RAW warning stacks beneath the legal banner; with that gone
             // it should move back up to the top strip.
             try { refreshRawWarnBanner(); } catch (_) { }
-            showToast('Terms accepted. Welcome to Project Kestrel!', 4000);
+            showToast(('Terms accepted. Welcome to ' + BRAND_NAME + '!'), 4000);
           }
         } catch (e) {
           console.error('Failed to agree to legal terms', e);

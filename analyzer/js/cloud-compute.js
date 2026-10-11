@@ -49,7 +49,7 @@
     // is deferred) but distinct from 'failed' for the badge.
     const _CC_TERMINAL_STATUSES = new Set(['done', 'failed', 'cancelled', 'incomplete']);
     const _CC_FOLDER_UNAVAILABLE_MSG =
-      'Cloud Compute results are available for download, but Kestrel cannot locate the folder that you analyzed.';
+      ('Cloud Compute results are available for download, but ' + BRAND_SHORT + ' cannot locate the folder that you analyzed.');
     // Cosmetic-only: hides finished rows from the cloud pill; never touches the ledger.
     const _ccPanelHiddenJobIds = new Set();
     // Preserve <details> open state across panel/history re-renders.
@@ -1866,7 +1866,7 @@
         if (window.pywebview?.api?.open_url) {
           try {
             window.pywebview.api.open_url(_CC_ACCOUNT_DELETE_URL);
-            showToast('Opening account deletion in your browser. Follow the steps there to permanently delete your Project Kestrel account and all associated data.', 9000);
+            showToast(('Opening account deletion in your browser. Follow the steps there to permanently delete your ' + BRAND_NAME + ' account and all associated data.'), 9000);
           } catch {
             showToast('Could not open the deletion page. Visit myaccount.projectkestrel.org to delete your account.', 6000);
           }

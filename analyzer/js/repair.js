@@ -129,8 +129,8 @@
             if (show) {
                 const summary = folderDriftSummary(root);
                 btn.title = summary
-                    ? `Kestrel data and photos no longer match: ${summary}`
-                    : 'Repair this folder’s Kestrel data';
+                    ? `${BRAND_SHORT} data and photos no longer match: ${summary}`
+                    : ('Repair this folder’s ' + BRAND_SHORT + ' data');
             }
         });
 
@@ -260,13 +260,13 @@
         // Anything other than a clean read means we do not know what is in this
         // folder, so we describe the problem and offer no actions at all.
         if (!diff || diff.scan_status !== 'ok') {
-            const box = _repairSection('Kestrel couldn’t read this folder');
+            const box = _repairSection((BRAND_SHORT + ' couldn’t read this folder'));
             _repairText(box,
                 'The folder is there, but its contents could not be listed. That usually '
                 + 'means a drive or network share is disconnected or still reconnecting, or '
-                + 'that Kestrel’s permission to read the folder needs to be granted again.');
+                + ('that ' + BRAND_SHORT + '’s permission to read the folder needs to be granted again.'));
             _repairText(box, 'No analysis data has been changed. Reconnect the drive or reopen '
-                + 'the folder, and Kestrel will check again.');
+                + ('the folder, and ' + BRAND_SHORT + ' will check again.'));
             if (diff?.scan_error) {
                 const detail = document.createElement('div');
                 detail.style.cssText = 'font-family:monospace;font-size:11px;color:#6a7d9c;margin-top:4px';
@@ -285,7 +285,7 @@
             sections++;
             const box = _repairSection(
                 `${_repairPlural(diff.renamed.length, 'photo appears', 'photos appear')} to have been renamed`);
-            _repairText(box, 'Kestrel matched these by file size. Check the pairs below before '
+            _repairText(box, (BRAND_SHORT + ' matched these by file size. Check the pairs below before ')
                 + 'confirming — applying a wrong match would move a photo’s rating and '
                 + 'culling decision onto a different photo.');
             const list = document.createElement('div');
@@ -298,7 +298,7 @@
             }
             box.appendChild(list);
             const actions = _repairActions(box);
-            _repairButton(actions, 'Update Kestrel Data', async () => {
+            _repairButton(actions, ('Update ' + BRAND_SHORT + ' Data'), async () => {
                 const res = await window.pywebview.api.repair_apply_renames(root, diff.renamed);
                 if (!res?.success) { showToast('Repair failed: ' + (res?.error || ''), 6000); return; }
                 await _repairAfterAction(root, `Updated ${_repairPlural(res.renamed, 'renamed photo', 'renamed photos')}.`);
@@ -311,7 +311,7 @@
             sections++;
             const box = _repairSection(`Found in “${hit.name}”`);
             _repairText(box,
-                `${_repairPlural(hit.count, 'photo', 'photos')} Kestrel couldn’t find here `
+                `${_repairPlural(hit.count, 'photo', 'photos')} ${BRAND_SHORT} couldn’t find here `
                 + `appear to be in the “${hit.name}” subfolder.`);
             _repairFileList(box, hit.filenames);
             const actions = _repairActions(box);
@@ -330,13 +330,13 @@
             const total = diff.db_rows || 0;
             const allGone = total > 0 && diff.missing.length >= total;
             const box = _repairSection(
-                `Kestrel couldn’t find ${_repairPlural(diff.missing.length, 'photo', 'photos')} on the disk`);
+                `${BRAND_SHORT} couldn’t find ${_repairPlural(diff.missing.length, 'photo', 'photos')} on the disk`);
             if (allGone) {
                 // Every photo gone with nothing new in its place is far more
                 // often a folder the user emptied on purpose than a deletion
                 // they want Kestrel to act on, so lead with the cautious reading.
                 _repairText(box, 'Every photo this folder had analysis data for is gone. If you '
-                    + 'moved them somewhere else, point Kestrel at their new home rather than '
+                    + ('moved them somewhere else, point ' + BRAND_SHORT + ' at their new home rather than ')
                     + 'deleting the data — that keeps your ratings and culling decisions.');
             }
             _repairFileList(box, diff.missing);
@@ -349,7 +349,7 @@
                 const res = await window.pywebview.api.repair_relocate(root, dest, diff.missing);
                 if (!res?.success) {
                     showToast(res?.reason === 'destination_has_kestrel'
-                        ? 'That folder already has Kestrel analysis data. Moving into an already-analyzed folder isn’t supported yet.'
+                        ? ('That folder already has ' + BRAND_SHORT + ' analysis data. Moving into an already-analyzed folder isn’t supported yet.')
                         : 'Move failed: ' + (res?.error || ''), 7000);
                     return;
                 }
@@ -374,7 +374,7 @@
             sections++;
             const box = _repairSection(
                 `${_repairPlural(diff.new.length, 'photo has', 'photos have')} not been analyzed`);
-            _repairText(box, 'These are in the folder but have no Kestrel analysis data yet. '
+            _repairText(box, ('These are in the folder but have no ' + BRAND_SHORT + ' analysis data yet. ')
                 + 'Analyze the folder to include them — already-analyzed photos are skipped.');
             _repairFileList(box, diff.new);
             body.appendChild(box);
@@ -394,7 +394,7 @@
 
         if (!sections) {
             const box = _repairSection('Nothing to repair');
-            _repairText(box, 'This folder’s photos and Kestrel data are in sync.');
+            _repairText(box, ('This folder’s photos and ' + BRAND_SHORT + ' data are in sync.'));
             body.appendChild(box);
         }
 

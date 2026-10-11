@@ -99,8 +99,8 @@ def find_model(prefer_fp16: bool = False) -> Path | None:
 def missing_model_message() -> str:
     names = " or ".join(MODEL_FILENAMES[k] for k in ("fp16", "fp32"))
     folders = "; ".join(str(d) for d in model_search_dirs())
-    return (f"UK/Europe/World bird model not found. Put {names} in one of: {folders}. "
-            "See FORK-NOTES.md for how to export it.")
+    return (f"UK/Europe/World bird model not found, so the original North America bird model is used. "
+            f"To enable it, put {names} in one of: {folders}. See FORK-NOTES.md.")
 
 
 def region_rows(region: str, include_rarities: bool = False, rows=None) -> list[dict]:

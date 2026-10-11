@@ -70,6 +70,14 @@ from .ml.provider_coordinator import ResilienceConfig
 from .ml.bird_species import BirdSpeciesClassifier
 from .ml import bird_species_inat21 as _inat21
 from .ml import bioclip as _bioclip
+
+try:  # product name for user-facing status messages (analyzer/branding.json)
+    from branding import SHORT_NAME as _BRAND_SHORT
+except ImportError:
+    try:
+        from analyzer.branding import SHORT_NAME as _BRAND_SHORT
+    except ImportError:
+        _BRAND_SHORT = "Birdtag"
 from .ml.quality import QualityClassifier
 
 
@@ -1005,7 +1013,7 @@ class AnalysisPipeline:
             if progress_cb:
                 progress_cb(processed_count, total)
             if processed_count > 0 and status_cb:
-                status_cb("Picking up where Kestrel left off...")
+                status_cb(f"Picking up where {_BRAND_SHORT} left off...")
             if not new_files:
                 if status_cb:
                     status_cb("No new files to process.")

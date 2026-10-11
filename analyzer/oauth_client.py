@@ -222,13 +222,13 @@ def _build_authorize_url(state: str, challenge: str, redirect_uri: str) -> str:
 
 _CALLBACK_HTML = (
     "<!doctype html><html><head><meta charset='utf-8'>"
-    "<title>Project Kestrel — Sign-in complete</title>"
+    "<title>Sign-in complete</title>"
     "<style>body{font-family:system-ui,sans-serif;background:#0e1116;color:#e6e8ee;"
     "display:flex;align-items:center;justify-content:center;height:100vh;margin:0}"
     "main{max-width:520px;padding:32px;text-align:center}"
     "h1{font-size:22px;margin:0 0 8px}p{margin:0;opacity:.8}</style></head>"
     "<body><main><h1>Sign-in complete</h1>"
-    "<p>You can close this tab and return to Project Kestrel.</p></main></body></html>"
+    "<p>You can close this tab and return to the app.</p></main></body></html>"
 )
 
 
@@ -1223,7 +1223,7 @@ def run_authorization_flow(
                 "error": "aswebauth_unavailable",
                 "error_description": (
                     "In-app sign-in (ASWebAuthenticationSession) is unavailable on "
-                    "this build. Please update Project Kestrel."
+                    "this build. Please update the app."
                 ),
             }
 

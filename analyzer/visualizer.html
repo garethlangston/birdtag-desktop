@@ -69,8 +69,8 @@
     <div class="wrap">
       <h1 style="display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;">
         <span style="display:flex;align-items:center;gap:8px;">
-          <img src="logo.png" alt="Project Kestrel" style="height:32px;" />
-          <span>Project Kestrel</span>
+          <img src="logo.png" alt="Birdtag Desktop" style="height:32px;" data-brand-tpl-alt="{name}"/>
+          <span><span data-brand="name">Birdtag Desktop</span></span>
         </span>
         <span style="display:flex;align-items:center;gap:8px;">
           <div id="notifWrap" class="notif-wrap hidden">
@@ -100,7 +100,7 @@
       </h1>
       <div class="toolbar">
         <div class="toolbar-row actions">
-          <button id="analyzeQueueBtn" class="primary sidebar-cta" title="Pick folders to analyze with Kestrel's ML pipeline">
+          <button id="analyzeQueueBtn" class="primary sidebar-cta" title="Pick folders to analyze with Birdtag's ML pipeline" data-brand-tpl-title="Pick folders to analyze with {short}'s ML pipeline">
             🔬 Analyze Folders…
           </button>
           <div id="saveRevertWrap" class="hidden" style="display:flex;gap:6px">
@@ -114,7 +114,7 @@
              existing IDs preserved so handlers keep working. treeChangeRoot
              retained but hidden to keep csv-init.js safe. -->
         <div id="folderTreeWrap" class="folder-tree-wrap folder-tree-empty">
-          <button id="pickFolder" class="folder-load-btn" title="Load a folder that you've already analyzed with Kestrel">
+          <button id="pickFolder" class="folder-load-btn" title="Load a folder that you've already analyzed with Birdtag" data-brand-tpl-title="Load a folder that you've already analyzed with {short}">
             <span class="folder-load-btn-plus">+ 📂</span>
             <span class="folder-load-btn-label">Load Folders…</span>
           </button>
@@ -154,10 +154,10 @@
       <!-- Segmented footer strip: Settings | Feedback | Tutorial | Donate.
            Zoom moved to the bottom status bar. -->
       <div class="sidebar-footer segmented-strip" aria-label="Controls">
-        <button id="openSettings" class="segmented-strip-item" title="Open Kestrel settings" aria-label="Settings">⚙ Settings</button>
+        <button id="openSettings" class="segmented-strip-item" title="Open Birdtag settings" aria-label="Settings" data-brand-tpl-title="Open {short} settings">⚙ Settings</button>
         <button id="openFeedback" class="segmented-strip-item" title="Send feedback, report a bug, or share a suggestion">Feedback</button>
         <button id="helpBtnMain" class="segmented-strip-item" title="Start guided tutorial">Tutorial</button>
-        <button id="donateBtnMain" class="segmented-strip-item donate-item" title="Support Project Kestrel">💛 Support</button>
+        <button id="donateBtnMain" class="segmented-strip-item donate-item" title="Support Birdtag Desktop" data-brand-tpl-title="Support {name}">💛 Support</button>
       </div>
     </div>
   </header>
@@ -217,8 +217,8 @@
       </div>
       <div id="compat" class="wrap hidden">
         <div class="notice">
-          Desktop bridge unavailable. Project Kestrel now runs in desktop-only mode.<br />
-          Please close this window and relaunch from the Project Kestrel app.
+          Desktop bridge unavailable. <span data-brand="name">Birdtag Desktop</span> now runs in desktop-only mode.<br />
+          Please close this window and relaunch from the <span data-brand="name">Birdtag Desktop</span> app.
         </div>
       </div>
 
@@ -227,9 +227,9 @@
       <!-- Welcome / Quick-Start panel — visible only when no folder is loaded -->
       <div id="welcomePanel">
         <div class="welcome-hero">
-          <img src="logo.png" alt="Kestrel Logo" class="welcome-hero-logo" style="height:150px; opacity:0.9;">
+          <img src="logo.png" alt="Birdtag Logo" class="welcome-hero-logo" style="height:150px; opacity:0.9;" data-brand-tpl-alt="{short} Logo">
           <div class="welcome-hero-text">
-            <h2>Welcome to Project Kestrel</h2>
+            <h2>Welcome to <span data-brand="name">Birdtag Desktop</span></h2>
             <button class="welcome-action-btn" style="margin:0; font-size:14px; padding:10px 16px;" onclick="openTutorialChooser()">📖 Start Tutorial</button>
           </div>
         </div>
@@ -257,7 +257,7 @@
 
         <div class="welcome-footer">
           <div style="font-size:11px; opacity:0.8;">
-            By using Project Kestrel, you agree to the <a href="https://projectkestrel.org/terms-of-use"
+            By using <span data-brand="name">Birdtag Desktop</span>, you agree to the <a href="https://projectkestrel.org/terms-of-use"
               target="_blank">Terms of Use</a> and <a href="https://projectkestrel.org/privacy-policy"
               target="_blank">Privacy Policy</a>.
           </div>
@@ -611,11 +611,11 @@
 
       <!-- ── Signed-out body: explainer ─────────────────────────────── -->
       <div id="perchDlgSignedOut" class="hidden">
-        <p class="perch-explainer-lead">Perch is the hosted home for your Kestrel-curated bird outings.</p>
-        <p class="perch-explainer-sub">Publish a perch from this folder and share a link with friends, family, or co-photographers — no Kestrel install required on their end.</p>
+        <p class="perch-explainer-lead">Perch is the hosted home for your <span data-brand="short">Birdtag</span>-curated bird outings.</p>
+        <p class="perch-explainer-sub">Publish a perch from this folder and share a link with friends, family, or co-photographers — no <span data-brand="short">Birdtag</span> install required on their end.</p>
         <ul class="perch-explainer-list">
           <li><b>Merged timelines</b> — combine your outing with co-photographers' perches into one shared view.</li>
-          <li><b>Quality-sorted scenes</b> — Kestrel's ranking carries through; the best photo of each scene leads.</li>
+          <li><b>Quality-sorted scenes</b> — <span data-brand="short">Birdtag</span>'s ranking carries through; the best photo of each scene leads.</li>
           <li><b>Likes, comments, favorites</b> — viewers can react and you can curate picks.</li>
         </ul>
         <p class="perch-explainer-ready" id="perchDlgReadyLine"></p>
@@ -707,7 +707,7 @@
             <div class="perch-beta-icon">⚠</div>
             <div class="perch-beta-body">
               <div class="perch-beta-title">Perch is in beta</div>
-              <div class="perch-beta-text">Once you share to Perch, you can show or hide individual scenes and sync species/family tag corrections straight from here — no re-upload. To add or remove photos or delete scenes, make those edits here in Kestrel, delete the old perch, and upload a fresh one.</div>
+              <div class="perch-beta-text">Once you share to Perch, you can show or hide individual scenes and sync species/family tag corrections straight from here — no re-upload. To add or remove photos or delete scenes, make those edits here in <span data-brand="short">Birdtag</span>, delete the old perch, and upload a fresh one.</div>
             </div>
           </div>
 
@@ -808,7 +808,7 @@
           <option value="custom">Custom Application…</option>
         </select>
       </div>
-      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Choose which editor Kestrel should use
+      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Choose which editor <span data-brand="short">Birdtag</span> should use
         when opening originals. &ldquo;System Default&rdquo; will use your OS default application.</div>
       <div class="row hidden" id="customEditorRow">
         <label for="customEditorPath">Application Path</label>
@@ -833,7 +833,7 @@
         <label for="birdModelRegion" style="flex:1">Bird identification model</label>
         <select id="birdModelRegion" style="min-width:280px">
           <option value="uk">UK (EVA-02 iNat21, British List)</option>
-          <option value="na">North America (Kestrel original)</option>
+          <option value="na">North America (<span data-brand="short">Birdtag</span> original)</option>
           <option value="europe">Europe (EVA-02 iNat21, Palearctic)</option>
           <option value="world">World (EVA-02 iNat21, all 1,486 birds)</option>
         </select>
@@ -854,7 +854,7 @@
         <label for="otherWildlifeModel" style="flex:1">Other wildlife model (reptiles, amphibians, insects)</label>
         <select id="otherWildlifeModel" style="min-width:280px">
           <option value="bioclip">BioCLIP 2 (zero-shot, region lists)</option>
-          <option value="speciesnet">SpeciesNet only (Kestrel original)</option>
+          <option value="speciesnet">SpeciesNet only (<span data-brand="short">Birdtag</span> original)</option>
         </select>
       </div>
       <div class="muted" id="wildlifeModelStatus" style="font-size:12px;margin-top:-6px;margin-bottom:8px">
@@ -961,7 +961,7 @@
           <span class="muted" id="settingsExpStrengthVal" style="min-width:34px;text-align:right;font-variant-numeric:tabular-nums">70%</span>
         </label>
       </div>
-      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Display only: how strongly Kestrel's calculated exposure boost is applied to preview imagery (grid &amp; scene-dialog export thumbnails and the RAW zoom). 0% shows the uncorrected export; 100% matches the processed bird crop. The same slider is in the scene viewer. Does not affect analysis or the baked crop.</div>
+      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Display only: how strongly <span data-brand="short">Birdtag</span>'s calculated exposure boost is applied to preview imagery (grid &amp; scene-dialog export thumbnails and the RAW zoom). 0% shows the uncorrected export; 100% matches the processed bird crop. The same slider is in the scene viewer. Does not affect analysis or the baked crop.</div>
 
       <div class="row">
         <label for="settingsAutoSave" style="flex:1">Auto-Save Changes</label>
@@ -975,10 +975,10 @@
       <h4 style="margin:12px 0 8px;padding-top:8px;border-top:1px solid #1d2230;color:#a0a8b8;font-size:13px;text-transform:uppercase;letter-spacing:0.5px">Analytics &amp; Privacy</h4>
 
       <div class="row">
-        <label style="flex:1">Kestrel's Impact</label>
+        <label style="flex:1"><span data-brand="short">Birdtag</span>'s Impact</label>
         <span class="muted" id="settingsTotalImpact">—</span>
       </div>
-      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Total number of photos analyzed by Kestrel
+      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Total number of photos analyzed by <span data-brand="short">Birdtag</span>
         on this computer.</div>
 
       <div style="border-top:1px solid #1d2230;margin:4px 0 2px"></div>
@@ -989,7 +989,7 @@
           <span class="muted" id="settingsAnalyticsLabel">Opt in</span>
         </label>
       </div>
-      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Helps improve Kestrel. No filenames,
+      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Helps improve <span data-brand="short">Birdtag</span>. No filenames,
         paths, or images are ever shared. You can change this at any time.</div>
 
       <div class="row">
@@ -998,7 +998,7 @@
           <input type="checkbox" id="settingsCrashReports" />
         </label>
       </div>
-      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Automatically send a report if Kestrel
+      <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Automatically send a report if <span data-brand="short">Birdtag</span>
         crashes, so we can find and fix the problem. No filenames, paths, or images are ever shared.
         Off by default in this fork.</div>
 
@@ -1009,7 +1009,7 @@
         </label>
       </div>
       <div class="muted" style="font-size:12px;margin-top:-6px;margin-bottom:8px">Fetches the upstream release list from
-        projectkestrel.org when Kestrel starts. Off by default in this fork (no network calls at startup).</div>
+        projectkestrel.org when <span data-brand="short">Birdtag</span> starts. Off by default in this fork (no network calls at startup).</div>
     </div>
     <div class="settings-footer">
       <button id="settingsCancel">Cancel</button>
@@ -1052,7 +1052,7 @@
   <!-- Info dialog -->
   <dialog id="infoDlg" class="kdlg kdlg--md kdlg--flex">
     <div class="settings">
-      <h3 style="margin:0">Kestrel Database Info</h3>
+      <h3 style="margin:0"><span data-brand="short">Birdtag</span> Database Info</h3>
       <div id="infoNotice" class="notice hidden" style="margin:0 0 8px"></div>
       <div id="infoContent" class="detail"
         style="max-height:50vh;overflow:auto;font-family:monospace;font-size:12px;white-space:pre;">—</div>
@@ -1069,11 +1069,11 @@
        successfully (diff.scan_status === 'ok'). -->
   <dialog id="repairDlg" class="kdlg kdlg--md kdlg--flex" aria-labelledby="repairDlgTitle">
     <div class="settings">
-      <h3 style="margin:0" id="repairDlgTitle">Repair Kestrel Data</h3>
+      <h3 style="margin:0" id="repairDlgTitle">Repair <span data-brand="short">Birdtag</span> Data</h3>
       <div id="repairDlgFolder" class="muted" style="font-size:12px;word-break:break-all">—</div>
       <div id="repairDlgBody" style="max-height:52vh;overflow:auto"></div>
       <div class="footer" style="gap:8px">
-        <button id="repairDlgDismiss" title="Stop showing this folder's warning until the next time Kestrel starts">Dismiss for now</button>
+        <button id="repairDlgDismiss" title="Stop showing this folder's warning until the next time Birdtag starts" data-brand-tpl-title="Stop showing this folder's warning until the next time {short} starts">Dismiss for now</button>
         <button id="repairDlgClose">Close</button>
       </div>
     </div>
@@ -1173,12 +1173,12 @@
                   </div>
                 </label>
               </div>
-              <div class="adlg-question-help muted">Kestrel's bird species classifier only recognizes North American birds. Skipping it makes analysis faster; finding your subjects and scoring their quality work exactly the same either way.</div>
+              <div class="adlg-question-help muted"><span data-brand="short">Birdtag</span>'s bird species classifier only recognizes North American birds. Skipping it makes analysis faster; finding your subjects and scoring their quality work exactly the same either way.</div>
             </div>
             <input id="analyzeSpeciesDetection" type="checkbox" class="hidden" aria-hidden="true" tabindex="-1" checked />
 
             <div class="adlg-question">
-              <div class="adlg-question-text">How many subjects should Kestrel analyze in each image?</div>
+              <div class="adlg-question-text">How many subjects should <span data-brand="short">Birdtag</span> analyze in each image?</div>
               <div class="adlg-setting-row">
                 <label for="adlgMaxBirdCrops">At most</label>
                 <input id="adlgMaxBirdCrops" type="number" min="1" max="20" step="1" value="10"
@@ -1241,7 +1241,7 @@
                   <input id="adlgDetectionThreshold" type="number" min="0.1" max="0.99" step="0.05" value="0.15"
                     style="width:80px" />
                 </div>
-                <div class="adlg-hint muted">How sure Kestrel must be that it found an animal before analyzing it (0.10–0.99). Lower values find more subjects.</div>
+                <div class="adlg-hint muted">How sure <span data-brand="short">Birdtag</span> must be that it found an animal before analyzing it (0.10–0.99). Lower values find more subjects.</div>
                 <!-- Live warning when the user picks a value much above the
                      recommended baseline. Wildlife detection models are quite
                      accurate, so high thresholds tend to miss real subjects. -->
@@ -1260,7 +1260,7 @@
                     <option value="aggressive">Aggressive (±8 stops)</option>
                   </select>
                 </div>
-                <div class="adlg-hint muted">Controls how strongly Kestrel corrects bird exposure in the analyzed crops. Balanced is recommended for most images.</div>
+                <div class="adlg-hint muted">Controls how strongly <span data-brand="short">Birdtag</span> corrects bird exposure in the analyzed crops. Balanced is recommended for most images.</div>
                 <div class="adlg-setting-row">
                   <label for="adlgSceneTime">Scene grouping time threshold (seconds)</label>
                   <input id="adlgSceneTime" type="number" min="0" max="60" step="0.5" value="1.0"
@@ -1346,7 +1346,7 @@
               <div class="analyze-dlg-destination-card" id="analyzeDestCloud"
                    data-destination="cloud" role="radio" aria-checked="false" tabindex="0">
                 <div class="dest-card-title">☁ Cloud Analysis</div>
-                <div class="dest-card-desc">Upload to Project Kestrel's cloud. Slower per-image, but frees up your machine.</div>
+                <div class="dest-card-desc">Upload to <span data-brand="name">Birdtag Desktop</span>'s cloud. Slower per-image, but frees up your machine.</div>
                 <div class="dest-card-usage" id="cloudDestUsage">Loading usage…</div>
                 <div class="dest-card-signin-overlay hidden" id="cloudDestSignInOverlay">
                   Sign in to Perch to use Cloud Compute.
@@ -1379,7 +1379,7 @@
   <dialog id="signInChooserDlg" class="kdlg signin-chooser-dlg" aria-labelledby="signInChooserTitle">
     <div class="signin-chooser-body">
       <button id="signInChooserClose" class="cloud-account-close signin-chooser-close" title="Close" aria-label="Close">✕</button>
-      <h3 id="signInChooserTitle" class="signin-chooser-title">Sign in to Project Kestrel</h3>
+      <h3 id="signInChooserTitle" class="signin-chooser-title">Sign in to <span data-brand="name">Birdtag Desktop</span></h3>
       <p class="signin-chooser-sub">Use Cloud Compute, Perch, and sync your account across devices.</p>
       <button id="signInAppleBtn" class="signin-apple-btn" type="button">
         <span class="signin-apple-logo" aria-hidden="true"></span>
@@ -1408,7 +1408,7 @@
         </div>
         <button id="cloudAccountManageBtn" class="primary" type="button">Manage my account ↗</button>
         <button id="cloudAccountSignOutBtn" class="cloud-account-signout" type="button">Sign out</button>
-        <button id="cloudAccountDeleteBtn" class="cloud-account-delete" type="button" title="Permanently delete your Project Kestrel account and data">Delete account</button>
+        <button id="cloudAccountDeleteBtn" class="cloud-account-delete" type="button" title="Permanently delete your Birdtag Desktop account and data" data-brand-tpl-title="Permanently delete your {name} account and data">Delete account</button>
       </div>
 
       <div class="account-columns">
@@ -1532,7 +1532,7 @@
        auto-confirm-on-Enter. -->
   <dialog id="clearKestrelConfirmDlg" class="kdlg kdlg--sm kdlg--flex analyze-confirm-dlg">
     <div class="analyze-confirm-body">
-      <h3 style="margin:0 0 8px;color:var(--warn);">⚠ Delete Kestrel analysis data?</h3>
+      <h3 style="margin:0 0 8px;color:var(--warn);">⚠ Delete <span data-brand="short">Birdtag</span> analysis data?</h3>
       <p style="margin:0 0 10px;font-size:13px;line-height:1.45;">
         The following data will be permanently deleted from
         <b id="clearKestrelFolderName">this folder</b>'s
@@ -1606,7 +1606,7 @@
   <!-- Analytics Consent dialog (shown once after first successful analysis) -->
   <dialog id="analyticsConsentDlg" class="kdlg kdlg--md kdlg--flex">
     <div class="analytics-dlg">
-      <h3>📊 Help Improve Project Kestrel</h3>
+      <h3>📊 Help Improve <span data-brand="name">Birdtag Desktop</span></h3>
       <p>Would you like to share anonymous usage data to help improve the app? This is completely optional and you can
         change your mind at any time.</p>
       <p><strong style="color:var(--text)">What would be shared (anonymously):</strong></p>
@@ -1660,12 +1660,12 @@
   <!-- Donation / Support dialog -->
   <dialog id="donateDlg" class="kdlg kdlg--sm kdlg--flex">
     <div class="donate-dlg">
-      <div class="donate-dlg-icon"><img src="logo.png" alt="Kestrel Logo" /></div>
-      <h3>Kestrel has analyzed over <span id="donateCountDisplay">many</span> photos!</h3>
-      <p>Thank you for using Project Kestrel! I’m a solo student developer and birder who built Kestrel because I love taking wildlife photos — but not sorting through them. If Kestrel has been useful to you, please consider supporting its development, or share your thoughts and feedback!</p>
-      <p style="font-size:12px;color:#607080;">Project Kestrel is free &amp; open-source. Every <a href="https://github.com/SanjaySoniLV/ProjectKestrel" target="_blank">contribution</a> helps keep it growing.</p>
+      <div class="donate-dlg-icon"><img src="logo.png" alt="Birdtag Logo" data-brand-tpl-alt="{short} Logo"/></div>
+      <h3><span data-brand="short">Birdtag</span> has analyzed over <span id="donateCountDisplay">many</span> photos!</h3>
+      <p>Thank you for using <span data-brand="name">Birdtag Desktop</span>! I’m a solo student developer and birder who built <span data-brand="short">Birdtag</span> because I love taking wildlife photos — but not sorting through them. If <span data-brand="short">Birdtag</span> has been useful to you, please consider supporting its development, or share your thoughts and feedback!</p>
+      <p style="font-size:12px;color:#607080;"><span data-brand="name">Birdtag Desktop</span> is free &amp; open-source. Every <a href="https://github.com/SanjaySoniLV/ProjectKestrel" target="_blank">contribution</a> helps keep it growing.</p>
       <div class="donate-dlg-btns">
-        <button class="donate-main-btn" id="donateDlgGoBtn">💛 Support Project Kestrel</button>
+        <button class="donate-main-btn" id="donateDlgGoBtn">💛 Support <span data-brand="name">Birdtag Desktop</span></button>
         <button class="primary" id="donateDlgFeedbackBtn" style="font-size:13px;padding:13px 20px;height:auto;">💬 Send Feedback</button>
       </div>
       <button id="donateDlgClose" class="donate-dlg-close-btn">Close</button>

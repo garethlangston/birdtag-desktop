@@ -20,6 +20,7 @@ import time
 import webbrowser
 
 from settings_utils import load_persisted_settings, save_persisted_settings, debug, info, warn, error
+from branding import PRODUCT_NAME as _BRAND_NAME, SHORT_NAME as _BRAND_SHORT  # noqa: F401
 # Several long-standing call sites use `log(...)` as a catch-all logger.
 # Bind it to `error` so error-path handlers don't NameError mid-cleanup
 # (which masks the real exception that triggered them).
@@ -1365,7 +1366,7 @@ class Api:
 
             shutil.rmtree(kestrel_dir)
             info(f'[API] clear_kestrel_data: removed {kestrel_dir}')
-            return {'success': True, 'message': 'Kestrel analysis data cleared'}
+            return {'success': True, 'message': f'{_BRAND_SHORT} analysis data cleared'}
         except Exception as e:
             error(f'[API] clear_kestrel_data error: {e}')
             return {'success': False, 'error': str(e)}
@@ -1539,7 +1540,7 @@ class Api:
             if region not in inat.REGIONS:
                 return {'success': True, 'region': 'na', 'available': True, 'model_path': '',
                         'search_dirs': dirs,
-                        'message': "Kestrel's original North American model (499 species)."}
+                        'message': "The original Project Kestrel North American model (499 species)."}
             rows = inat.region_rows(region, include_rarities=False)
             found = inat.find_model(prefer_fp16=False)
             if found is None:
@@ -7865,7 +7866,7 @@ class Api:
                 return {
                     'success': False,
                     'error': (
-                        'That folder already has Kestrel analysis data. Moving data '
+                        f'That folder already has {_BRAND_SHORT} analysis data. Moving data '
                         'into an already-analyzed folder is not supported yet.'
                     ),
                     'reason': 'destination_has_kestrel',

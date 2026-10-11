@@ -107,8 +107,8 @@
       if (!hadUncleanShutdown) return;
 
       const promptText = exitReason === 'crash'
-        ? 'Kestrel detected that the previous session crashed.\n\nSend a crash report now?'
-        : 'Kestrel did not exit cleanly. This is sometimes caused by a system shutdown or power loss — would you still like to send a report?';
+        ? (BRAND_SHORT + ' detected that the previous session crashed.\n\nSend a crash report now?')
+        : (BRAND_SHORT + ' did not exit cleanly. This is sometimes caused by a system shutdown or power loss — would you still like to send a report?');
       const sendReport = confirm(promptText);
       if (sendReport) {
         try {

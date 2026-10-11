@@ -6,14 +6,14 @@
     // ====================================================================
 
     const _tutWelcomeStep = {
-      title: 'Welcome to Project Kestrel!',
-      body: 'Project Kestrel uses machine learning to organize your bird photography — helping you review photos more efficiently, search through your library, and quickly find the ones you want to edit and share.<br><br>Click <b>Next</b> and we’ll auto-load some <b>sample bird photos</b> so you can see Kestrel in action.',
+      title: ('Welcome to ' + BRAND_NAME + '!'),
+      body: (BRAND_NAME + ' uses machine learning to organize your bird photography — helping you review photos more efficiently, search through your library, and quickly find the ones you want to edit and share.<br><br>Click <b>Next</b> and we’ll auto-load some <b>sample bird photos</b> so you can see ' + BRAND_SHORT + ' in action.'),
       target: null,
       loadSamplesOnNext: true,
     };
 
     const _tutWorkflowStep = {
-      title: 'Fit Kestrel into your workflow',
+      title: ('Fit ' + BRAND_SHORT + ' into your workflow'),
       body: '',
       target: '.write-metadata-btn',
       position: 'bottom',
@@ -23,7 +23,7 @@
 
     const _tutTryYourOwnStepBase = {
       title: 'Now try it with your own photos',
-      body: 'You’re ready!<br><br>• Click <b>Analyze Folders…</b> to process a new folder of photos.<br>• Click <b>Open Folder…</b> (or drop into the Folder Tree) to browse photos Kestrel has already analyzed.<br><br><b>Tip:</b> open a parent folder once to load your whole library — then search across every outing, every year.',
+      body: ('You’re ready!<br><br>• Click <b>Analyze Folders…</b> to process a new folder of photos.<br>• Click <b>Open Folder…</b> (or drop into the Folder Tree) to browse photos ' + BRAND_SHORT + ' has already analyzed.<br><br><b>Tip:</b> open a parent folder once to load your whole library — then search across every outing, every year.'),
       target: '#analyzeQueueBtn',
       position: 'right',
       highlightAlso: ['#pickFolder'],
@@ -33,7 +33,7 @@
       _tutWelcomeStep,
       {
         title: 'Your photos, organized by scene',
-        body: 'Kestrel organizes your photos into <b>scenes</b> — groups of similar images captured in the same burst. The scene grid shows these scenes in the order they were taken.',
+        body: (BRAND_SHORT + ' organizes your photos into <b>scenes</b> — groups of similar images captured in the same burst. The scene grid shows these scenes in the order they were taken.'),
         nudge: 'Click on a scene to open it!',
         target: '#sceneGrid .card',
         position: 'right',
@@ -50,7 +50,7 @@
       },
       {
         title: 'Make a culling decision, then close the scene',
-        body: 'Kestrel computes <b>star ratings</b> based on each image’s quality score. Click the stars to set your own. <span style="color:#6aa0ff">Blue stars</span> = AI rating · <span style="color:#f5c542">Gold stars</span> = your manual override.<br><br>Use the <b>Accept · Undecided · Reject</b> buttons to make a culling decision. These decisions power the Culling Assistant later!<br><br>When you’re done, close the scene to continue.',
+        body: (BRAND_SHORT + ' computes <b>star ratings</b> based on each image’s quality score. Click the stars to set your own. <span style="color:#6aa0ff">Blue stars</span> = AI rating · <span style="color:#f5c542">Gold stars</span> = your manual override.<br><br>Use the <b>Accept · Undecided · Reject</b> buttons to make a culling decision. These decisions power the Culling Assistant later!<br><br>When you’re done, close the scene to continue.'),
         nudge: 'Mark a photo Accept/Reject, then close the scene.',
         target: '#sceneInfoBar',
         position: 'top-left',
@@ -66,7 +66,7 @@
       _tutWorkflowStep,
       {
         title: 'Which photo editor do you use?',
-        body: 'Pick your preferred photo editor below. Kestrel will use it when you press <b>Space</b> or click the <b>Open</b> button (top-right of the scene info bar) to launch a photo.',
+        body: ('Pick your preferred photo editor below. ' + BRAND_SHORT + ' will use it when you press <b>Space</b> or click the <b>Open</b> button (top-right of the scene info bar) to launch a photo.'),
         target: null,
         customBody: 'editorPicker',
       },
@@ -79,7 +79,7 @@
       _tutWelcomeStep,
       {
         title: 'Your photos, organized by scene',
-        body: 'Kestrel organizes your photos into <b>scenes</b> — groups of similar images captured in the same burst. The scene grid shows these scenes in the order they were taken.',
+        body: (BRAND_SHORT + ' organizes your photos into <b>scenes</b> — groups of similar images captured in the same burst. The scene grid shows these scenes in the order they were taken.'),
         nudge: 'Click on a scene to open it!',
         target: '#sceneGrid .card',
         position: 'right',
@@ -96,7 +96,7 @@
       },
       {
         title: 'Ratings and culling decisions',
-        body: 'Kestrel computes <b>star ratings</b> based on each image’s quality score. Click the stars to set your own. <span style="color:#6aa0ff">Blue stars</span> = AI rating · <span style="color:#f5c542">Gold stars</span> = your manual override.<br><br>Use the <b>Accept · Undecided · Reject</b> buttons to make a culling decision for each photo. These come in handy with the Culling Assistant later!',
+        body: (BRAND_SHORT + ' computes <b>star ratings</b> based on each image’s quality score. Click the stars to set your own. <span style="color:#6aa0ff">Blue stars</span> = AI rating · <span style="color:#f5c542">Gold stars</span> = your manual override.<br><br>Use the <b>Accept · Undecided · Reject</b> buttons to make a culling decision for each photo. These come in handy with the Culling Assistant later!'),
         nudge: 'Mark a photo as Accepted or Rejected to continue!',
         target: '#sceneInfoBar',
         position: 'top-left',
@@ -112,7 +112,7 @@
       },
       {
         title: 'Open in your photo editor',
-        body: 'Click this <b>Open</b> button (or press <kbd>Space</kbd>) to launch the original photo in your chosen photo editor. You can change which editor Kestrel uses in <b>Settings</b>.',
+        body: ('Click this <b>Open</b> button (or press <kbd>Space</kbd>) to launch the original photo in your chosen photo editor. You can change which editor ' + BRAND_SHORT + ' uses in <b>Settings</b>.'),
         target: '#sceneInfoEditorBtn',
         position: 'top-left',
         inDialog: true,
@@ -126,7 +126,7 @@
       },
       {
         title: 'Keyboard shortcuts',
-        body: 'Kestrel has keyboard shortcuts to make reviewing photos faster. The shortcuts are listed above — try some out before continuing!',
+        body: (BRAND_SHORT + ' has keyboard shortcuts to make reviewing photos faster. The shortcuts are listed above — try some out before continuing!'),
         target: '#sceneShortcutLegend',
         position: 'bottom',
         inDialog: true,
@@ -134,7 +134,7 @@
       },
       {
         title: 'A few more scene features',
-        body: 'A few more things you can do once you’re browsing your <b>own photos</b> (some won’t work on the sample images):<br><br>• Edit the <b>scene name</b> and <b>tags</b> at the top<br>• Use <b>✂ Split Scene</b> if Kestrel accidentally merged two different scenes<br>• <b>Copy</b> (clipboard) the full image or bird crop straight from the preview<br><br>Close the scene dialog to continue.',
+        body: ('A few more things you can do once you’re browsing your <b>own photos</b> (some won’t work on the sample images):<br><br>• Edit the <b>scene name</b> and <b>tags</b> at the top<br>• Use <b>✂ Split Scene</b> if ' + BRAND_SHORT + ' accidentally merged two different scenes<br>• <b>Copy</b> (clipboard) the full image or bird crop straight from the preview<br><br>Close the scene dialog to continue.'),
         nudge: 'Close the scene dialog to continue.',
         target: '#closeDlg',
         position: 'bottom',
@@ -149,21 +149,21 @@
       },
       {
         title: 'Merging scenes',
-        body: 'The two highlighted scenes above were actually one continuous burst that Kestrel split in two. Hold <kbd>Ctrl</kbd> and click both cards to select them, then click <b>Merge selected scenes</b> to combine them back into one.<br><br>You can also <kbd>Shift</kbd>+click to range-select a group of scenes at once.',
+        body: ('The two highlighted scenes above were actually one continuous burst that ' + BRAND_SHORT + ' split in two. Hold <kbd>Ctrl</kbd> and click both cards to select them, then click <b>Merge selected scenes</b> to combine them back into one.<br><br>You can also <kbd>Shift</kbd>+click to range-select a group of scenes at once.'),
         target: '#sceneGrid .card:nth-child(2)',
         highlightAlso: ['#sceneGrid .card:nth-child(1)'],
         position: 'bottom',
       },
       {
         title: 'Search across your whole library',
-        body: 'Kestrel searches across <b>every loaded folder</b> by species or family.<br><br><b>Tip:</b> open a <b>parent folder</b> once (via <b>Open Folder…</b> or the Folder Tree) and Kestrel loads your entire library at once — then you can search across every outing and every year without re-loading anything.',
+        body: (BRAND_SHORT + ' searches across <b>every loaded folder</b> by species or family.<br><br><b>Tip:</b> open a <b>parent folder</b> once (via <b>Open Folder…</b> or the Folder Tree) and ' + BRAND_SHORT + ' loads your entire library at once — then you can search across every outing and every year without re-loading anything.'),
         target: '#search',
         position: 'right',
       },
       _tutWorkflowStep,
       {
         title: 'Write Photo Metadata',
-        body: 'Click <b>Write Photo Metadata</b> to export Kestrel’s star ratings and Accept/Reject decisions into XMP sidecar files alongside your photos. These <code>.xmp</code> files are understood natively by <b>Adobe Lightroom</b>, <b>darktable</b>, <b>Capture One</b>, and other editors.<br><br>⚠️ <b>Write photo metadata <em>before</em> importing into your photo editor</b> — most catalogues ignore new sidecar files once a photo is already imported. If a sidecar was already created by another application, Kestrel will ask before overwriting it.',
+        body: ('Click <b>Write Photo Metadata</b> to export ' + BRAND_SHORT + '’s star ratings and Accept/Reject decisions into XMP sidecar files alongside your photos. These <code>.xmp</code> files are understood natively by <b>Adobe Lightroom</b>, <b>darktable</b>, <b>Capture One</b>, and other editors.<br><br>⚠️ <b>Write photo metadata <em>before</em> importing into your photo editor</b> — most catalogues ignore new sidecar files once a photo is already imported. If a sidecar was already created by another application, ' + BRAND_SHORT + ' will ask before overwriting it.'),
         target: '.write-metadata-btn',
         position: 'bottom',
       },
@@ -186,7 +186,7 @@
       },
       {
         title: 'Please send feedback!',
-        body: 'I (the person who made Project Kestrel) would really love to hear from you! Please tell me if you found the app useful, or if you find any bugs or have suggestions for improvements.<br><br>Thank you for trying Kestrel!',
+        body: ('I (the person who made ' + BRAND_NAME + ') would really love to hear from you! Please tell me if you found the app useful, or if you find any bugs or have suggestions for improvements.<br><br>Thank you for trying ' + BRAND_SHORT + '!'),
         target: '#openFeedback',
         position: 'top',
       },
@@ -311,7 +311,7 @@
 
     function _renderTutWorkflowCard(bodyEl) {
       bodyEl.innerHTML =
-        '<div class="tut-workflow-intro">Pick the workflow that fits how you already edit — Kestrel plugs into any of them.</div>' +
+        ('<div class="tut-workflow-intro">Pick the workflow that fits how you already edit — ' + BRAND_SHORT + ' plugs into any of them.</div>') +
         '<div class="tut-workflow-tabs" role="tablist">' +
           '<button type="button" class="tut-wf-tab active" data-tab="none">No workflow changes</button>' +
           '<button type="button" class="tut-wf-tab" data-tab="cull">Cut the blurry bulk</button>' +
@@ -322,17 +322,17 @@
             '<div class="tut-wf-flow">' +
               '<div class="tut-wf-node">Your Photos</div>' +
               '<div class="tut-wf-arrow">→</div>' +
-              '<div class="tut-wf-node accent">Kestrel Analyzes</div>' +
+              ('<div class="tut-wf-node accent">' + BRAND_SHORT + ' Analyzes</div>') +
               '<div class="tut-wf-arrow">→</div>' +
               '<div class="tut-wf-node highlight">Write Metadata</div>' +
             '</div>' +
-            '<div class="tut-wf-caption">Just export Kestrel’s analysis as XMP sidecars, then browse them in the photo editor you already use.</div>' +
+            ('<div class="tut-wf-caption">Just export ' + BRAND_SHORT + '’s analysis as XMP sidecars, then browse them in the photo editor you already use.</div>') +
           '</div>' +
           '<div class="tut-wf-panel" data-panel="cull">' +
             '<div class="tut-wf-flow">' +
               '<div class="tut-wf-node">Your Photos</div>' +
               '<div class="tut-wf-arrow">→</div>' +
-              '<div class="tut-wf-node accent">Kestrel Analyzes</div>' +
+              ('<div class="tut-wf-node accent">' + BRAND_SHORT + ' Analyzes</div>') +
               '<div class="tut-wf-arrow">→</div>' +
               '<div class="tut-wf-node highlight">Culling Assistant</div>' +
               '<div class="tut-wf-arrow">→</div>' +
@@ -344,13 +344,13 @@
             '<div class="tut-wf-flow">' +
               '<div class="tut-wf-node">Your Photos</div>' +
               '<div class="tut-wf-arrow">→</div>' +
-              '<div class="tut-wf-node accent">Kestrel Analyzes</div>' +
+              ('<div class="tut-wf-node accent">' + BRAND_SHORT + ' Analyzes</div>') +
               '<div class="tut-wf-arrow">→</div>' +
               '<div class="tut-wf-node">Pick Favorites</div>' +
               '<div class="tut-wf-arrow">→</div>' +
               '<div class="tut-wf-node highlight">Open in Editor</div>' +
             '</div>' +
-            '<div class="tut-wf-caption">Browse your scenes in Kestrel and press <kbd>Space</kbd> on the ones you love — they open straight in your photo editor.</div>' +
+            ('<div class="tut-wf-caption">Browse your scenes in ' + BRAND_SHORT + ' and press <kbd>Space</kbd> on the ones you love — they open straight in your photo editor.</div>') +
           '</div>' +
         '</div>' +
         '<div class="tut-workflow-hint">We’ve highlighted the two buttons you’ll use most: <b>Write Photo Metadata</b> and <b>Open Culling Assistant</b>.</div>';

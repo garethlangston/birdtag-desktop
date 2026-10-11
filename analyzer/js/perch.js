@@ -510,7 +510,7 @@
         b.disabled = !!disabled;
         b.title = disabled
           ? 'A Perch upload is already running'
-          : 'Create an Unfinished Perch on the web with this folder’s Kestrel analysis (export and crop images)';
+          : ('Create an Unfinished Perch on the web with this folder’s ' + BRAND_SHORT + ' analysis (export and crop images)');
       });
     }
 

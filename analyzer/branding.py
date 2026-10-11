@@ -52,6 +52,7 @@ def load() -> dict:
 BRAND = load()
 PRODUCT_NAME: str = BRAND["product_name"]
 EXE_NAME: str = BRAND["exe_name"]
+SHORT_NAME: str = BRAND["short_name"]
 UPSTREAM_SERVICES: bool = bool(BRAND.get("upstream_services", False))
 
 
@@ -70,5 +71,5 @@ def user_agent() -> str:
     return f"{EXE_NAME}/1.0"
 
 
-__all__ = ["BRAND", "PRODUCT_NAME", "EXE_NAME", "UPSTREAM_SERVICES", "data_dir_name",
+__all__ = ["BRAND", "PRODUCT_NAME", "SHORT_NAME", "EXE_NAME", "UPSTREAM_SERVICES", "data_dir_name",
            "legacy_data_dir_names", "user_agent"]

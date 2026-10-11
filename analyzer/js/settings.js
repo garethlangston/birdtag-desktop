@@ -373,10 +373,18 @@
           if (!statusEl || !window.pywebview?.api?.get_bird_model_status) return;
           try {
             const st = await window.pywebview.api.get_bird_model_status(birdModelSel.value);
-            if (!st || !st.success) return;
+            if (!st || !st.success) {
+              statusEl.textContent = 'Could not check the bird model: ' + ((st && st.error) || 'unknown error')
+                + '. The North America model is used if the UK/Europe/World model is missing.';
+              statusEl.style.color = '#ff9f6b';
+              return;
+            }
             statusEl.textContent = st.message || '';
             statusEl.style.color = st.available ? '' : '#ff9f6b';
-          } catch (_) { /* non-fatal */ }
+          } catch (e) {
+            statusEl.textContent = 'Could not check the bird model (' + e + ').';
+            statusEl.style.color = '#ff9f6b';
+          }
         };
         if (!birdModelSel.dataset.wired) {
           birdModelSel.dataset.wired = '1';
@@ -394,10 +402,18 @@
           if (!st_el || !window.pywebview?.api?.get_wildlife_model_status) return;
           try {
             const st = await window.pywebview.api.get_wildlife_model_status(wildSel.value, birdModelSel ? birdModelSel.value : 'uk');
-            if (!st || !st.success) return;
+            if (!st || !st.success) {
+              st_el.textContent = 'Could not check BioCLIP: ' + ((st && st.error) || 'unknown error')
+                + '. SpeciesNet is used for other wildlife.';
+              st_el.style.color = '#ff9f6b';
+              return;
+            }
             st_el.textContent = st.message || '';
             st_el.style.color = st.available ? '' : '#ff9f6b';
-          } catch (_) { /* non-fatal */ }
+          } catch (e) {
+            st_el.textContent = 'Could not check BioCLIP (' + e + ').';
+            st_el.style.color = '#ff9f6b';
+          }
         };
         if (!wildSel.dataset.wired) {
           wildSel.dataset.wired = '1';

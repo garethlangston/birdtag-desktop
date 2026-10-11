@@ -1234,7 +1234,7 @@
       if (approved) {
         html += '<span class="scene-tag-sep"></span><span class="approval-note" style="font-size:11px">✓ Reviewed</span>';
       } else {
-        html += '<span class="scene-tag-sep"></span><button class="mark-reviewed-btn" id="markReviewedBtn" title="Confirm that Kestrel\'s tags are correct and mark this scene as reviewed">✓ Mark as Reviewed</button>';
+        html += ('<span class="scene-tag-sep"></span><button class="mark-reviewed-btn" id="markReviewedBtn" title="Confirm that ' + BRAND_SHORT + '\'s tags are correct and mark this scene as reviewed">✓ Mark as Reviewed</button>');
       }
 
       tagsEl.innerHTML = html;

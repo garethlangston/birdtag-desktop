@@ -17,16 +17,16 @@
       // with the new bird — it is the only per-release part.
       heroImg: 'whatsnew-bird.jpg',
       heroAlt: 'Ruddy Turnstone',
-      title: 'What’s New in Project Kestrel',
-      subtitle: 'Updates across Project Kestrel, Perch & Cloud Compute',
+      title: ('What’s New in ' + BRAND_NAME),
+      subtitle: ('Updates across ' + BRAND_NAME + ', Perch & Cloud Compute'),
       cards: [
         {
           // Desktop app logo — bundled at the static-server root (see .spec datas).
           iconImg: 'logo.png',
-          name: 'Project Kestrel',
+          name: (BRAND_NAME),
           tag: 'New in v(Ruddy Turnstone)',
           bullets: [
-            'If you moved or deleted photos from a folder, Kestrel will notice and finally offer you a path to fix the data. A new <b>Repair</b> dialog offers to reconcile the differences so you don’t need to re-analyze each time.',
+            ('If you moved or deleted photos from a folder, ' + BRAND_SHORT + ' will notice and finally offer you a path to fix the data. A new <b>Repair</b> dialog offers to reconcile the differences so you don’t need to re-analyze each time.'),
             'The scene grid now <b>shows your decisions</b>: each thumbnail is the best photo you accepted, hovering the image count breaks out accepted, undecided and rejected, and a new filter shows <b>only unreviewed scenes</b>. (this feature came from a user suggestion!)',
             '<b>7/8/9</b> join Z/X/C for Accept/Undecided/Reject (accessibility improvement, from a user suggestion!)',
             'Very large round of bug fixes and stability improvements: <b>culling decisions made during analysis are no longer erased</b>, sidecars you edited in Lightroom are no longer overwritten silently, and a crash now records <b>which stage it died in</b>.',
@@ -56,7 +56,7 @@
           hint: 'Find it in the Analyze Folders dialog.',
         },
       ],
-      note: 'Thank you for supporting the solo dev of Project Kestrel.',
+      note: ('Thank you for supporting the solo dev of ' + BRAND_NAME + '.'),
       sign: '— Sanjay',
       blogLink: { label: 'Read the full v(Dusky Grouse) release notes →', href: 'https://projectkestrel.org/notes/dusky-grouse/' },
     };
@@ -66,7 +66,7 @@
         icon: '🦋',
         title: 'Try wildlife mode',
         badge: 'New!',
-        body: 'Kestrel can detect squirrels, bears, and other wildlife in addition to birds. Enable it in <b>Settings &rarr; Analysis</b>.',
+        body: (BRAND_SHORT + ' can detect squirrels, bears, and other wildlife in addition to birds. Enable it in <b>Settings &rarr; Analysis</b>.'),
         action: { label: 'Open Settings', onClick: function() { try { showSettings(); } catch (_) {} } },
       },
       {
@@ -82,7 +82,7 @@
       {
         icon: '📂',
         title: 'Open a parent folder once',
-        body: 'Kestrel searches across <b>every loaded folder</b>. Open a parent folder and browse your entire library by species or family without re-loading anything.',
+        body: (BRAND_SHORT + ' searches across <b>every loaded folder</b>. Open a parent folder and browse your entire library by species or family without re-loading anything.'),
       },
       {
         icon: '⌨️',

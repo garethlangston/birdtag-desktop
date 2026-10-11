@@ -24,9 +24,17 @@ WILDLIFE_MODEL_MODE_TO_DETECTOR = {
 }
 
 
+def _brand_name() -> str:
+    try:
+        from branding import PRODUCT_NAME
+        return PRODUCT_NAME
+    except ImportError:
+        return "Birdtag Desktop"
+
+
 def parse_args(argv: Sequence[str] | None = None):
     detector_choices = sorted(DETECTOR_ONNX_PATHS.keys())
-    parser = argparse.ArgumentParser(description="Kestrel Analyzer CLI")
+    parser = argparse.ArgumentParser(description=f"{_brand_name()} analyzer CLI")
     parser.add_argument(
         "folder",
         nargs="?",

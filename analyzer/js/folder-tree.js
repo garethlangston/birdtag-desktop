@@ -315,7 +315,7 @@
           const result = await window.pywebview.api.clear_kestrel_data(folderPath);
           if (result && result.success) {
             if (typeof showToast === 'function') {
-              showToast('Kestrel analysis data cleared for ' + (folderName || folderPath));
+              showToast((BRAND_SHORT + ' analysis data cleared for ') + (folderName || folderPath));
             }
             if (refreshCallback) refreshCallback();
           } else if (typeof showToast === 'function') {
@@ -436,7 +436,7 @@
       if (node.path === treeActivePath) row.classList.add('active');
       // Path is always visible on hover; in-progress / outdated states append context.
       if (isInProgress) row.title = `Currently analyzing…\n${node.path}`;
-      else if (outdated) row.title = `Analyzed on Kestrel v${node.kestrel_version} (current: v${_appVersion})\n${node.path}`;
+      else if (outdated) row.title = `Analyzed on ${BRAND_SHORT} v${node.kestrel_version} (current: v${_appVersion})\n${node.path}`;
       else row.title = node.path;
 
       // ── Rail: ancestor continuation lines + own elbow ──────────────────────
