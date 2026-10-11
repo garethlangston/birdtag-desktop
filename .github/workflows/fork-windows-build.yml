@@ -168,5 +168,9 @@ jobs:
           The extra models (EVA-02 iNat21 birds, CC-BY-NC-4.0 non-commercial; BioCLIP 2) are
           not included. See FORK-NOTES.md "Installing on Windows" for where to put them.
           NOTES
+          if [ -f "release-notes/fork/${{ github.ref_name }}.md" ]; then
+            { cat "release-notes/fork/${{ github.ref_name }}.md"; echo; echo '---'; echo; cat notes.md; } > notes_full.md
+            mv notes_full.md notes.md
+          fi
           gh release create "${{ github.ref_name }}" dist/installer/*.exe \
             --prerelease --title "Birdtag Desktop ${{ github.ref_name }}" --notes-file notes.md

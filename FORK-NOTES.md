@@ -52,8 +52,9 @@ and SpeciesNet, and Settings shows where it looked.
 
 * Upstream's names, logos and Store identities are proprietary (upstream `assets/LICENSE`), so
   the fork uses its own name from `analyzer/branding.json`. That file is read by Python
-  (`branding.py`: window title, data folder), the UI (`js/brand.js` rewrites visible
-  "Project Kestrel"/"Kestrel" text), the PyInstaller spec (exe name), the Inno Setup script and CI.
+  (`branding.py`: window title, data folder, user-facing messages), the UI (`js/brand.js` exposes
+  `BRAND_NAME`/`BRAND_SHORT` for scripts and fills `data-brand*` markup once at load), the
+  PyInstaller spec (exe name), the Inno Setup script and CI.
   Renaming the app means editing that one file and re-running `tools/branding/make_placeholder_art.py`.
 * Placeholder artwork is generated (CC0). Store tiles, splash screen, MSIX manifest and branded
   screenshots were removed.
@@ -68,6 +69,23 @@ and SpeciesNet, and Settings shows where it looked.
   folder, the `kestrel:` XMP namespace and `Kestrel|…` keywords, the spec file name, and the
   keyring service name. They're not shown as the product name, and changing them would break
   compatibility with existing results and sidecars.
+
+## Phase 4 (6.3.0-uk.2): fixes
+
+* **"Common Kestrel" shown as "Common Birdtag".** uk.1's `brand.js` replaced the word "Kestrel"
+  anywhere on the page. It now only fills explicit `data-brand` markup, and UI scripts use
+  `BRAND_NAME`/`BRAND_SHORT`; upstream brand strings were changed in the source. Tests:
+  `test_brand_strings.py` scans HTML/JS/Python for leftover brand strings (with an allowlist:
+  comments, `[Kestrel]` log prefixes, `Kestrel|…` keywords, `.kestrel`/`kestrel:` identifiers,
+  upstream-service text). It also checks that "Common/Lesser/American Kestrel" and the BOU
+  "Kestrel" reach the picker data and keywords (`Birds|Kestrel|Falco tinnunculus`).
+  `tools/ui_checks/brand_check.js` (node + jsdom) renders species cells with the real `brand.js`.
+* **Settings froze when the extra models were missing.** uk.1's MutationObserver set a text node's
+  value whenever it contained "Kestrel", even when nothing changed. Each assignment fired another
+  mutation, so the "model not found" message (which lists `...\ProjectKestrel\models_extra`)
+  looped forever and starved the UI. Reproduced headlessly with jsdom; fixed by removing the
+  observer. The status messages now state the fallback, and Settings shows errors instead of
+  hanging.
 
 ## Installing the bird model on Windows
 
